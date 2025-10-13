@@ -1,2 +1,24 @@
 /*import tất cả file css vào trong này*/
 @import url("style.css");
+
+/*NHỮNG STYLE CHUNG CHO TOÀN BỘ TRANG WEB BỎ VÀO TRONG NÀY*/    
+
+/* biến cục bộ */
+:foot {
+    --main-color: #1bcaf1; /*màu chủ đạo*/
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;/*giúp kích thước của các phần tử không bị phình to ra 
+                            ngoài kích thước mong muốn*/
+    
+}
+
+body {
+    /* height: 100vh; không sài trong trường hợp web dài có cuộn trang */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+}
