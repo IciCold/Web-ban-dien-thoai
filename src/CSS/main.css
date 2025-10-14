@@ -16,7 +16,7 @@
 
 body {
     /* height: 100vh; không sài trong trường hợp web dài có cuộn trang */
-    font-family: 'Inter', sans-serif;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: #FCF7F8;
     color: #333;
 }
