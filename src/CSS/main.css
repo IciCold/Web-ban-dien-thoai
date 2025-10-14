@@ -13,7 +13,7 @@
                             ngoài kích thước mong muốn*/
     
 }
-
+/*Không được viết style trực tiếp vào body*/
 body {
     /* height: 100vh; không sài trong trường hợp web dài có cuộn trang */
     font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
