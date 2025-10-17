@@ -1,0 +1,169 @@
+.Login-Register{
+    display: flex;
+    justify-content: center;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    width: auto;
+}
+
+/* ===== HEADER ===== */
+.top-bar {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 12px 5%;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    position: absolute;
+    left: 10%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #5f7df5;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* THANH SEARCH */
+.search-bar {
+    position: relative;
+    right: 1%;
+    display: flex;
+    width: 40%;
+    height: 100%;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+
+.search-bar button {
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+}
+
+/* ACTION */
+.icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.action i {
+    transition: all 0.2s ease;
+}
+
+.action i:hover {
+    cursor: pointer;
+    color: var(--main-color);
+}
+
+.action {
+    position: absolute;
+    right: 0;
+    max-width: 300px;
+    max-height: 50px;
+    width: 40%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    justify-content: space-around;
+    align-items: center;
+
+}
+
+.user-name {
+    cursor: pointer;
+    width: 50%;
+    gap: 50px;
+    transition: all 0.2s ease;
+}
+
+.user-name span {
+    padding-left: 5%;
+    font-weight: 600;
+}
+
+.user-name:hover {
+    color: var(--main-color);
+}
+
+.action #icon {
+    font-size: 1.3rem;
+}
+
+
+/* ===== FOOTER ===== */
+.footer {
+    margin-bottom: 0;
+    width: 100%;
+    background: #5f7df5;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.footer-logo {
+    background: white;
+    color: black;
+    width: 100px;
+    margin: 0 auto 10px;
+    padding: 6px;
+    border-radius: 4px;
+}
+
+.socials {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    font-size: 20px;
+}
+.search-bar,.logo, .action{
+    transition: all 0.2s ease;
+}
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {  
+    .user-name{
+        opacity: 0;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 320px){
+      .action,.logo{
+        opacity: 0;
+    }
+    .search-bar input{
+        width: 10%;
+    }
+    
+}
+@media (max-width: 400px){
+    .search-bar input{
+        width: 30%;
+    }
+}

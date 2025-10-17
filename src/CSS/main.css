@@ -1,11 +1,14 @@
 /*import tất cả file css vào trong này*/
-@import url("style.css");
+@import url("sign-in.css");
+@import url("login.css");
+@import url('style.css');
 
-/*NHỮNG STYLE CHUNG CHO TOÀN BỘ TRANG WEB BỎ VÀO TRONG NÀY*/    
-:foot {
+/*NHỮNG STYLE CHUNG CHO TOÀN BỘ TRANG WEB BỎ VÀO TRONG NÀY*/
+
+/* biến cục bộ */
+:root {
     --main-color: #1bcaf1; /*màu chủ đạo*/
-}
-
+}    
 * {
     margin: 0;
     padding: 0;
@@ -13,7 +16,9 @@
                             ngoài kích thước mong muốn*/
     
 }
-/*Không được viết style trực tiếp vào body*/
+html {
+  scroll-behavior: smooth;
+}
 body {
     /* height: 100vh; không sài trong trường hợp web dài có cuộn trang */
     font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
