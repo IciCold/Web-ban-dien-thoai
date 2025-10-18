@@ -36,22 +36,41 @@
             </div>
         </header>
 
-        <!--=============LOGIN===============-->
+       <!--=============LOGIN===============-->
         <div class="page-login" id="login">
-            <div class="form-container">
-                <h1 class="form-title">Đăng nhập</h1>
-                <form action="#" method="post" class="login-form">
-                    <input type="text" id="username" name="username" placeholder="Tên đăng nhập hoặc Email" required>
-        
-                    <input type="password" id="password" name="password" placeholder="Mật khẩu" required>
-                    <button type="submit" class="submit-btn">Đăng nhập</button>
-                    <div class="form-actions-top">
-                        <a href="#" class="forgot-link">Quên mật khẩu?</a>
-                        <a href="#register" class="register-link">Đăng ký</a>
-                    </div>
-                </form>
-            </div>
+            <form class="login-form layout-form" id="login-form">
+                <div class="form-heading">Đăng nhập</div>
+
+                <!--Tên đăng nhập-->
+                <div class="input-group">
+                    <label class="label" for="username">Tên đăng nhập</label>
+                    <input class="Ip" type="text" id="username" name="username" placeholder="Tên đăng nhập hoặc Email"
+                        required>
+                    <p class="warning-user" style="color: red;
+            font-size: 0.7rem; font-weight: 600; display: none;">Tài khoản không tồn tại</p>
+                </div>
+
+                <!--Mật khẩu-->
+                <div class="input-group">
+                    <label class="label" for="password">Mật khẩu</label>
+                    <input class="Ip" type="password" id="password" name="password" placeholder="Mật khẩu" required>
+                    <p class="warning-incorrect-password" style="color: red;
+            font-size: 0.7rem; font-weight: 600; display: none;">Sai mật khẩu</p>
+                </div>
+
+                <!--Button-->
+                <div class="button">
+                    <button type="submit">Đăng nhập</button>
+                </div>
+
+                <!--Liên kết-->
+                <div class="form-actions">
+                    <a href="#" class="forgot-link">Quên mật khẩu?</a>
+                    <a href="#register" class="register-link">Đăng ký</a>
+                </div>
+            </form>
         </div>
+
 
         <!--=============REGISTER===============-->
         <div class="page-register" id="register">
@@ -60,27 +79,27 @@
                 <div class="form-heading">Đăng ký</div>
                 <div class="input-group">
                     <!--Tên đăng nhập-->
-                    <label class="label" for="user-name"> Tên đăng nhập</label>
-                    <input class="Ip" name="username" type="text" id="fname" placeholder="Nhập tên đăng nhập">
+                    <label class="label" for="fname"> Tên đăng nhập</label>
+                    <input class="register-Ip" name="username" type="text" id="fname" placeholder="Nhập tên đăng nhập">
                     <!--buộc người dùng nhập vào thì mới cho gửi form-->
                 </div>
 
                 <!--Email-->
                 <div class="input-group">
-                    <label class="label" for="email">Email</label>
-                    <input class="Ip" name="email" type="email" id="femail" placeholder="Nhập Email" >
+                    <label class="label" for="femail">Email</label>
+                    <input class="register-Ip" name="email" type="email" id="femail" placeholder="Nhập Email" >
                      <p class="warning-email" style="color: red;
                      font-size: 0.7rem; font-weight: 600; display: none;">Email không hợp lệ</p>
                 </div>
 
                 <!--Mật khẩu-->
                 <div class="input-group">
-                    <label class="label" for="password">Mật khẩu</label>
-                    <input class="Ip" name="password" type="password" id="fpassword" placeholder="Nhập Mật khẩu">
+                    <label class="label" for="fpassword">Mật khẩu</label>
+                    <input class="register-Ip" name="password" type="password" id="fpassword" placeholder="Nhập Mật khẩu">
                 </div>
                 <div class="input-group">
-                    <label class="label" for="password">Nhập lại mật khẩu</label>
-                    <input class="Ip" name="confirmPw" type="password" id="fconfirm" placeholder="Nhập lại mật khẩu">
+                    <label class="label" for="fconfirm">Nhập lại mật khẩu</label>
+                    <input class="register-Ip" name="confirmPw" type="password" id="fconfirm" placeholder="Nhập lại mật khẩu">
                     <p class="warning-pw" style="color: red;
                     font-size: 0.7rem; font-weight: 600; display: none;">Mật khẩu không khớp</p>
                 </div>
@@ -92,7 +111,7 @@
             </form>
 
             <!--Đăng kí thành công-->
-            <div class="thongbao" class="hidden">
+            <div class="thongbao hidden">
                 <h1 class="style"><i class="fa-solid fa-circle-check" style="color: #74C0FC;"></i>
                     Đăng ký thành công
                 </h1>
@@ -111,6 +130,7 @@
             </div>
         </footer>   
     </section>
-
 </body>
+
+
 </html>
