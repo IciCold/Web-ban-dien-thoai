@@ -51,7 +51,6 @@ function register(email, userName, password) {
 
 // =======Sử lí dữ liệu form đăng ký==========
 const form = document.getElementById("form-register");
-let users = [];
 form.addEventListener("submit", function (event) {
   event.preventDefault();
   let complete = true;
