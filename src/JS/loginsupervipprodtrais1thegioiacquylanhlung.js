@@ -5,15 +5,25 @@ const registerDiv = document.getElementById("register");
 
 registerLink.addEventListener("click", (e) => {
   e.preventDefault();
+  form.reset(); // reset lại các ô input
   loginDiv.style.display = "none";
   registerDiv.style.display = "block";
-  history.pushState({ page:1 }, "", "#Register");
-});
-window.addEventListener("popstate", function (event) {
-  console.log("Quay lại hoặc tiến tới trong lịch sử!");
-  console.log(event.state);
+  form.classList.remove("hidden"); // Thêm dòng này xoá hidden khi đăng ký thành công ở phía dưới
+  form.classList.remove("fade-out"); //  để tránh bị mờ khi quay lại
+  history.replaceState({ page: "Register" }, "", "#Register");
 });
 
+// Khi tải lại trang hoặc mở link trực tiếp có hash MẶC ĐỊNH LÀ LOGIN
+window.addEventListener("load", () => {
+  if (location.hash === "#register") {
+    loginDiv.style.display = "none";
+    registerDiv.style.display = "block";
+  } else {
+    registerDiv.style.display = "none";
+    loginDiv.style.display = "block";
+    history.replaceState({ page: "login" }, "", "#login");
+  }
+});
 //Sử lí back/forward
 window.onpopstate = (e) => {
   if (location.hash === "#Register") {
@@ -40,7 +50,7 @@ function register(email, userName, password) {
 }
 
 // =======Sử lí dữ liệu form đăng ký==========
-const form = document.getElementById("form");
+const form = document.getElementById("form-register");
 let users = [];
 form.addEventListener("submit", function (event) {
   event.preventDefault();
@@ -102,7 +112,7 @@ form.addEventListener("submit", function (event) {
   //Hiện thông báo đăng ký thành công
   if (complete && !isEmpty.includes(false)) {
     register(email, userName, password);
-    const message = document.getElementById("thongbao");
+    const message = document.querySelector(".thongbao");
     form.classList.add("fade-out");
     setTimeout(() => {
       form.classList.add("hidden");
@@ -111,6 +121,15 @@ form.addEventListener("submit", function (event) {
         message.style.opacity = "1";
       }, 10);
     }, 400);
+    setTimeout(() => {
+      message.style.removeProperty(
+        "opacity"
+      ); /*xoá dòng inline style "message.style.opacity = "1" */
+      message.classList.add("fade-out");
+      loginDiv.classList.add("fade-out","fade-in");
+      loginDiv.style.display = "block";
+      history.replaceState({ page: "login" }, "", "#login");
+    }, 3000);
   }
 });
 

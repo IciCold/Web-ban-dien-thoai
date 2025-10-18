@@ -11,7 +11,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="JS/main.js" type="module"></script>
 </head>
-  
+
 <body>
-  sybau
+  
+  <!--=============LOGIN-REGISTER===============-->
+    <section class="Login-Register" id="">
+        <!--=============THANH TOP===============-->
+        <header class="top-bar">
+            <div class="logo">Logo</div>
+            <div class="search-bar">
+                <input type="text" placeholder="Bạn muốn mua gì?">
+                <button><i class="fa fa-search"></i></button>
+            </div>
+
+            <div class="action">
+                <div class="user-name">
+                    <i class="fa-solid fa-user" id="icon"></i>
+                    <span>User name</span>
+                </div>
+                <div class="icons">
+                    <i class="fa fa-bell" id="icon"></i>
+                    <i class="fa fa-shopping-cart" id="icon"></i>
+                </div>
+            </div>
+        </header>
+
+        <!--=============LOGIN===============-->
+        <div class="page-login" id="login">
+            <div class="form-container">
+                <h1 class="form-title">Đăng nhập</h1>
+                <form action="#" method="post" class="login-form">
+                    <input type="text" id="username" name="username" placeholder="Tên đăng nhập hoặc Email" required>
+        
+                    <input type="password" id="password" name="password" placeholder="Mật khẩu" required>
+                    <button type="submit" class="submit-btn">Đăng nhập</button>
+                    <div class="form-actions-top">
+                        <a href="#" class="forgot-link">Quên mật khẩu?</a>
+                        <a href="#register" class="register-link">Đăng ký</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!--=============REGISTER===============-->
+        <div class="page-register" id="register">
+            <!-- Bảng đăng kí -->
+            <form class="signin-form layout-form" id="form-register">
+                <div class="form-heading">Đăng ký</div>
+                <div class="input-group">
+                    <!--Tên đăng nhập-->
+                    <label class="label" for="user-name"> Tên đăng nhập</label>
+                    <input class="Ip" name="username" type="text" id="fname" placeholder="Nhập tên đăng nhập">
+                    <!--buộc người dùng nhập vào thì mới cho gửi form-->
+                </div>
+
+                <!--Email-->
+                <div class="input-group">
+                    <label class="label" for="email">Email</label>
+                    <input class="Ip" name="email" type="email" id="femail" placeholder="Nhập Email" >
+                     <p class="warning-email" style="color: red;
+                     font-size: 0.7rem; font-weight: 600; display: none;">Email không hợp lệ</p>
+                </div>
+
+                <!--Mật khẩu-->
+                <div class="input-group">
+                    <label class="label" for="password">Mật khẩu</label>
+                    <input class="Ip" name="password" type="password" id="fpassword" placeholder="Nhập Mật khẩu">
+                </div>
+                <div class="input-group">
+                    <label class="label" for="password">Nhập lại mật khẩu</label>
+                    <input class="Ip" name="confirmPw" type="password" id="fconfirm" placeholder="Nhập lại mật khẩu">
+                    <p class="warning-pw" style="color: red;
+                    font-size: 0.7rem; font-weight: 600; display: none;">Mật khẩu không khớp</p>
+                </div>
+
+                <!--button-->
+                <div class="button">
+                    <button>Xác nhận</button>
+                </div>
+            </form>
+
+            <!--Đăng kí thành công-->
+            <div class="thongbao" class="hidden">
+                <h1 class="style"><i class="fa-solid fa-circle-check" style="color: #74C0FC;"></i>
+                    Đăng ký thành công
+                </h1>
+                <span class="loader"></span>
+            </div>
+        </div>
+
+        <!--=============THANH BOT===============-->
+        <footer class="footer">
+            <div class="footer-logo">Logo</div>
+            <p>Copyrighted 2025 by iciii</p>
+            <div class="socials">
+                <i class="fa-brands fa-github"></i>
+                <i class="fa-brands fa-facebook"></i>
+                <i class="fa-brands fa-youtube"></i>
+            </div>
+        </footer>   
+    </section>
+
 </body>
+</html>
