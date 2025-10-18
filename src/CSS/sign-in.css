@@ -82,29 +82,98 @@
 }
 
 /* Bảng thông báo thành công*/
-#thongbao .style {
+.thongbao .style {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
 }
 
-#thongbao {
-    opacity: 0;
-    transition: opacity 0.5s;
+.thongbao {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2em;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s;
 }
 .hidden{
     display: none;
 }
 .fade-out {
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
 }
 .fade-in{
   opacity: 1;
-  transition: opacity 0.4s ease;
+  transition: all 0.4s ease;
+}
+/* Loading */
+.loader {
+  color: var(--main-color);
+  font-size: 7px;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  position: relative;
+  text-indent: -9999em;
+  animation: mulShdSpin 1.3s infinite linear;
+  transform: translateZ(0);
 }
 
+@keyframes mulShdSpin {
+  0%,
+  100% {
+    box-shadow: 0 -3em 0 0.2em, 
+    2em -2em 0 0em, 3em 0 0 -1em, 
+    2em 2em 0 -1em, 0 3em 0 -1em, 
+    -2em 2em 0 -1em, -3em 0 0 -1em, 
+    -2em -2em 0 0;
+  }
+  12.5% {
+    box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 
+    3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, 
+    -2em 2em 0 -1em, -3em 0 0 -1em, 
+    -2em -2em 0 -1em;
+  }
+  25% {
+    box-shadow: 0 -3em 0 -0.5em, 
+    2em -2em 0 0, 3em 0 0 0.2em, 
+    2em 2em 0 0, 0 3em 0 -1em, 
+    -2em 2em 0 -1em, -3em 0 0 -1em, 
+    -2em -2em 0 -1em;
+  }
+  37.5% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
+     3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, 
+     -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
+  }
+  50% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
+     3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, 
+     -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
+  }
+  62.5% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
+     3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, 
+     -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
+  }
+  75% {
+    box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 
+    3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, 
+    -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
+  }
+  87.5% {
+    box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 
+    3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, 
+    -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
+  }
+}
 /* Class list cho báo lỗi input */
 .Ierror{
   animation: shake 0.4s ease;
