@@ -1,14 +1,16 @@
 /*import tất cả file css vào trong này*/
-@import url("sign-in.css");
+@import url("register.css");
 @import url("login.css");
 @import url('style.css');
+@import url('Home.css');
 
 /*NHỮNG STYLE CHUNG CHO TOÀN BỘ TRANG WEB BỎ VÀO TRONG NÀY*/
 
 /* biến cục bộ */
 :root {
     --main-color: #1bcaf1; /*màu chủ đạo*/
-}    
+}   
+
 * {
     margin: 0;
     padding: 0;
@@ -16,13 +18,22 @@
                             ngoài kích thước mong muốn*/
     
 }
-html {
+html,body {
   scroll-behavior: smooth;
+  height: 100%;
 }
 body {
-    /* height: 100vh; không sài trong trường hợp web dài có cuộn trang */
+    min-height: 100vh;
     font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: #FCF7F8;
     color: #333;
+    display: flex;
+    flex-direction: column;
 }
-
+/*Class ẩn page dùng để chuyển page*/
+.hidden {
+  display: none !important;
+}
+.container-main{
+  flex: 1;
+}
