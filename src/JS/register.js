@@ -1,4 +1,4 @@
-//==========Chuyển page===============
+
 const registerLink = document.querySelector(".register-link");
 const loginDiv = document.querySelector("#login");
 const registerDiv = document.querySelector("#register");
@@ -8,38 +8,17 @@ const form = document.getElementById("form-register");
 if (!(!form || !registerLink || !loginDiv || !registerDiv)) {
   console.log("object");
 }
-// Khi tải lại trang hoặc mở link trực tiếp có hash MẶC ĐỊNH LÀ LOGIN
-window.addEventListener("load", () => {
-  if (location.hash === "#register") {
-    loginDiv.style.display = "none";
-    registerDiv.style.display = "block";
-  } else {
-    registerDiv.style.display = "none";
-    loginDiv.style.display = "block";
-    history.replaceState({ page: "login" }, "", "#login");
-  }
-});
-
+//Chuyển page khi ấn vào nút đăng ký phía dưới
 registerLink.addEventListener("click", (e) => {
   e.preventDefault();
   form.reset(); // reset lại các ô input
-  loginDiv.style.display = "none";
-  registerDiv.style.display = "block";
+  loginDiv.classList.add('hidden');
+  registerDiv.classList.remove('hidden');
   form.classList.remove("hidden"); // Thêm dòng này xoá hidden khi đăng ký thành công ở phía dưới
   form.classList.remove("fade-out"); //  để tránh bị mờ khi quay lại
   history.pushState({ page: "register" }, "", "#register"); //Đẩy vào lịch sử
 });
 
-//Sử lí back/forward
-window.onpopstate = (e) => {
-  if (location.hash === "#register") {
-    loginDiv.style.display = "none";
-    registerDiv.style.display = "block";
-  } else {
-    registerDiv.style.display = "none";
-    loginDiv.style.display = "block";
-  }
-};
 
 // ================= Lưu thông tin User =================
 function register(email, userName, password) {
@@ -135,7 +114,7 @@ form.addEventListener("submit", function (event) {
       // Đợi hiệu ứng mờ hoàn tất rồi mới ẩn hẳn
       setTimeout(() => {
         message.classList.add("hidden");
-        loginDiv.style.display = "block";
+       loginDiv.classList.remove('hidden');
         history.replaceState({ page: "login" }, "", "#login");
         form.classList.remove("fade-out");
       }, 500); // thời gian này phải khớp với thời gian của animation của CSS

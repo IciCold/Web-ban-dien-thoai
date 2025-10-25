@@ -1,7 +1,7 @@
 /*import tất cả file css vào trong này*/
 @import url("register.css");
 @import url("login.css");
-@import url('style.css');
+@import url('Head-Footer.css');
 @import url('Home.css');
 
 /*NHỮNG STYLE CHUNG CHO TOÀN BỘ TRANG WEB BỎ VÀO TRONG NÀY*/
@@ -29,6 +29,7 @@ body {
     color: #333;
     display: flex;
     flex-direction: column;
+
 }
 /*Class ẩn page dùng để chuyển page*/
 .hidden {
