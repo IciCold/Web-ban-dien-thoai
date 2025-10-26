@@ -2,7 +2,7 @@ import "./register.js";
 import "./login.js";    
 import "./Home.js";
 
-//==============Chuyển Page bằng pushState=======================//
+//==============Chuyển Page bằng Hase=======================//
 const pages = {
   home: document.querySelector('.Home'),
   login: document.querySelector('.page-login'),
