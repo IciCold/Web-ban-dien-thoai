@@ -35,6 +35,15 @@ body {
 .hidden {
   display: none !important;
 }
+
 .container-main{
   flex: 1;
+}
+/*Hiệu ứng chuyển page*/
+.page-active{
+ opacity: 0;
+ transition:opacity 0.3s ease;
+}
+.page-active-enter{
+  opacity: 1;
 }

@@ -12,7 +12,9 @@ loginForm.addEventListener("submit", function (e) {
   const password = passwordInput.value.trim();
   const users = JSON.parse(localStorage.getItem("users")) || [];
 
-  const foundUser = users.find((u) => u.userName === username || u.email === username);
+  const foundUser = users.find(
+    (u) => u.userName === username || u.email === username
+  );
 
   // Reset cảnh báo mỗi lần submit
   warningUser.style.display = "none";
@@ -42,20 +44,21 @@ loginForm.addEventListener("submit", function (e) {
     warningPassword.classList.remove("Ierror");
     void warningPassword.offsetWidth;
     warningPassword.classList.add("Ierror");
-
     return;
   }
+      // ====== Đăng nhập thành công ======
+   else {
 
-  // ====== Đăng nhập thành công ======
-  alert(`✅ Chào mừng ${foundUser.userName}!`);
 
-  // Lưu user đang đăng nhập (tùy chọn)
-  localStorage.setItem("currentUser", JSON.stringify(foundUser));
 
-  // Cập nhật giao diện top bar
-  const userSpan = document.querySelector(".user-name span");
-  userSpan.textContent = foundUser.userName;
+    // Lưu user đang đăng nhập (tùy chọn)
+    localStorage.setItem("currentUser", JSON.stringify(foundUser));
 
-  // Tự động chuyển về trang chủ sau khi đăng nhập
-  
+    // Cập nhật giao diện top bar
+    const userSpan = document.querySelector(".user-name span");
+    userSpan.textContent = foundUser.userName;
+
+    // Tự động chuyển về trang chủ sau khi đăng nhập
+    location.hash = '#home'
+  }
 });

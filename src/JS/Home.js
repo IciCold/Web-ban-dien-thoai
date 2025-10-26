@@ -1,4 +1,4 @@
-import { showPage } from "./main.js";
+
 // Carousel Logic
 const carousel = document.getElementById("carousel");
 const prevBtn = document.getElementById("prevBtn");
@@ -346,22 +346,15 @@ popUp.addEventListener("click", (e) => {
 });
 //=======Click Option============
 const option = document.querySelector(".option");
-const register = document.querySelector(".page-register");
-const login = document.querySelector(".page-login");
-const home = document.querySelector(".Home");
 option.addEventListener("click", (e) => {
   if (!e.target.classList || !e.target.classList.contains("text")) return;
-  if (
-    e.target.classList.contains("text") && //kiểm tra phần tử đang click có phải text không, sau đó kiểm tra nội dung
-    e.target.textContent === "Đăng nhập"
-  ) {
-    showPage("login");
-  } else if (
-    e.target.classList.contains("text") && 
-    e.target.textContent === "Đăng ký"
-  ) {
-    showPage("register"); //gọi hàm showPage từ main.js
+  if(e.target.textContent === 'Đăng nhập'){
+    location.hash = '#login'
   }
+   if(e.target.textContent === 'Đăng ký'){
+    location.hash = '#register'
+  }
+
   // Ẩn popup sau khi chọn
   popUp.style.visibility = "hidden";
   popUp.style.opacity = "0";
