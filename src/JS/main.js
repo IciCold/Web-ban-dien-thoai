@@ -1,6 +1,7 @@
 import "./register.js";
 import "./login.js";    
 import "./Home.js";
+import "./search.js";
 
 //==============Chuyển Page bằng Hase=======================//
 const pages = {

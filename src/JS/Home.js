@@ -359,3 +359,6 @@ option.addEventListener("click", (e) => {
   popUp.style.visibility = "hidden";
   popUp.style.opacity = "0";
 });
+
+export { products, productsGrid, displayProducts };
+
