@@ -1,4 +1,3 @@
-
 // Carousel Logic
 const carousel = document.getElementById("carousel");
 const prevBtn = document.getElementById("prevBtn");
@@ -80,19 +79,19 @@ const products = [
     name: "iPhone 7",
     brand: "iphone",
     price: 32990000,
-    img: "../asset/Images/Dienthoai/iphone/iphone-7-pink_32.webp",
+    img: "/asset/Images/Dienthoai/iphone/iphone-7-pink_32.webp",
   },
   {
     name: "iPhone 11 Pro Max Vàng",
     brand: "iphone",
     price: 19990000,
-    img: "../asset/Images/Dienthoai/iphone/iphone-11-pro-max-vang.jpg.webp",
+    img: "/asset/Images/Dienthoai/iphone/iphone-11-pro-max-vang.jpg.webp",
   },
   {
     name: "iPhone 11 Tím",
     brand: "iphone",
     price: 32990000,
-    img: "../asset/Images/Dienthoai/iphone/iphone-11-tim.jpg.webp",
+    img: "/asset/Images/Dienthoai/iphone/iphone-11-tim.jpg.webp",
   },
   {
     name: "iPhone 12 Pro vàng",
@@ -294,6 +293,13 @@ function displayProducts(list) {
                     <div class="product-price">${product.price.toLocaleString()} VND</div>
                     <button class="buy-btn">Mua ngay</button>
                 `;
+    // Gắn lại sự kiện cho tất cả nút "Mua ngay" mới tạo
+    const buyButtons = productsGrid.querySelectorAll(".buy-btn");
+    buyButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        location.hash = "#chitiet";
+      });
+    });
     productsGrid.appendChild(card);
   });
 
@@ -331,7 +337,7 @@ viewMoreBtn.addEventListener("click", () => {
 // ======= KHỞI TẠO =======
 updateDisplay();
 
-// ======= Popup =======
+// ======= POPUP =======
 const userName = document.querySelector(".user-name");
 const popUp = document.getElementById("overlay-Popup");
 userName.addEventListener("click", (e) => {
@@ -344,15 +350,16 @@ popUp.addEventListener("click", (e) => {
     popUp.style.opacity = "0";
   }
 });
+
 //=======Click Option============
 const option = document.querySelector(".option");
 option.addEventListener("click", (e) => {
   if (!e.target.classList || !e.target.classList.contains("text")) return;
-  if(e.target.textContent === 'Đăng nhập'){
-    location.hash = '#login'
+  if (e.target.textContent === "Đăng nhập") {
+    location.hash = "#login";
   }
-   if(e.target.textContent === 'Đăng ký'){
-    location.hash = '#register'
+  if (e.target.textContent === "Đăng ký") {
+    location.hash = "#register";
   }
 
   // Ẩn popup sau khi chọn
@@ -360,5 +367,10 @@ option.addEventListener("click", (e) => {
   popUp.style.opacity = "0";
 });
 
-export { products, productsGrid, displayProducts };
+// ======= ẤN MUA SẼ HIỆN TRANG THANH TOÁN-CHI TIẾT=======
+const buyNowBtn = document.querySelector(".buy-now-button");
+buyNowBtn.addEventListener("click", () => {
+  location.hash = "#thanhtoan";
+});
 
+export { products, productsGrid, displayProducts };

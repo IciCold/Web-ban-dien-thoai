@@ -49,8 +49,6 @@ loginForm.addEventListener("submit", function (e) {
       // ====== Đăng nhập thành công ======
    else {
 
-
-
     // Lưu user đang đăng nhập (tùy chọn)
     localStorage.setItem("currentUser", JSON.stringify(foundUser));
 

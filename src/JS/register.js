@@ -29,11 +29,9 @@ function register(email, userName, password) {
   users.push(newUser);
   //lưu lại vào localStorage
   localStorage.setItem("users", JSON.stringify(users)); //chuyển mảng thành chuỗi
-  console.log(users);
 }
 
 // =======Sử lí dữ liệu form đăng ký==========
-
 form.addEventListener("submit", function (event) {
   event.preventDefault();
   let complete = true;

@@ -3,13 +3,22 @@
 @import url("login.css");
 @import url('Head-Footer.css');
 @import url('Home.css');
+@import url('chitiet.css');
+@import url('thanhtoan.css');
 
 /*NHỮNG STYLE CHUNG CHO TOÀN BỘ TRANG WEB BỎ VÀO TRONG NÀY*/
 
 /* biến cục bộ */
 :root {
-    --main-color: #1bcaf1; /*màu chủ đạo*/
-}   
+  --main-color: #1bcaf1;
+  /*màu chủ đạo*/
+  --color-primary: #5f7df5;
+  --color-secondary: #98abf6;
+  --color-light-gray: #c0ccda;
+  --color-success: #5cb85c;
+  --color-text: #333;
+}
+     
 
 * {
     margin: 0;
