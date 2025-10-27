@@ -1,9 +1,21 @@
 .container.payment-section {
-    background-color: var(--color-secondary); 
-    padding: 30px;
-    margin: 50px;
-    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     color: white;
+    width: auto;
+}
+
+.payment-form{
+  max-width: 900px;
+  max-height: 700px;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  background: #1bcaf1;
+  border-radius: 10px;
+  box-shadow: 0px 10px 30px #0000001a;
 }
 
 /* Tiêu đề lớn "Thanh toán" */
@@ -141,12 +153,12 @@
 }
 
 .visa {
-    background-color: #FFEB3B; /* Vàng */
-    color: #333; /* Chữ đen trên nền vàng */
+    background: linear-gradient(to right, #0A2A6C, #1E3A8A, #2F55D1); /* Vàng */
+    color: white; /* Chữ đen trên nền vàng */
 }
 
 .momo {
-    background-color: #FF4081; /* Hồng/Magenta */
+    background-color: rgba(176, 0, 106, 1); /* Màu thương hiệu MoMo */
 }
 
 /* Trạng thái active của nút thanh toán */
@@ -176,4 +188,11 @@
     background-color: #fff;
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.momo-logo {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
 }

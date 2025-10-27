@@ -180,41 +180,43 @@
     
     <!--=============THANH TOÁN===============-->
     <section class="container payment-section" id="paymentSection">
-      <h1 class="payment-title">Thanh toán</h1>
-
-      <div class="payment-grid">
-
-        <div class="order-summary">
-          <h2 class="order-title">Đơn hàng của bạn:</h2>
-          <p class="order-item">1x Xiaomi Pro 5T</p>
-          <p class="order-item">1x iPhone XS Pro Vjp</p>
-
-          <div class="total-box">
-            <span class="total-label">Thành tiền:</span>
-            <span class="total-amount">5.000.000 VND</span>
+      <form class="payment-form layout-form" id="payment-form">
+        <h1 class="payment-title">Thanh toán</h1>
+  
+        <div class="payment-grid">
+  
+          <div class="order-summary">
+            <h2 class="order-title">Đơn hàng của bạn:</h2>
+            <p class="order-item">1x Xiaomi Pro 5T</p>
+            <p class="order-item">1x iPhone XS Pro Vjp</p>
+  
+            <div class="total-box">
+              <span class="total-label">Thành tiền:</span>
+              <span class="total-amount">5.000.000 VND</span>
+            </div>
+          </div>
+  
+          <div class="payment-info">
+  
+            <label for="delivery-address" class="info-label">Địa chỉ giao hàng:</label>
+            <input type="text" id="delivery-address" class="text-input" placeholder="Địa chỉ default (placeholder)">
+  
+            <div class="payment-methods">
+              <button class="payment-button cash"><i class="fa-solid fa-money-bill"></i> Cash</button>
+              <button class="payment-button visa"><i class="fa-brands fa-cc-visa"></i> Visa</button>
+              <button class="payment-button momo"><img src="../asset/Images/mini-app_design-guideline_branding-guide-2-2.webp" alt="Momo" class="momo-logo">Momo</button>
+            </div>
+  
+            <label for="card-name" class="info-label">Tên người chủ thẻ</label>
+            <input type="text" id="card-name" class="text-input" placeholder="Tên người chủ thẻ">
+  
+            <label for="card-number" class="info-label">Số thẻ</label>
+            <input type="text" id="card-number" class="text-input" placeholder="Số thẻ">
+  
+            <button class="buy-now-button-large">Mua ngay</button>
           </div>
         </div>
-
-        <div class="payment-info">
-
-          <label for="delivery-address" class="info-label">Địa chỉ giao hàng:</label>
-          <input type="text" id="delivery-address" class="text-input" placeholder="Địa chỉ default (placeholder)">
-
-          <div class="payment-methods">
-            <button class="payment-button cash">Hình tiền</button>
-            <button class="payment-button visa">Visa</button>
-            <button class="payment-button momo">Momo</button>
-          </div>
-
-          <label for="card-name" class="info-label">Tên người chủ thẻ</label>
-          <input type="text" id="card-name" class="text-input" placeholder="Tên người chủ thẻ">
-
-          <label for="card-number" class="info-label">Số thẻ</label>
-          <input type="text" id="card-number" class="text-input" placeholder="Số thẻ">
-
-          <button class="buy-now-button-large">Mua ngay</button>
-        </div>
-      </div>
+      </form class="payment-form layout-form" id="payment-form">
     </section>
 
 
