@@ -293,16 +293,10 @@ function displayProducts(list) {
                     <div class="product-price">${product.price.toLocaleString()} VND</div>
                     <button class="buy-btn">Mua ngay</button>
                 `;
-    // Gắn lại sự kiện cho tất cả nút "Mua ngay" mới tạo
-    const buyButtons = productsGrid.querySelectorAll(".buy-btn");
-    buyButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        location.hash = "#chitiet";
-      });
-    });
     productsGrid.appendChild(card);
   });
-
+  // Gắn lại sự kiện cho tất cả nút "Mua ngay" mới tạo
+  actionsBuy();
   viewMoreBtn.style.display = visibleProducts >= list.length ? "none" : "block";
 }
 // ======= LỌC THEO HÃNG =======
@@ -368,9 +362,18 @@ option.addEventListener("click", (e) => {
 });
 
 // ======= ẤN MUA SẼ HIỆN TRANG THANH TOÁN-CHI TIẾT=======
+function actionsBuy(){
+  // Gắn lại sự kiện cho tất cả nút "Mua ngay" mới tạo
+    const clickOnProduct = productsGrid.querySelectorAll(".product-card");
+    clickOnProduct.forEach((element) => {
+      element.addEventListener("click", () => {
+        location.hash = "#chitiet";
+      });
+    });
+}
 const buyNowBtn = document.querySelector(".buy-now-button");
 buyNowBtn.addEventListener("click", () => {
   location.hash = "#thanhtoan";
 });
-
+ 
 export { products, productsGrid, displayProducts };
