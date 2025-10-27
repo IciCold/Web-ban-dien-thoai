@@ -194,6 +194,7 @@
     "loai": "Smartphone",
     "src": "/asset/Images/Dienthoai/iphone/iphone-7-pink_32.webp"
   },
+  
   {
     "id": "S014",
     "ten": "dien thoai samsung galaxy a06 5g",
@@ -479,6 +480,7 @@
     "loai": "Smartphone",
     "src": "/asset/Images/Dienthoai/samsung/samsung-galaxy-z-fold-7-xanh.webp"
   },
+
   {
     "id": "S033",
     "ten": "oppo a18 xanh",
@@ -764,6 +766,7 @@
     "loai": "Smartphone",
     "src": "/asset/Images/Dienthoai/oppo/oppo-reno8-vang.jpg.webp"
   },
+
   {
     "id": "S052",
     "ten": "dien thoai poco x7 pro 5g",
