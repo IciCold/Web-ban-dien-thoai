@@ -2,7 +2,8 @@ import "./register.js";
 import "./login.js";    
 import "./Home.js";
 import "./search.js";
-import "./thanhtoan.js"
+import "./thanhtoan.js";
+import "./logout.js";
 
 //==============Chuyển Page bằng Hase=======================//
 const pages = {

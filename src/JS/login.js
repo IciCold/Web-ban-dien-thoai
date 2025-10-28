@@ -49,11 +49,11 @@ loginForm.addEventListener("submit", function (e) {
       // ====== Đăng nhập thành công ======
    else {
 
-    // Lưu user đang đăng nhập (tùy chọn)
+    // Lưu user đang đăng nhập
     localStorage.setItem("currentUser", JSON.stringify(foundUser));
 
     // Cập nhật giao diện top bar
-    const userSpan = document.querySelector(".user-name span");
+    const userSpan = document.querySelector(".username");
     userSpan.textContent = foundUser.userName;
 
     // Tự động chuyển về trang chủ sau khi đăng nhập
