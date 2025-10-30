@@ -15,7 +15,7 @@
 
   <!--=============THANH TOP===============-->
   <header class="top-bar">
-    <div class="logo">Logo</div>
+    <a href="#home" class="logo">Logo</a>
     <div class="search-bar">
       <input type="text" id="search-input" placeholder="Bạn muốn mua gì?">
       <button id="search-btn"><i class="fa fa-search"></i></button>
@@ -30,9 +30,20 @@
         <i class="fa fa-shopping-cart" id="icon"></i>
       </div>
     </div>
+           <!--Popup option cho đăng nhập, đăng ký-->
+      <div class="overlay" id="overlay-Popup">
+        <div class="popup-content">
+          <h1 class="style">Xin chào!</h1>
+          <div class="option">
+            <span class="text style">Đăng nhập</span>
+            <span class="text style">Đăng ký</span>
+          </div>
+        </div>
+      </div>
   </header>
   <!--=============NỘI DUNG CHÍNH===============-->
   <main class="container-main">
+    
 
     <!--=============HOME===============-->
     <section class="Home">
@@ -106,17 +117,6 @@
 
           <button class="view-more-btn" id="viewMoreBtn">Xem thêm</button>
         </section>
-      </div>
-
-      <!--Popup option cho đăng nhập, đăng ký-->
-      <div class="overlay" id="overlay-Popup">
-        <div class="popup">
-          <h1 class="style">Xin chào!</h1>
-          <div class="option">
-            <span class="text style">Đăng nhập</span>
-            <span class="text style">Đăng ký</span>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -313,6 +313,67 @@
       <i class="fa-brands fa-youtube"></i>
     </div>
   </footer>
+  <!-- CSS (thêm vào <head> hoặc file .css) -->
+<style>
+  .carousel-container {
+    width: 100%;
+    max-width: 1100px; /* chỉnh nếu cần */
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    user-select: none; /* tránh chọn text khi kéo */
+  }
+
+  .carousel {
+    display: flex;
+    gap: 0;
+    transition: transform 300ms ease;
+    will-change: transform;
+    touch-action: pan-y; /* cho phép kéo ngang bằng JS */
+    cursor: grab;
+  }
+
+  .carousel.dragging {
+    transition: none; /* khi đang kéo tắt transition để mượt */
+    cursor: grabbing;
+  }
+
+  .carousel-slide {
+    min-width: 100%; /* mỗi slide chiếm toàn bộ vùng hiển thị */
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .carousel-slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+    pointer-events: none; /* tránh ảnh nhận sự kiện khi kéo */
+    -webkit-user-drag: none;
+  }
+
+  /* optional: nút điều hướng */
+  .nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.4);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 10;
+  }
+  .nav-btn.left { left: 10px; }
+  .nav-btn.right { right: 10px; }
+</style>
+
+<!-- JS (thêm trước </body> hoặc file .js) -->
+
+
 </body>
 
 

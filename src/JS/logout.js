@@ -33,24 +33,23 @@ function createLogoutPopup() {
 function handleLogout() {
     localStorage.removeItem('currentUser');
     userSpan.textContent = 'Đăng nhập';
-    window.location.hash = 'home';
+    // window.location.hash = 'home';
     
     // Đảm bảo trang home được hiển thị
     const homePage = document.querySelector('.Home');
     if (homePage) {
-        homePage.classList.remove('hidden');
-        homePage.classList.add('page-active', 'page-active-enter');
+       location.hash = '#home';
     }
     
-    // Ẩn các trang khác
-    const pages = document.querySelectorAll('.page-login, .page-register');
-    pages.forEach(page => {
-        if (page) {
-            page.classList.add('hidden');
-            page.classList.remove('page-active', 'page-active-enter');
-        }
-    });
-}
+    // // Ẩn các trang khác
+    // const pages = document.querySelectorAll('.page-login, .page-register');
+    // pages.forEach(page => {
+    //     if (page) {
+    //         page.classList.add('hidden');
+    //         page.classList.remove('page-active', 'page-active-enter');
+    //     }
+    // });
+}   
 
 // Hiển thị popup đăng xuất
 function showLogoutPopup() {
@@ -74,6 +73,7 @@ function showLogoutPopup() {
     confirmBtn.addEventListener('click', () => {
         handleLogout();
         closePopup();
+        
     });
     
     cancelBtn.addEventListener('click', closePopup);

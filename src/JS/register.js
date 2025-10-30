@@ -20,7 +20,7 @@ registerLink.addEventListener("click", (e) => {
 
 // ================= Lưu thông tin User =================
 function register(email, userName, password) {
-  let users = JSON.parse(localStorage.getItem("users")) || [];
+  let users = JSON.parse(localStorage.getItem("users")) || []; //lấy lại dữ liệu cũ từ localStorage, nếu không có tạo 1 mãng rỗng
   let newUser = {
     email: email,
     userName: userName,

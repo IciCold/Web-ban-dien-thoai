@@ -17,6 +17,7 @@
 }
 
 .carousel-slide {
+    cursor: pointer;
     min-width: 100%;
     position: relative;
     height: 100%;
@@ -33,9 +34,9 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
+    background-color: rgba(255,255, 255, 0);
     border: none;
+    color: white;
     padding: 10px 15px;
     cursor: pointer;
     font-size: 18px;
@@ -43,10 +44,10 @@
     transition: background-color 0.3s;
 }
 
-.carousel-btn:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
 
+.carousel-btn:hover {
+   filter: brightness(50%);
+}
 .prev-btn {
     left: 10px;
 }
@@ -196,72 +197,3 @@
     background-color: #415ed0;
 }
 
-/* Popup option đăng ký,đăng nhập */
-.overlay {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-#overlay-Popup{
-    position: fixed;
-    backdrop-filter: blur(5px);
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    justify-content: center;
-    align-items: center;
-}
-
-.overlay .popup {
-    max-height: 400px;
-    max-width: 400px;
-    width: 100%;
-    height: 40%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 30%;
-    background: beige;
-    padding: 20px 30px;
-    border-radius: 10px;
-    text-align: left;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0px 0px 20px rgba(255, 255, 255, 0)
-}
-.option{
-    width: 100%;
-    padding: 2%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-}
-.popup .style{
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-.text {
-    color: #f9f9f9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    cursor: pointer;
-    background: var(--main-color);
-    border-radius: 50px;
-    width: 100%;
-    height: 40px;
-    transition: transform 0.2s ease-in-out,
-                box-shadow 0.2s ease-in-out;
-}
-.text:hover{
-    box-shadow: 0 0 30px rgba(70, 207, 238,0.5);
-    transform: scale(1.05);
-}

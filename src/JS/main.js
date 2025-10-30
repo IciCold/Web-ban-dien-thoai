@@ -5,7 +5,7 @@ import "./search.js";
 import "./thanhtoan.js";
 import "./logout.js";
 
-//==============Chuyển Page bằng Hase=======================//
+//==============Chuyển Page bằng Hash=======================//
 const pages = {
   home: document.querySelector('.Home'),
   login: document.querySelector('.page-login'),
