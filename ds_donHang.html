@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách đơn hàng</title>
+    <link rel="stylesheet" href="ds_donHang.css">
+</head>
+<body>
+    <div id="dh-wrapper">
+        <!-- Phần trái: Bảng danh sách đơn hàng -->
+        <div id="dh-left">
+            <h1 class="dh-title">Danh sách đơn hàng</h1>
+
+            <!-- Bảng đơn hàng -->
+            <div class="dh-table-container">
+                <table class="dh-table">
+                    <thead>
+                        <tr>
+                            <th>Ngày</th>
+                            <th>Khách hàng</th>
+                            <th>Giá</th>
+                            <th>Địa chỉ</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2021-10-01</td>
+                            <td>Nguyễn Văn A</td>
+                            <td>1,500,000 VND</td>
+                            <td>Hà Nội</td>
+                            <td>Đã giao</td>
+                            <td>
+                                <button class="dh-del">X</button>
+                                <button class="dh-edit">Chi tiết</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2021-10-05</td>
+                            <td>Trần Thị B</td>
+                            <td>500,000 VND</td>
+                            <td>Hồ Chí Minh</td>
+                            <td>Chưa giao</td>
+                            <td>
+                                <button class="dh-del">X</button>
+                                <button class="dh-edit">Chi tiết</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Phần phải: Tìm kiếm đơn hàng -->
+        <div id="dh-right">
+            <div class="dh-search-box">
+                <h2 class="dh-subtitle">Tìm kiếm đơn hàng</h2>
+                <form class="dh-search-form">
+                    <input type="text" placeholder="Tên sản phẩm">
+                    <!-- Thay đổi ô "Từ" và "Đến" thành input date -->
+                    <input type="date" placeholder="Ngày Từ">
+                    <input type="date" placeholder="Ngày Đến">
+                    <select>
+                        <option value="">Trạng thái</option>
+                        <option value="pending">Chưa giao</option>
+                        <option value="delivered">Đã giao</option>
+                    </select>
+                    <button type="submit">Tìm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

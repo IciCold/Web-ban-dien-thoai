@@ -1,0 +1,227 @@
+/* Cấu trúc chung */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+/* Khung tổng thể */
+#sp-wrapper {
+    display: flex;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    width: 1240px;    
+    height: 570px;    
+}
+
+/* --- Phần trái: Danh sách sản phẩm + Tìm kiếm sản phẩm --- */
+#sp-left {
+    width: 740px;       
+    height: 100%;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Tiêu đề phần Danh sách sản phẩm */
+.sp-title {
+    text-align: center;
+    color: #4e4e4e;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Bảng sản phẩm */
+.sp-table-container {
+    background-color: #ffffff;  
+    border-radius: 10px;
+    padding: 15px;
+    flex: 1;
+    overflow-x: auto;
+    box-shadow: none; 
+}
+
+.sp-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+/* Các thẻ tiêu đề và các ô trong bảng */
+.sp-table th, .sp-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 14px; 
+    color: #333;    
+}
+
+/* Định dạng tiêu đề của bảng */
+.sp-table th {
+    color: white;
+    background-color: #4e73df; 
+}
+
+/* Định dạng ảnh trong bảng */
+.sp-table td img {
+    width: 50px;  
+    height: 50px;
+    border-radius: 5px;
+}
+
+/* Nút thao tác (Xóa và Sửa) */
+.sp-del, .sp-edit {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Màu nền của nút Xóa */
+.sp-del {
+    background-color: #dc3545;
+}
+
+/* Màu nền của nút Sửa */
+.sp-edit {
+    background-color: #007bff;
+}
+
+/* Hiệu ứng khi di chuột vào nút Xóa */
+.sp-del:hover {
+    background-color: #c82333;
+}
+
+/* Hiệu ứng khi di chuột vào nút Sửa */
+.sp-edit:hover {
+    background-color: #0056b3;
+}
+
+/* --- Phần phải: Thêm sản phẩm --- */
+#sp-right {
+    width: 460px;     
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    gap: 20px; 
+    flex-shrink: 0; 
+}
+
+/* Thêm sản phẩm */
+.sp-add-box {
+    border-radius: 10px;
+    padding: 20px;
+    width: 100%; 
+    box-shadow: none; 
+    background-color: #ffffff; 
+}
+
+/* Form thêm sản phẩm */
+.sp-add-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Nút thêm sản phẩm */
+.sp-add-form button {
+    background-color: #4e73df;  
+    color: white;  
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%; 
+}
+
+/* Hiệu ứng khi di chuột vào nút */
+.sp-add-form button:hover {
+    background-color: #375aeb; 
+}
+
+.sp-add-form input {
+    padding: 10px; 
+    font-size: 16px; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    width: 440px; 
+    margin-bottom: 15px; 
+}
+
+#revenue1{
+    padding: 10px; 
+    font-size: 16px; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    width: 80%; 
+    margin-bottom: 15px;
+}
+
+/* Upload ảnh */
+.sp-image-upload {
+    width: 430px;
+    background-color: #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    color: #444;
+}
+
+/* Tìm kiếm sản phẩm */
+.sp-search-box {
+    border-radius: 10px;
+    padding: 15px;
+    width: 90%; 
+    box-shadow: none; 
+    background-color: #ffffff; 
+}
+
+/* Tiêu đề của ô tìm kiếm */
+.sp-subtitle {
+    color: #4e4e4e;  
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+/* Form tìm kiếm */
+.sp-search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sp-search-form input{
+    padding: 10px; 
+    font-size: 16px; 
+    border: 1px solid #ddd; 
+    border-radius: 5px; 
+    width: 610px; 
+    margin-bottom: 15px;
+}
+
+/* Nút tìm kiếm */
+.sp-search-form button {
+    background-color: #4e73df;  
+    color: white;  
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;  
+}
+
+/* Hiệu ứng khi di chuột vào nút */
+.sp-search-form button:hover {
+    background-color: #375aeb; 
+}
+

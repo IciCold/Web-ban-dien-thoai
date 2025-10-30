@@ -1,0 +1,161 @@
+/* Cấu trúc chung */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+/* Khung tổng thể */
+#kh-wrapper {
+    display: flex;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    width: 1240px;    
+    height: 570px;    
+}
+
+/* --- Phần trái: Bảng danh sách khách hàng --- */
+#kh-left {
+    width: 66%;       
+    height: 100%;
+    border-radius: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Tiêu đề phần Danh sách khách hàng */
+.kh-title {
+    text-align: center;
+    color: #4e4e4e;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Bảng khách hàng */
+.kh-table-container {
+    background-color: #ffffff;  
+    border-radius: 10px;
+    padding: 15px;
+    flex: 1;
+    overflow-x: auto;
+    box-shadow: none; 
+}
+
+.kh-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+/* Các thẻ tiêu đề và các ô trong bảng */
+.kh-table th, .kh-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    font-size: 14px; 
+    color: #333;   
+}
+
+/* Định dạng tiêu đề của bảng */
+.kh-table th {
+    color: white;
+    background-color: #4e73df; 
+}
+
+/* Nút thao tác (Xóa và Chi tiết) */
+.kh-del, .kh-edit {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Màu nền của nút Xóa */
+.kh-del {
+    background-color: #dc3545;
+}
+
+/* Màu nền của nút Chi tiết */
+.kh-edit {
+    background-color: #007bff;
+}
+
+/* Hiệu ứng khi di chuột vào nút Xóa */
+.kh-del:hover {
+    background-color: #c82333;
+}
+
+/* Hiệu ứng khi di chuột vào nút Chi tiết */
+.kh-edit:hover {
+    background-color: #0056b3;
+}
+
+/* --- Phần phải: Tìm kiếm khách hàng --- */
+#kh-right {
+    width: 34%;     
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    gap: 20px; 
+    flex-shrink: 0; 
+}
+
+/* Ô tìm kiếm */
+.kh-search-box {
+    border-radius: 10px;
+    padding: 15px;
+    width: 100%; 
+    box-shadow: none; 
+    color: white;
+}
+
+/* Tiêu đề của ô tìm kiếm */
+.kh-subtitle {
+    color: #4e4e4e;
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 18px;
+    padding-right: 50px;
+}
+
+/* Form tìm kiếm */
+.kh-search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Các ô nhập liệu */
+.kh-search-form input {
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 16px;
+    width: 355px;
+}
+
+/* Nút tìm kiếm */
+.kh-search-form button {
+    background-color: #4e73df;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 90%;  
+}
+
+/* Hiệu ứng khi di chuột vào nút */
+.kh-search-form button:hover {
+    background-color: #375aeb;
+    
+}

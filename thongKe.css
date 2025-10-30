@@ -1,0 +1,130 @@
+/* Cấu trúc chung */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+}
+
+/* Khung tổng thể */
+.stats-wrapper {
+    display: flex;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    width: 1240px;    
+    height: 570px;    
+}
+
+/* Phần bên trái (Bảng thống kê) */
+.stats-left-panel {
+    flex: 2;
+    padding-right: 20px;
+}
+
+/* Tiêu đề phần thống kê */
+.stats-title {
+    font-size: 32px;
+    color: #4e4e4e;
+    margin-bottom: 30px;
+}
+
+/* Bảng thống kê */
+.stats-table-container {
+    overflow-x: auto;
+}
+
+.stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.stats-table th, .stats-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.stats-table th {
+    background-color: #4e73df;
+    color: white;
+}
+
+/* Phần bên phải (Tùy chỉnh lọc và kết quả mẫu) */
+.stats-right-panel {
+    flex: 1;
+    padding-left: 20px;
+}
+
+.stats-subtitle {
+    font-size: 24px;
+    color: #4e4e4e;
+    margin-bottom: 20px;
+}
+
+.stats-filter-section label {
+    font-size: 16px;
+    color: #4e4e4e;
+    margin-bottom: 5px;
+}
+
+.stats-filter-section select, input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+/* Đảm bảo ô nhập "Số thu" giống với 2 ô trên */
+#revenue {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 95%; 
+    margin-bottom: 15px;
+}
+
+.stats-filter-section button {
+    background-color: #4e73df;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.stats-filter-section button:hover {
+    background-color: #375aeb;
+}
+
+.stats-table button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.stats-table button:hover {
+    background-color: #0056b3;
+}
+
+/* Phần kết quả thống kê */
+.stats-result {
+    margin-top: 30px;
+}
+
+.stats-result p {
+    font-size: 18px;
+    color: #4e4e4e;
+}
