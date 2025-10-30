@@ -1,0 +1,59 @@
+/*import tất cả file css vào trong này*/
+@import url("register.css");
+@import url("login.css");
+@import url('Head-Footer.css');
+@import url('Home.css');
+@import url('chitiet.css');
+@import url('thanhtoan.css');
+@import url('logout.css');
+
+/*NHỮNG STYLE CHUNG CHO TOÀN BỘ TRANG WEB BỎ VÀO TRONG NÀY*/
+
+/* biến cục bộ */
+:root {
+  --main-color: #1bcaf1;
+  /*màu chủ đạo*/
+  --color-primary: #5f7df5;
+  --color-secondary: #98abf6;
+  --color-light-gray: #c0ccda;
+  --color-success: #5cb85c;
+  --color-text: #333;
+}
+     
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;/*giúp kích thước của các phần tử không bị phình to ra 
+                            ngoài kích thước mong muốn*/
+    
+}
+html,body {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+body {
+    min-height: 100vh;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #FCF7F8;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+
+}
+/*Class ẩn page dùng để chuyển page*/
+.hidden {
+  display: none !important;
+}
+
+.container-main{
+  flex: 1;
+}
+/*Hiệu ứng chuyển page*/
+.page-active{
+ opacity: 0;
+ transition:opacity 0.3s ease;
+}
+.page-active-enter{
+  opacity: 1;
+}

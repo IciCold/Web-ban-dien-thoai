@@ -1,0 +1,231 @@
+/* ===== HEADER ===== */
+.top-bar {
+    position: relative;
+ 
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 12px 5%;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    position: absolute;
+    left: 10%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #5f7df5;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* THANH SEARCH */
+.search-bar {
+    position: relative;
+    right: 1%;
+    display: flex;
+    width: 40%;
+    height: 100%;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-right: none;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+
+.search-bar button {
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+}
+
+/* ACTION */
+.icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.action i {
+    transition: all 0.2s ease;
+}
+
+.action i:hover {
+    cursor: pointer;
+    color: var(--main-color);
+}
+
+.action {
+    position: absolute;
+    right: 0;
+    max-width: 300px;
+    max-height: 50px;
+    width: 40%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    justify-content: space-around;
+    align-items: center;
+
+}
+
+.user-name {
+    cursor: pointer;
+    width: 50%;
+    gap: 50px;
+    transition: all 0.2s ease;
+}
+
+.user-name span {
+    padding-left: 5%;
+    font-weight: 600;
+}
+
+.user-name:hover {
+    color: var(--main-color);
+}
+
+.action #icon {
+    font-size: 1.3rem;
+}
+
+
+/* ===== FOOTER ===== */
+.footer {
+
+    margin-bottom: 0;
+    width: 100%;
+    background: #5f7df5;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.footer-logo {
+    background: white;
+    color: black;
+    width: 100px;
+    margin: 0 auto 10px;
+    padding: 6px;
+    border-radius: 4px;
+}
+
+.socials {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    font-size: 20px;
+}
+.search-bar,.logo, .action{
+    transition: all 0.2s ease;
+}
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {  
+    .user-name{
+        opacity: 0;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 320px){
+      .action,.logo{
+        opacity: 0;
+    }
+    .search-bar input{
+        width: 10%;
+    }
+    
+}
+@media (max-width: 400px){
+    .search-bar input{
+        width: 30%;
+    }
+}
+/* Popup option đăng ký,đăng nhập */
+.overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+
+}
+
+#overlay-Popup{
+    position: fixed;
+    backdrop-filter: blur(5px);
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /*Giúp popup luôn nằm trên tất cả phần từ*/
+    
+}
+
+.overlay .popup-content {
+    max-height: 400px;
+    max-width: 400px;
+    width: 100%;
+    height: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30%;
+    background-color: #fff8dc;
+    padding: 20px 30px;
+    border-radius: 10px;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0px 0px 20px rgba(255, 255, 255, 0)
+}
+.option{
+    width: 100%;
+    padding: 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.popup .style{
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+.text {
+    color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    cursor: pointer;
+    background: var(--main-color);
+    border-radius: 50px;
+    width: 100%;
+    height: 40px;
+    transition: transform 0.2s ease-in-out,
+                box-shadow 0.2s ease-in-out;
+}
+.text:hover{
+    box-shadow: 0 0 30px rgba(70, 207, 238,0.5);
+    transform: scale(1.05);
+}

@@ -1,0 +1,198 @@
+.container.payment-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: white;
+    width: auto;
+}
+
+.payment-form{
+  max-width: 900px;
+  max-height: 700px;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  background: #1bcaf1;
+  border-radius: 10px;
+  box-shadow: 0px 10px 30px #0000001a;
+}
+
+/* Tiêu đề lớn "Thanh toán" */
+.payment-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+}
+
+/* Khung lưới chính chứa tóm tắt và thông tin thanh toán */
+.payment-grid {
+    display: grid;
+    /* Hai cột bằng nhau trên desktop */
+    grid-template-columns: 1fr 1fr; 
+    gap: 80px;
+    text-align: left;
+}
+
+/* --- Tóm Tắt Đơn Hàng (Order Summary) --- */
+
+.order-summary {
+    display: flex;
+    flex-direction: column;
+    padding-right: 40px; 
+}
+
+.order-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    /* Đường kẻ ngang ngăn cách */
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 10px;
+}
+
+.order-item {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    opacity: 0.9;
+}
+
+.total-box {
+    margin-top: 30px;
+    padding-top: 20px;
+    /* Đường kẻ ngang trên tổng tiền */
+    border-top: 2px solid #FFFFFF;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.total-label {
+    font-size: 1.3rem;
+    font-weight: 400;
+}
+
+.total-amount {
+    font-size: 2rem;
+    font-weight: 700;
+    /* Màu nổi bật giống nút Visa trong ảnh */
+    letter-spacing: 0.5px;
+}
+
+/* --- Thông Tin Thanh Toán (Payment Info) --- */
+
+.payment-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-label {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    margin-top: 20px;
+}
+/* Thiết lập lại margin cho label đầu tiên */
+.payment-info > .info-label:first-child {
+    margin-top: 0;
+}
+
+
+.text-input {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 6px;
+    /* Nền input màu trắng nhạt */
+    background-color: rgba(255, 255, 255, 0.9); 
+    color: #333;
+    font-size: 1rem;
+    transition: box-shadow 0.2s;
+}
+
+.text-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px #5f7df5;
+}
+
+.text-input::placeholder {
+    color: #999;
+    opacity: 1;
+}
+
+/* Các phương thức thanh toán (buttons) */
+.payment-methods {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap; 
+}
+
+.payment-button {
+    flex: 1;
+    padding: 12px 15px;
+    border: none;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    min-width: 100px;
+}
+
+.payment-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Màu riêng cho từng phương thức */
+.cash {
+    background-color: #4CAF50; /* Xanh lá cây */
+}
+
+.visa {
+    background: linear-gradient(to right, #0A2A6C, #1E3A8A, #2F55D1); /* Vàng */
+    color: white; /* Chữ đen trên nền vàng */
+}
+
+.momo {
+    background-color: rgba(176, 0, 106, 1); /* Màu thương hiệu MoMo */
+}
+
+/* Trạng thái active của nút thanh toán */
+.payment-button.active {
+    /* Viền trắng nổi bật */
+    box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px rgba(0, 0, 0, 0.2); 
+    transform: scale(1.05);
+}
+
+/* Nút Mua Ngay */
+.buy-now-button-large {
+    width: 100%;
+    padding: 18px 20px;
+    margin-top: 20px;
+    /* Màu xám nhạt từ ảnh */
+    background-color: #E0E0E0; 
+    color: #333; 
+    font-size: 1.5rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+}
+
+.buy-now-button-large:hover {
+    background-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.momo-logo {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
+}

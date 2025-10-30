@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <link rel="stylesheet" href="../asset/icon/fontawesome-free-7.1.0-web/css/all.min.css">
+  <link rel="stylesheet" href="CSS/main.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="JS/main.js" type="module"></script>
+</head>
+
+<body>
+
+  <!--=============THANH TOP===============-->
+  <header class="top-bar">
+    <a href="#home" class="logo">Logo</a>
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="Bạn muốn mua gì?">
+      <button id="search-btn"><i class="fa fa-search"></i></button>
+    </div>
+    <div class="action">
+      <div class="user-name" tabindex="0">
+        <i class="fa-solid fa-user" id="icon"></i>
+        <span class="username">username</span>
+      </div>
+      <div class="icons">
+        <i class="fa fa-bell" id="icon"></i>
+        <i class="fa fa-shopping-cart" id="icon"></i>
+      </div>
+    </div>
+           <!--Popup option cho đăng nhập, đăng ký-->
+      <div class="overlay" id="overlay-Popup">
+        <div class="popup-content">
+          <h1 class="style">Xin chào!</h1>
+          <div class="option">
+            <span class="text style">Đăng nhập</span>
+            <span class="text style">Đăng ký</span>
+          </div>
+        </div>
+      </div>
+  </header>
+  <!--=============NỘI DUNG CHÍNH===============-->
+  <main class="container-main">
+    
+
+    <!--=============HOME===============-->
+    <section class="Home">
+      <!-- Carousel Quảng Cáo -->
+      <div class="carousel-container">
+        <div class="carousel" id="carousel">
+          <!-- Slide 1: iPhone 17 -->
+          <div class="carousel-slide">
+            <img src="../asset/Images/banner/690x300_iPhone_17_Pro_Opensale_v3.webp"
+              alt="iPhone 17 - Bù thật ít. Đổi thật nhanh">
+          </div>
+
+          <!-- Slide 2: iPhone Air -->
+          <div class="carousel-slide">
+            <img src="../asset/Images/banner/honor-magic-v5-home.webp" alt="iPhone Air - Bù thật ít. Đổi thật nhanh">
+          </div>
+
+          <!-- Slide 3: HONOR Magic V5 -->
+          <div class="carousel-slide">
+            <img src="../asset/Images/banner/s25-home-1025.webp" alt="HONOR Magic V5 - AI | ĐẲNG CẤP GẬP TOÀN DIỆN">
+          </div>
+
+          <!-- Slide 4: Galaxy S25 Ultra 5G -->
+          <div class="carousel-slide">
+            <img src="../asset/Images/banner/xiaomi-15t-5g-home-0925.webp" alt="Galaxy S25 Ultra 5G">
+          </div>
+
+          <!-- Slide 5: Xiaomi 15T Series -->
+          <div class="carousel-slide">
+            <img src="../asset/Images/banner/690x300_iPhone_Air_opensale_v3.webp"
+              alt="Xiaomi 15T Series - CO-ENGINEERED WITH">
+          </div>
+        </div>
+        <!-- Nút điều hướng -->
+        <button class="carousel-btn prev-btn" id="prevBtn">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="carousel-btn next-btn" id="nextBtn">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- Chỉ số slide -->
+        <div class="carousel-indicators" id="indicators">
+          <div class="indicator active" data-index="0"></div>
+          <div class="indicator" data-index="1"></div>
+          <div class="indicator" data-index="2"></div>
+          <div class="indicator" data-index="3"></div>
+          <div class="indicator" data-index="4"></div>
+        </div>
+      </div>
+
+      <!-- Bộ lọc sản phẩm -->
+      <div class="filter-bar">
+        <div class="brand-filter">
+          <button class="brand-btn active" data-brand="all">Tất cả</button>
+          <button class="brand-btn" data-brand="iphone">iPhone</button>
+          <button class="brand-btn" data-brand="samsung">Samsung</button>
+          <button class="brand-btn" data-brand="xiaomi">Xiaomi</button>
+          <button class="brand-btn" data-brand="ipad">Máy Tính Bảng</button>
+        </div>
+      </div>
+
+      <!-- Nội dung chính -->
+      <div class="container">
+        <section class="products-section">
+          <h2>Sản phẩm nổi bật</h2>
+
+          <div class="products-grid" id="productsGrid">
+            <!-- Sản phẩm sẽ được thêm bằng JavaScript -->
+          </div>
+
+          <button class="view-more-btn" id="viewMoreBtn">Xem thêm</button>
+        </section>
+      </div>
+    </section>
+
+    <!--=============CHI TIẾT===============-->
+    <section class="product-section" id="productSection">
+      <h1 class="product-title">Samsung Galaxy A06 5G</h1>
+      <div class="product-details-grid">
+        <div class="product-image-specs">
+          <div class="product-image-container">
+            <img src="../asset/Images/Dienthoai/samsung/dien-thoai-samsung-galaxy-a06-5g_1__1.webp"
+              alt="Samsung Galaxy A06 5G" class="product-image">
+          </div>
+
+          <div class="specs-box">
+            <p><strong>.CPU:</strong></p>
+            <p><strong>.RAM:</strong></p>
+            <p><strong>.Camera:</strong></p>
+            <p><strong>.Dung lượng pin:</strong></p>
+          </div>
+        </div>
+        <div class="product-options">
+          <div class="product-price">
+            5.000.000 VND
+          </div>
+
+          <div class="option-group">
+            <span class="option-label">Bộ nhớ:</span>
+            <div class="option-buttons" id="ramButton">
+              <button class="option-button">1</button>
+              <button class="option-button">2</button>
+              <button class="option-button">3</button>
+            </div>
+          </div>
+
+          <div class="option-group">
+            <span class="option-label">Màu:</span>
+            <div class="color-options" id="colorButton">
+              <button class="color-option red"></button>
+              <button class="color-option yellow"></button>
+              <button class="color-option green"></button>
+            </div>
+          </div>
+
+          <div class="option-group">
+            <span class="option-label">Số lượng:</span>
+            <div class="quantity-control">
+              <button class="qty-button">-</button>
+              <input type="number" class="qty-input" value="1" min="1" readonly>
+              <button class="qty-button">+</button>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button class="buy-now-button" id="toggleButton">Mua ngay</button>
+            <button class="add-to-cart-button">Thêm vào giỏ hàng</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+    <!--=============THANH TOÁN===============-->
+    <section class="container payment-section" id="paymentSection">
+      <form class="payment-form layout-form" id="payment-form">
+        <h1 class="payment-title">Thanh toán</h1>
+  
+        <div class="payment-grid">
+  
+          <div class="order-summary">
+            <h2 class="order-title">Đơn hàng của bạn:</h2>
+            <p class="order-item">1x Xiaomi Pro 5T</p>
+            <p class="order-item">1x iPhone XS Pro Vjp</p>
+  
+            <div class="total-box">
+              <span class="total-label">Thành tiền:</span>
+              <span class="total-amount">5.000.000 VND</span>
+            </div>
+          </div>
+  
+          <div class="payment-info">
+  
+            <label for="delivery-address" class="info-label">Địa chỉ giao hàng:</label>
+            <input type="text" id="delivery-address" class="text-input" placeholder="Địa chỉ default (placeholder)">
+  
+            <div class="payment-methods">
+              <button class="payment-button cash"><i class="fa-solid fa-money-bill"></i> Cash</button>
+              <button class="payment-button visa"><i class="fa-brands fa-cc-visa"></i> Visa</button>
+              <button class="payment-button momo"><img src="../asset/Images/mini-app_design-guideline_branding-guide-2-2.webp" alt="Momo" class="momo-logo">Momo</button>
+            </div>
+  
+            <label for="card-name" class="info-label">Tên người chủ thẻ</label>
+            <input type="text" id="card-name" class="text-input" placeholder="Tên người chủ thẻ">
+  
+            <label for="card-number" class="info-label">Số thẻ</label>
+            <input type="text" id="card-number" class="text-input" placeholder="Số thẻ">
+  
+            <button class="buy-now-button-large">Mua ngay</button>
+          </div>
+        </div>
+      </form class="payment-form layout-form" id="payment-form">
+    </section>
+
+
+    <!--=============LOGIN===============-->
+    <section class="page-login" id="login">
+      <form class="login-form layout-form" id="login-form">
+        <div class="form-heading">Đăng nhập</div>
+
+        <!--Tên đăng nhập-->
+        <div class="input-group">
+          <label class="label" for="username">Tên đăng nhập</label>
+          <input class="Ip" type="text" id="username" name="username" placeholder="Tên đăng nhập hoặc Email" required>
+          <p class="warning-user" style="color: red;
+              font-size: 0.7rem; font-weight: 600; display: none;">Tài khoản không tồn tại</p>
+        </div>
+
+        <!--Mật khẩu-->
+        <div class="input-group">
+          <label class="label" for="password">Mật khẩu</label>
+          <input class="Ip" type="password" id="password" name="password" placeholder="Mật khẩu" required>
+          <p class="warning-incorrect-password" style="color: red;
+              font-size: 0.7rem; font-weight: 600; display: none;">Sai mật khẩu</p>
+        </div>
+
+        <!--Button-->
+        <div class="button">
+          <button type="submit">Đăng nhập</button>
+        </div>
+
+        <!--Liên kết-->
+        <div class="form-actions">
+          <a href="#" class="forgot-link">Quên mật khẩu?</a>
+          <a href="#register" class="register-link">Đăng ký</a>
+        </div>
+      </form>
+    </section>
+
+
+    <!--=============REGISTER===============-->
+    <section class="page-register" id="register">
+      <!-- Bảng đăng kí -->
+      <form class="signin-form layout-form" id="form-register">
+        <div class="form-heading">Đăng ký</div>
+        <div class="input-group">
+          <!--Tên đăng nhập-->
+          <label class="label" for="fname"> Tên đăng nhập</label>
+          <input class="register-Ip" name="username" type="text" id="fname" placeholder="Nhập tên đăng nhập">
+          <!--buộc người dùng nhập vào thì mới cho gửi form-->
+        </div>
+
+        <!--Email-->
+        <div class="input-group">
+          <label class="label" for="femail">Email</label>
+          <input class="register-Ip" name="email" type="email" id="femail" placeholder="Nhập Email">
+          <p class="warning-email" style="color: red;
+                       font-size: 0.7rem; font-weight: 600; display: none;">Email không hợp lệ</p>
+        </div>
+
+        <!--Mật khẩu-->
+        <div class="input-group">
+          <label class="label" for="fpassword">Mật khẩu</label>
+          <input class="register-Ip" name="password" type="password" id="fpassword" placeholder="Nhập Mật khẩu">
+        </div>
+        <div class="input-group">
+          <label class="label" for="fconfirm">Nhập lại mật khẩu</label>
+          <input class="register-Ip" name="confirmPw" type="password" id="fconfirm" placeholder="Nhập lại mật khẩu">
+          <p class="warning-pw" style="color: red;
+                      font-size: 0.7rem; font-weight: 600; display: none;">Mật khẩu không khớp</p>
+        </div>
+
+        <!--button-->
+        <div class="button">
+          <button>Xác nhận</button>
+        </div>
+      </form>
+
+      <!--Đăng kí thành công-->
+      <div class="thongbao hidden">
+        <h1 class="style"><i class="fa-solid fa-circle-check" style="color: #74C0FC;"></i>
+          Đăng ký thành công
+        </h1>
+        <span class="loader"></span>
+      </div>
+    </section>
+  </main>
+
+  <!--=============THANH BOT===============-->
+  <footer class="footer">
+    <div class="footer-logo">Logo</div>
+    <p>Copyrighted 2025 by iciii</p>
+    <div class="socials">
+      <i class="fa-brands fa-github"></i>
+      <i class="fa-brands fa-facebook"></i>
+      <i class="fa-brands fa-youtube"></i>
+    </div>
+  </footer>
+  <!-- CSS (thêm vào <head> hoặc file .css) -->
+<style>
+  .carousel-container {
+    width: 100%;
+    max-width: 1100px; /* chỉnh nếu cần */
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    user-select: none; /* tránh chọn text khi kéo */
+  }
+
+  .carousel {
+    display: flex;
+    gap: 0;
+    transition: transform 300ms ease;
+    will-change: transform;
+    touch-action: pan-y; /* cho phép kéo ngang bằng JS */
+    cursor: grab;
+  }
+
+  .carousel.dragging {
+    transition: none; /* khi đang kéo tắt transition để mượt */
+    cursor: grabbing;
+  }
+
+  .carousel-slide {
+    min-width: 100%; /* mỗi slide chiếm toàn bộ vùng hiển thị */
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .carousel-slide img {
+    width: 100%;
+    height: auto;
+    display: block;
+    pointer-events: none; /* tránh ảnh nhận sự kiện khi kéo */
+    -webkit-user-drag: none;
+  }
+
+  /* optional: nút điều hướng */
+  .nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.4);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 10;
+  }
+  .nav-btn.left { left: 10px; }
+  .nav-btn.right { right: 10px; }
+</style>
+
+<!-- JS (thêm trước </body> hoặc file .js) -->
+
+
+</body>
+
+
+</html>
