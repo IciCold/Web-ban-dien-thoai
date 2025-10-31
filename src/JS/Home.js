@@ -73,211 +73,57 @@ carousel.addEventListener("mouseleave", startSlideShow);
 
 // Bắt đầu carousel
 startSlideShow();
-const products = [
-  //iphone
-  {
-    name: "iPhone 7",
-    brand: "iphone",
-    price: 32990000,
-    img: "/asset/Images/Dienthoai/iphone/iphone-7-pink_32.webp",
-  },
-  {
-    name: "iPhone 11 Pro Max Vàng",
-    brand: "iphone",
-    price: 19990000,
-    img: "/asset/Images/Dienthoai/iphone/iphone-11-pro-max-vang.jpg.webp",
-  },
-  {
-    name: "iPhone 11 Tím",
-    brand: "iphone",
-    price: 32990000,
-    img: "/asset/Images/Dienthoai/iphone/iphone-11-tim.jpg.webp",
-  },
-  {
-    name: "iPhone 12 Pro vàng",
-    brand: "iphone",
-    price: 32990000,
-    img: "../asset/Images/Dienthoai/iphone/iphone-12-pro-vang.jpg.webp",
-  },
-  {
-    name: "iPhone 14 Plus Tím",
-    brand: "iphone",
-    price: 32990000,
-    img: "../asset/Images/Dienthoai/iphone/iphone-14-plus-tim.jpg.webp",
-  },
-  {
-    name: "iPhone 14 Pro Max Đen",
-    brand: "iphone",
-    price: 32990000,
-    img: "../asset/Images/Dienthoai/iphone/iphone-14-pro-max-den-cu.jpg.webp",
-  },
-  {
-    name: "iPhone 14 Pro Tím",
-    brand: "iphone",
-    price: 32990000,
-    img: "../asset/Images/Dienthoai/iphone/iphone-14pro-tim-chinh-thuc.png.webp",
-  },
-  {
-    name: "iPhone 15 vàng",
-    brand: "iphone",
-    price: 32990000,
-    img: "../asset/Images/Dienthoai/iphone/iphone-15-cu-vang.jpg.webp",
-  },
-  {
-    name: "iPhone 15 Plus",
-    brand: "iphone",
-    price: 32990000,
-    img: "../asset/Images/Dienthoai/iphone/iphone-15-plus_1_.webp",
-  },
-  {
-    name: "iPhone 16 Xanh Lam",
-    brand: "iphone",
-    price: 32990000,
-    img: "../asset/Images/Dienthoai/iphone/iphone-16-1.webp",
-  },
-  {
-    name: "iPhone 16 Pro Max",
-    brand: "iphone",
-    price: 32990000,
-    img: "../asset/Images/Dienthoai/iphone/iphone-16-pro-max.webp",
-  },
-  {
-    name: "iPhone 17 Pro Max",
-    brand: "iphone",
-    price: 32990000,
-    img: "../asset/Images/Dienthoai/iphone/iphone-17-pro-max_3.webp",
-  },
-  //xiaomi
-  {
-    name: "POCO C71 4G",
-    brand: "xiaomi",
-    price: 4990000,
-    img: "../asset/Images/Dienthoai/xiaomi/dien-thoai-xiaomi-poco-c71_2__1.webp",
-  },
-  {
-    name: "Xiaomi 15 Utra",
-    brand: "xiaomi",
-    price: 7490000,
-    img: "../asset/Images/Dienthoai/xiaomi/dien-thoai-xiaomi-15-ultra.webp",
-  },
-  {
-    name: "POCO X7 Pro 5G",
-    brand: "xiaomi",
-    price: 7490000,
-    img: "../asset/Images/Dienthoai/xiaomi/dien-thoai-poco-x7-pro-5g_1_.webp",
-  },
-  {
-    name: "POCO C75 Xanh lá",
-    brand: "xiaomi",
-    price: 7490000,
-    img: "../asset/Images/Dienthoai/xiaomi/poco-c75-xanh-la.jpg.webp",
-  },
-  {
-    name: "Xiaomi redmi note 11",
-    brand: "xiaomi",
-    price: 7490000,
-    img: "../asset/Images/Dienthoai/xiaomi/xiaomi-redmi-note-11_1.webp",
-  },
-  //samsung
-  {
-    name: "Samsung Galaxi A06",
-    brand: "samsung",
-    price: 28990000,
-    img: "../asset/Images/Dienthoai/samsung/dien-thoai-samsung-galaxy-a06_3.webp",
-  },
-  {
-    name: "Samsung Galaxi A06 5G",
-    brand: "samsung",
-    price: 28990000,
-    img: "../asset/Images/Dienthoai/samsung/dien-thoai-samsung-galaxy-a06-5g_1__1.webp",
-  },
-  {
-    name: "Samsung Galaxi A16",
-    brand: "samsung",
-    price: 28990000,
-    img: "../asset/Images/Dienthoai/samsung/dien-thoai-samsung-galaxy-a16_1__3.webp",
-  },
-  {
-    name: "Samsung Galaxi A36",
-    brand: "samsung",
-    price: 28990000,
-    img: "../asset/Images/Dienthoai/samsung/dien-thoai-samsung-galaxy-a36.2.webp",
-  },
-  {
-    name: "Samsung Galaxi A56",
-    brand: "samsung",
-    price: 8990000,
-    img: "../asset/Images/Dienthoai/samsung/dien-thoai-samsung-galaxy-a56.1_1.webp",
-  },
-  //tablet-samsung
-  {
-    name: "Samsung Galaxi Tab S10",
-    brand: "ipad",
-    price: 9999999,
-    img: "../asset/Images/Tablet/samsung/may-tinh-bang-samsung-galaxy-tab-s10-fe.1.webp",
-  },
-  {
-    name: "Samsung Galaxi Tab S10 Plus 5G",
-    brand: "ipad",
-    price: 9999999,
-    img: "../asset/Images/Tablet/samsung/may-tinh-bang-samsung-galaxy-tab-s10-plus-5g_2.webp",
-  },
-  {
-    name: "Samsung Galaxi Tab S11 Ultra 4",
-    brand: "ipad",
-    price: 9999999,
-    img: "../asset/Images/Tablet/samsung/may-tinh-bang-samsung-galaxy-tab-s11-ultra-4.webp",
-  },
-  {
-    name: "Samsung Galaxi Tab A11",
-    brand: "ipad",
-    price: 9999999,
-    img: "../asset/Images/Tablet/samsung/samsung_galaxy_tab_a11_wifi_1_1.webp",
-  },
-  {
-    name: "Samsung Galaxi Tab A7 Lite Xám",
-    brand: "ipad",
-    price: 9999999,
-    img: "../asset/Images/Tablet/samsung/samsung-galaxy-tab-a7-lite-gray-600x600_2_1.webp",
-  },
-  //tablet-xiaomi
-  {
-    name: "Xiaomi Pad 5 Đen",
-    brand: "ipad",
-    price: 9999999,
-    img: "../asset/Images/Tablet/xiaomi/xiaomi-mi-pad-5-dai-dien-den.jpg.webp",
-  },
-  {
-    name: "Xiaomi Pad 5 Pro Trắng",
-    brand: "ipad",
-    price: 9999999,
-    img: "../asset/Images/Tablet/xiaomi/xiaomi-mi-pad-5-pro-dai-dien-trang.jpg.webp",
-  },
-  {
-    name: "Xiaomi Pad 6 Đen",
-    brand: "ipad",
-    price: 9999999,
-    img: "../asset/Images/Tablet/xiaomi/xiaomi-mi-pad-6-den.jpg.webp",
-  },
-  {
-    name: "Xiaomi Pad 6 Vàng",
-    brand: "ipad",
-    price: 9999999,
-    img: "../asset/Images/Tablet/xiaomi/xiaomi-mi-pad-6-vang.jpg.webp",
-  },
-  {
-    name: "Xiaomi Pad 7 Xám",
-    brand: "ipad",
-    price: 9999999,
-    img: "../asset/Images/Tablet/xiaomi/xiaomi-pad-7-dai-dien.jpg.webp",
-  },
-];
+
+// ===================================================
+// PHẦN LOGIC SẢN PHẨM ĐÃ THAY ĐỔI
+// ===================================================
+
+// **2. Tạo một biến để lưu trữ tất cả sản phẩm**
+let allProducts = [];
 
 const productsGrid = document.getElementById("productsGrid");
 const viewMoreBtn = document.getElementById("viewMoreBtn");
 const brandBtns = document.querySelectorAll(".brand-btn");
 let visibleProducts = 6;
 let currentBrand = "all";
+
+// **3. Tạo hàm để tải và xử lý dữ liệu từ JSON**
+async function loadProducts() {
+  try {
+    // Tải tệp JSON (đường dẫn này là tương đối so với tệp index.html)
+    const response = await fetch("../asset/data/dienthoai.json");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+
+    // **Quan trọng: Ánh xạ dữ liệu từ JSON sang định dạng mà code của bạn mong đợi**
+    allProducts = data.map(item => {
+      // Xử lý logic cho "Máy Tính Bảng"
+      // Nút lọc của bạn dùng 'data-brand="ipad"' cho Máy Tính Bảng.
+      // Tệp JSON dùng 'loai: "Tablet"'.
+      // Chúng ta sẽ gán lại 'brand' thành 'ipad' nếu 'loai' là 'Tablet'.
+      let effectiveBrand = item.brand;
+      if (item.loai === 'Tablet') {
+        effectiveBrand = 'ipad';
+      }
+
+      return {
+        name: item.ten,         // 'ten' từ JSON -> 'name'
+        brand: effectiveBrand,  // 'brand' hoặc 'ipad' (nếu là tablet)
+        price: item.gia,        // 'gia' từ JSON -> 'price'
+        img: item.src           // 'src' từ JSON -> 'img'
+      };
+    });
+
+    // **4. Sau khi tải và xử lý xong, gọi hàm hiển thị lần đầu**
+    updateDisplay();
+
+  } catch (error) {
+    console.error("Không thể tải sản phẩm:", error);
+    productsGrid.innerHTML = "<p>Lỗi khi tải sản phẩm. Vui lòng thử lại.</p>";
+  }
+}
 
 // ======= HIỂN THỊ SẢN PHẨM =======
 function displayProducts(list) {
@@ -299,10 +145,13 @@ function displayProducts(list) {
   actionsBuy();
   viewMoreBtn.style.display = visibleProducts >= list.length ? "none" : "block";
 }
+
 // ======= LỌC THEO HÃNG =======
+// Hàm này giờ sẽ dùng 'allProducts' thay vì 'products'
 function filterByBrand() {
-  if (currentBrand === "all") return [...products];
-  return products.filter((p) => p.brand === currentBrand);
+  if (currentBrand === "all") return [...allProducts];
+  // Vì đã xử lý 'ipad' ở hàm loadProducts, logic lọc này vẫn đúng
+  return allProducts.filter((p) => p.brand === currentBrand);
 }
 
 // ======= CẬP NHẬT HIỂN THỊ =======
@@ -329,7 +178,13 @@ viewMoreBtn.addEventListener("click", () => {
 });
 
 // ======= KHỞI TẠO =======
-updateDisplay();
+// **5. Gọi hàm loadProducts() thay vì updateDisplay()**
+// updateDisplay(); // XÓA DÒNG NÀY
+loadProducts(); // THÊM DÒNG NÀY ĐỂ BẮT ĐẦU TẢI DỮ LIỆU
+
+// ===================================================
+// PHẦN LOGIC POPUP VÀ CHUYỂN TRANG (giữ nguyên)
+// ===================================================
 
 // ======= POPUP =======
 const userName = document.querySelector(".user-name");
@@ -376,4 +231,6 @@ buyNowBtn.addEventListener("click", () => {
   location.hash = "thanhtoan";
 });
  
-export { products, productsGrid, displayProducts };
+// **6. Cập nhật lại export (nếu cần)**
+// Xóa 'products' khỏi export vì nó không còn tồn tại
+export { productsGrid, displayProducts };
