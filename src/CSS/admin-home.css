@@ -1,0 +1,139 @@
+/* --- Cấu trúc chung --- */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex; 
+    height: 100vh;
+}
+
+/* --- Cột bên trái (Sidebar) --- */
+.sidebar {
+    width: 120px;
+    background-color: #97a9ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    width: 100%;
+    height: 96px;
+    background-color: #d9d9d9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    user-select: none;
+}
+
+.menu {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    padding-top: 30px;
+    gap: 30px;
+}
+
+.icon-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 30px; 
+    color: #000;
+    text-decoration: none; /* Reset style cho thẻ <a> */
+}
+
+.icon-btn:hover {
+    background-color: #eee;
+}
+
+/* Trạng thái active cho nút sidebar */
+.icon-btn.active {
+    background-color: #4e73df;
+    color: white; /* Icon sẽ kế thừa màu này */
+}
+
+/* --- Khung nội dung chính (Bên phải) --- */
+.main {
+    flex: 1;
+    padding: 30px;
+    position: relative;
+    /* Giúp nội dung dài có thể cuộn */
+    overflow-y: auto; 
+    height: calc(100vh - 60px); /* 100vh trừ đi padding trên/dưới */
+}
+
+.login {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    user-select: none;
+}
+
+.login:hover {
+    border: 2px solid #000;
+    border-radius: 10px;    
+    padding: 5px 10px;      
+    background-color: #f2f2f2; 
+    transition: 0.2s; 
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    background: black;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+/* --- Logic Ẩn/Hiện Trang (Router) --- */
+
+/* 1. Ẩn tất cả các trang theo mặc định */
+.page-section {
+    display: none;
+    width: 100%;
+    height: 100%;
+}
+
+/* 2. Chỉ hiển thị trang nào có class "active" */
+.page-section.active {
+    display: block;
+}
+
+/* 3. Style riêng cho trang chủ (căn giữa nội dung) */
+#home.page-section.active {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+/* Style cho H1, H2 của trang chủ */
+#home.page-section.active h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+#home.page-section.active h2 {
+    font-size: 20px;
+    color: #444;
+}

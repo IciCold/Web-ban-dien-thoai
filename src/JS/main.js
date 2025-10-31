@@ -4,6 +4,7 @@ import "./Home.js";
 import "./search.js";
 import "./thanhtoan.js";
 import "./logout.js";
+import "./cart.js";
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {

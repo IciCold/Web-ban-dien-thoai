@@ -1,4 +1,3 @@
-
 const registerLink = document.querySelector(".register-link");
 const loginDiv = document.querySelector("#login");
 const registerDiv = document.querySelector("#register");
@@ -12,7 +11,7 @@ if (!(!form || !registerLink || !loginDiv || !registerDiv)) {
 registerLink.addEventListener("click", (e) => {
   e.preventDefault();
   form.reset(); // reset lại các ô input
-  location.hash ='#register'
+  location.hash = '#register'
   form.classList.remove("hidden"); // Thêm dòng này xoá hidden khi đăng ký thành công ở phía dưới
   form.classList.remove("fade-out"); //  để tránh bị mờ khi quay lại
 });
@@ -25,6 +24,7 @@ function register(email, userName, password) {
     email: email,
     userName: userName,
     password: password,
+    role: "user"
   };
   users.push(newUser);
   //lưu lại vào localStorage

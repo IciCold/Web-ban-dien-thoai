@@ -1,0 +1,204 @@
+/* File: cart.css */
+
+/* Wrapper chứa icon và popup */
+.cart-wrapper {
+  position: relative; /* Làm mốc cho popup */
+  display: inline-block;
+}
+
+/* Định dạng popup giỏ hàng */
+.cart-popup {
+  display: none; /* Ẩn popup mặc định */
+  position: absolute;
+  top: 150%; /* Vị trí dưới icon (điều chỉnh nếu cần) */
+  right: 0;
+  width: 320px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  overflow: hidden; /* Để bo góc cho đẹp */
+}
+
+/* Ẩn popup mặc định */
+.cart-popup {
+  display: none; 
+  /* ... (giữ nguyên các thuộc tính khác của bạn như position, width, v.v...) */
+}
+
+/* Lớp .show này sẽ được JS thêm/xóa để bật/tắt popup */
+.cart-popup.show {
+  display: block;
+}
+
+/* Header của popup */
+.cart-header {
+  font-weight: 600;
+  padding: 12px 15px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Danh sách sản phẩm trong giỏ hàng */
+.cart-items-list {
+  max-height: 300px; /* Giới hạn chiều cao, tự cuộn */
+  overflow-y: auto;
+}
+
+/* Tin nhắn khi giỏ hàng trống */
+.cart-empty-msg {
+  text-align: center;
+  color: #888;
+  padding: 30px 15px;
+  font-size: 0.9rem;
+}
+
+/* Kiểu cho mỗi sản phẩm trong popup */
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 12px;
+  border: 1px solid #eee;
+}
+
+.cart-item .item-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  /* Ngăn text quá dài */
+  min-width: 0; 
+}
+
+.cart-item .item-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cart-item .item-price {
+  font-size: 0.85rem;
+  color: #e74c3c;
+  margin-top: 4px;
+}
+
+.cart-item .item-quantity {
+  font-size: 0.9rem;
+  color: #555;
+  margin-left: 10px;
+  font-weight: 500;
+}
+
+/* Footer của popup (chứa nút xem giỏ hàng) */
+.cart-footer {
+  padding: 12px;
+  border-top: 1px solid #f0f0f0;
+  background-color: #f9f9f9;
+}
+
+.view-cart-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #3498db; /* Màu nút (thay đổi) */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.view-cart-btn:hover {
+  background-color: #2980b9; /* Màu khi hover */
+}
+
+/* File: cart.css (Thêm vào cuối file) */
+
+/* === CSS CHO THÔNG BÁO POPUP (TOAST) === */
+
+.toast-overlay {
+  /* Ẩn mặc định */
+  opacity: 0;
+  pointer-events: none; /* Không thể click khi đang ẩn */
+  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6); /* Lớp nền mờ */
+  z-index: 1000;
+  
+  /* Dùng flex để căn giữa popup */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* Lớp .active (được thêm bằng JS) để hiển thị */
+.toast-overlay.active {
+  opacity: 1;
+  pointer-events: auto; /* Cho phép click khi hiển thị */
+}
+
+.toast-message {
+  background-color: white;
+  border-radius: 12px;
+  padding: 25px 35px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  
+  /* Hiệu ứng scale khi xuất hiện */
+  transform: scale(0.9);
+  transition: transform 0.2s ease-in-out;
+}
+
+.toast-overlay.active .toast-message {
+  transform: scale(1);
+}
+
+.toast-icon {
+  width: 60px;
+  height: 60px;
+  background-color: #27ae60; /* Màu xanh lá (giống ảnh) */
+  border-radius: 50%;
+  margin: 0 auto 15px auto;
+  
+  /* Căn giữa icon check */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast-icon i.fa-check {
+  color: white;
+  font-size: 1.8rem; /* Kích thước icon check */
+  font-weight: 600;
+}
+
+.toast-text {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}

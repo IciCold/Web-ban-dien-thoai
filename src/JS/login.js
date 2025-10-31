@@ -47,16 +47,22 @@ loginForm.addEventListener("submit", function (e) {
     return;
   }
       // ====== Đăng nhập thành công ======
-   else {
-
+else {
     // Lưu user đang đăng nhập
     localStorage.setItem("currentUser", JSON.stringify(foundUser));
 
-    // Cập nhật giao diện top bar
-    const userSpan = document.querySelector(".username");
-    userSpan.textContent = foundUser.userName;
+    // ======== PHÂN LOẠI VAI TRÒ (ROLE) ========
+    if (foundUser.role === "admin") {
+        // Nếu là admin, chuyển hướng sang trang admin
+        window.location.href = 'test.html'; // Chuyển sang trang admin
+    } 
+    else {
+        // Nếu là khách hàng, cập nhật UI và ở lại trang
+        const userSpan = document.querySelector(".username");
+        userSpan.textContent = foundUser.userName;
 
-    // Tự động chuyển về trang chủ sau khi đăng nhập
-    location.hash = '#home'
-  }
+        // Tự động chuyển về trang chủ (của khách)
+        location.hash = '#home';
+    }
+}
 });

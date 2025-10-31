@@ -27,23 +27,46 @@
       </div>
       <div class="icons">
         <i class="fa fa-bell" id="icon"></i>
-        <i class="fa fa-shopping-cart" id="icon"></i>
-      </div>
-    </div>
-           <!--Popup option cho đăng nhập, đăng ký-->
-      <div class="overlay" id="overlay-Popup">
-        <div class="popup-content">
-          <h1 class="style">Xin chào!</h1>
-          <div class="option">
-            <span class="text style">Đăng nhập</span>
-            <span class="text style">Đăng ký</span>
+
+        <div class="cart-wrapper">
+          <i class="fa fa-shopping-cart" id="icon-cart"></i>
+          <div class="cart-popup" id="cart-popup">
+            <div class="cart-header">Sản phẩm đã thêm</div>
+            <div class="cart-items-list" id="cart-items-list">
+              <p class="cart-empty-msg" id="cart-empty-msg">Giỏ hàng của bạn trống.</p>
+            </div>
+            <div class="cart-footer">
+              <button class="view-cart-btn">Xem giỏ hàng</button>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="toast-overlay" id="toast-overlay">
+      <div class="toast-message" id="toast-message">
+        <div class="toast-icon">
+          <i class="fas fa-check"></i>
+        </div>
+        <p class="toast-text" id="toast-text-content">
+          Sản phẩm đã được thêm vào Giỏ hàng!
+        </p>
+      </div>
+    </div>
+    <!--Popup option cho đăng nhập, đăng ký-->
+    <div class="overlay" id="overlay-Popup">
+      <div class="popup-content">
+        <h1 class="style">Xin chào!</h1>
+        <div class="option">
+          <span class="text style">Đăng nhập</span>
+          <span class="text style">Đăng ký</span>
+        </div>
+      </div>
+    </div>
   </header>
   <!--=============NỘI DUNG CHÍNH===============-->
   <main class="container-main">
-    
+
 
     <!--=============HOME===============-->
     <section class="Home">
@@ -177,42 +200,44 @@
       </div>
     </section>
 
-    
+
     <!--=============THANH TOÁN===============-->
     <section class="container payment-section" id="paymentSection">
       <form class="payment-form layout-form" id="payment-form">
         <h1 class="payment-title">Thanh toán</h1>
-  
+
         <div class="payment-grid">
-  
+
           <div class="order-summary">
             <h2 class="order-title">Đơn hàng của bạn:</h2>
             <p class="order-item">1x Xiaomi Pro 5T</p>
             <p class="order-item">1x iPhone XS Pro Vjp</p>
-  
+
             <div class="total-box">
               <span class="total-label">Thành tiền:</span>
               <span class="total-amount">5.000.000 VND</span>
             </div>
           </div>
-  
+
           <div class="payment-info">
-  
+
             <label for="delivery-address" class="info-label">Địa chỉ giao hàng:</label>
             <input type="text" id="delivery-address" class="text-input" placeholder="Địa chỉ default (placeholder)">
-  
+
             <div class="payment-methods">
               <button class="payment-button cash"><i class="fa-solid fa-money-bill"></i> Cash</button>
               <button class="payment-button visa"><i class="fa-brands fa-cc-visa"></i> Visa</button>
-              <button class="payment-button momo"><img src="../asset/Images/mini-app_design-guideline_branding-guide-2-2.webp" alt="Momo" class="momo-logo">Momo</button>
+              <button class="payment-button momo"><img
+                  src="../asset/Images/mini-app_design-guideline_branding-guide-2-2.webp" alt="Momo"
+                  class="momo-logo">Momo</button>
             </div>
-  
+
             <label for="card-name" class="info-label">Tên người chủ thẻ</label>
             <input type="text" id="card-name" class="text-input" placeholder="Tên người chủ thẻ">
-  
+
             <label for="card-number" class="info-label">Số thẻ</label>
             <input type="text" id="card-number" class="text-input" placeholder="Số thẻ">
-  
+
             <button class="buy-now-button-large">Mua ngay</button>
           </div>
         </div>
@@ -314,66 +339,74 @@
     </div>
   </footer>
   <!-- CSS (thêm vào <head> hoặc file .css) -->
-<style>
-  .carousel-container {
-    width: 100%;
-    max-width: 1100px; /* chỉnh nếu cần */
-    margin: 0 auto;
-    overflow: hidden;
-    position: relative;
-    user-select: none; /* tránh chọn text khi kéo */
-  }
+  <style>
+    .carousel-container {
+      width: 100%;
+      max-width: 1100px;
+      /* chỉnh nếu cần */
+      margin: 0 auto;
+      overflow: hidden;
+      position: relative;
+      user-select: none;
+      /* tránh chọn text khi kéo */
+    }
 
-  .carousel {
-    display: flex;
-    gap: 0;
-    transition: transform 300ms ease;
-    will-change: transform;
-    touch-action: pan-y; /* cho phép kéo ngang bằng JS */
-    cursor: grab;
-  }
+    .carousel {
+      display: flex;
+      gap: 0;
+      transition: transform 300ms ease;
+      will-change: transform;
+      touch-action: pan-y;
+      /* cho phép kéo ngang bằng JS */
+      cursor: grab;
+    }
 
-  .carousel.dragging {
-    transition: none; /* khi đang kéo tắt transition để mượt */
-    cursor: grabbing;
-  }
+    .carousel.dragging {
+      transition: none;
+      /* khi đang kéo tắt transition để mượt */
+      cursor: grabbing;
+    }
 
-  .carousel-slide {
-    min-width: 100%; /* mỗi slide chiếm toàn bộ vùng hiển thị */
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+    .carousel-slide {
+      min-width: 100%;
+      /* mỗi slide chiếm toàn bộ vùng hiển thị */
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-  .carousel-slide img {
-    width: 100%;
-    height: auto;
-    display: block;
-    pointer-events: none; /* tránh ảnh nhận sự kiện khi kéo */
-    -webkit-user-drag: none;
-  }
+    .carousel-slide img {
+      width: 100%;
+      height: auto;
+      display: block;
+      pointer-events: none;
+      /* tránh ảnh nhận sự kiện khi kéo */
+      -webkit-user-drag: none;
+    }
 
-  /* optional: nút điều hướng */
-  .nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0,0,0,0.4);
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    z-index: 10;
-  }
-  .nav-btn.left { left: 10px; }
-  .nav-btn.right { right: 10px; }
-</style>
+    /* optional: nút điều hướng */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.4);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      z-index: 10;
+    }
 
-<!-- JS (thêm trước </body> hoặc file .js) -->
+    .nav-btn.left {
+      left: 10px;
+    }
 
-
+    .nav-btn.right {
+      right: 10px;
+    }
+  </style>
 </body>
 
 
