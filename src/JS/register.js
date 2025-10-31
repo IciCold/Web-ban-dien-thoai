@@ -11,7 +11,7 @@ if (!(!form || !registerLink || !loginDiv || !registerDiv)) {
 registerLink.addEventListener("click", (e) => {
   e.preventDefault();
   form.reset(); // reset lại các ô input
-  location.hash = '#register'
+  location.hash = 'register'
   form.classList.remove("hidden"); // Thêm dòng này xoá hidden khi đăng ký thành công ở phía dưới
   form.classList.remove("fade-out"); //  để tránh bị mờ khi quay lại
 });
@@ -111,7 +111,7 @@ form.addEventListener("submit", function (event) {
       setTimeout(() => {
         message.classList.add("hidden");
         loginDiv.classList.remove('hidden');
-        history.replaceState({ page: "login" }, "", "#login");
+        history.replaceState({ page: "login" }, "", "login");
         form.classList.remove("fade-out");
       }, 500); // thời gian này phải khớp với thời gian của animation của CSS
     }, 3000);

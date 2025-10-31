@@ -21,7 +21,13 @@ loginForm.addEventListener("submit", function (e) {
   warningPassword.style.display = "none";
   usernameInput.style.border = "none";
   passwordInput.style.border = "none";
-
+  // Nếu là admin, chuyển hướng sang trang admin
+  if (usernameInput.value === "admin" && passwordInput.value === "123") {
+    const footer = document.querySelector('.footer');
+    const header = document.querySelector('.header');
+    location.hash ='admin' // Chuyển sang trang admin
+    return;
+  }
   // ====== Kiểm tra tài khoản tồn tại ======
   if (!foundUser) {
     // Hiện thông báo lỗi "Tài khoản không tồn tại"
@@ -46,23 +52,16 @@ loginForm.addEventListener("submit", function (e) {
     warningPassword.classList.add("Ierror");
     return;
   }
-      // ====== Đăng nhập thành công ======
-else {
+  // ====== Đăng nhập thành công ======
+  else {
     // Lưu user đang đăng nhập
     localStorage.setItem("currentUser", JSON.stringify(foundUser));
 
-    // ======== PHÂN LOẠI VAI TRÒ (ROLE) ========
-    if (foundUser.role === "admin") {
-        // Nếu là admin, chuyển hướng sang trang admin
-        window.location.href = 'test.html'; // Chuyển sang trang admin
-    } 
-    else {
-        // Nếu là khách hàng, cập nhật UI và ở lại trang
-        const userSpan = document.querySelector(".username");
-        userSpan.textContent = foundUser.userName;
+    // Nếu là khách hàng, cập nhật UI và ở lại trang
+    const userSpan = document.querySelector(".username");
+    userSpan.textContent = foundUser.userName;
 
-        // Tự động chuyển về trang chủ (của khách)
-        location.hash = '#home';
-    }
-}
+    // Tự động chuyển về trang chủ (của khách)
+    location.hash = "home";
+  }
 });

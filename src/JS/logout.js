@@ -38,7 +38,7 @@ function handleLogout() {
     // Đảm bảo trang home được hiển thị
     const homePage = document.querySelector('.Home');
     if (homePage) {
-       location.hash = '#home';
+       location.hash = 'home';
     }
     
     // // Ẩn các trang khác

@@ -350,10 +350,10 @@ const option = document.querySelector(".option");
 option.addEventListener("click", (e) => {
   if (!e.target.classList || !e.target.classList.contains("text")) return;
   if (e.target.textContent === "Đăng nhập") {
-    location.hash = "#login";
+    location.hash = "login";
   }
   if (e.target.textContent === "Đăng ký") {
-    location.hash = "#register";
+    location.hash = "register";
   }
 
   // Ẩn popup sau khi chọn
@@ -367,13 +367,13 @@ function actionsBuy(){
     const clickOnProduct = productsGrid.querySelectorAll(".product-card");
     clickOnProduct.forEach((element) => {
       element.addEventListener("click", () => {
-        location.hash = "#chitiet";
+        location.hash = "chitiet";
       });
     });
 }
 const buyNowBtn = document.querySelector(".buy-now-button");
 buyNowBtn.addEventListener("click", () => {
-  location.hash = "#thanhtoan";
+  location.hash = "thanhtoan";
 });
  
 export { products, productsGrid, displayProducts };

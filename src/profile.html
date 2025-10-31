@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="../asset/icon/fontawesome-free-7.1.0-web/css/all.min.css">
+    <link rel="stylesheet" href="CSS/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="JS/profile.js" defer></script>
+</head>
+
+<body>
+    <!--=============THANH TOP===============-->
+    <header class="top-bar">
+        <a href="#home" class="logo">Logo</a>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Bạn muốn mua gì?">
+            <button id="search-btn"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="action">
+            <div class="user-name" tabindex="0">
+                <i class="fa-solid fa-user" id="icon"></i>
+                <span class="username">Đăng nhập</span>
+            </div>
+            <div class="icons">
+                <i class="fa fa-bell" id="icon"></i>
+                <i class="fa fa-shopping-cart" id="icon"></i>
+            </div>
+        </div>
+        <!--Popup option cho đăng nhập, đăng ký-->
+        <div class="overlay" id="overlay-Popup">
+            <div class="popup-content">
+                <h1 class="style">Xin chào!</h1>
+                <div class="option">
+                    <span class="text style">Đăng nhập</span>
+                    <span class="text style">Đăng ký</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section class="profile-container profile-style">
+        <div class="list-container">
+            <h3>Tài khoản của<br><span class="user-Name"></span></h3>
+            <ul class="menu">
+                <li style="color: var(--main-color); font-weight: 600;" ><i class="fa-solid fa-user"></i> Thông tin tài khoản</li>
+                <li><i class="fa-solid fa-box"></i> Quản lý đơn hàng</li>
+                <li><i class="fa-solid fa-heart"></i> Sản phẩm yêu thích</li>
+                <li><i class="fa-solid fa-location-dot"></i> Sổ địa chỉ</li>
+                <li>
+                    <i class="fa-solid fa-bell"></i> Thông báo
+                    <ul class="submenu">    
+                        <li>Ưu đãi & Cập nhật</li>
+                        <li>Đơn hàng</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="input-info">
+            <h2>Thông tin tài khoản</h2>
+
+            <form class="input-user">
+                <label for="fullname">Họ tên</label>
+                <input type="text" id="fullname" value="Nguyễn Trường Hiệp">
+
+                <label for="email">Email</label>
+                <input type="email" id="email" value="nguyentruonghiep2006@gmail.com">
+
+                <label for="phone">Số điện thoại</label>
+                <input type="text" id="phone" placeholder="">
+
+                <label for="birthday">Ngày sinh</label>
+                <input type="date" id="birthday" placeholder="dd/mm/yyyy">
+                
+                <label>Giới tính</label>
+                <div class="gender">
+                    <label><input type="radio" name="gender"> Nam</label>
+                    <label><input type="radio" name="gender"> Nữ</label>
+                    <label><input type="radio" name="gender"> Khác</label>
+                </div>
+
+                <button type="submit">Cập nhật</button>
+            </form>
+        </div>
+
+        <div class="location">
+            <h3>Địa chỉ mặc định</h3>
+            <p>Bạn chưa có địa chỉ nhận hàng mặc định. Vui lòng chọn Thêm địa chỉ nhận hàng.</p>
+            <button type="button"><i class="fa-solid fa-plus"></i> Thêm địa chỉ nhận hàng</button>
+        </div>
+    </section>
+
+
+
+    <!--=============THANH BOT===============-->
+    <footer class="footer">
+        <div class="footer-logo">Logo</div>
+        <p>Copyrighted 2025 by iciii</p>
+        <div class="socials">
+            <i class="fa-brands fa-github"></i>
+            <i class="fa-brands fa-facebook"></i>
+            <i class="fa-brands fa-youtube"></i>
+        </div>
+    </footer>
+</body>
+
+</html>

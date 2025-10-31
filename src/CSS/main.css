@@ -7,6 +7,7 @@
 @import url('thanhtoan.css');
 @import url('logout.css');
 @import url('cart.css');
+@import url('admin-home.css');
 
 /*NHỮNG STYLE CHUNG CHO TOÀN BỘ TRANG WEB BỎ VÀO TRONG NÀY*/
 
@@ -57,4 +58,8 @@ body {
 }
 .page-active-enter{
   opacity: 1;
+}
+.no-header-footer header,
+.no-header-footer footer {
+  display: none;
 }
