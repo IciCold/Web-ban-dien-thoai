@@ -40,6 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const sidebarAvatar = document.querySelector(".sidebar-avatar-img"); 
     const sidebarAvatarIcon = document.getElementById("sidebar-avatar-icon-default");
     
+    // (SỬA LỖI) Lấy thêm thẻ span tên ở sidebar
+    const sidebarNameSpan = document.querySelector(".profile-sidebar-user .user-Name");
+
     let pendingAvatarUrl = null; // Biến tạm để giữ ảnh chờ lưu
 
     // --- Trang Ngân Hàng ---
@@ -106,12 +109,34 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- 1. Tải dữ liệu Hồ Sơ ---
     function loadProfileData() {
         try {
+            // (SỬA LỖI) Lấy thông tin TỪ "currentUser"
+            // (currentUser đã được khai báo ở guard clause bên trên)
+            const loginUsername = currentUser.userName;
+            const loginEmail = currentUser.email;
+
+            // (SỬA LỖI) Điền thông tin đăng nhập vào form
+            if (loginUsername) {
+                // (SỬA LỖI) Dùng id "profile-username"
+                const usernameInput = document.getElementById("profile-username");
+                if (usernameInput) usernameInput.value = loginUsername;
+                
+                // (SỬA LỖI) Cập nhật tên ở sidebar
+                if (sidebarNameSpan) sidebarNameSpan.textContent = loginUsername;
+            }
+            if (loginEmail) {
+                // (SỬA LỖI) Dùng id "profile-email"
+                const emailInput = document.getElementById("profile-email");
+                if (emailInput) emailInput.value = loginEmail;
+            }
+
+            // Lấy các thông tin đã lưu khác (Tên, SĐT,...)
             const savedName = localStorage.getItem("userFullName");
             const savedPhone = localStorage.getItem("userPhone");
             const savedBirthday = localStorage.getItem("userBirthday");
             const savedGender = localStorage.getItem("userGender");
             const savedAvatarUrl = localStorage.getItem("userAvatarUrl"); 
 
+            // Điền các thông tin hồ sơ khác (giữ nguyên)
             if (savedName) document.getElementById("fullname").value = savedName;
             if (savedPhone) document.getElementById("phone").value = savedPhone;
             if (savedBirthday) document.getElementById("birthday").value = savedBirthday;
