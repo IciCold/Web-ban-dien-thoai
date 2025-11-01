@@ -5,6 +5,7 @@
   import "./thanhtoan.js";
   import "./logout.js";
   import "./cart.js";
+  import "./LocSanPham.js";
   import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
   import { loadStatistics, seedOrderData } from './thongke.js';
   //==============Chuyển Page bằng Hash=======================//

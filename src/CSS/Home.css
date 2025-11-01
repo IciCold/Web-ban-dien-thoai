@@ -87,7 +87,7 @@
     justify-content: center;
 }
 
-.brand-btn {
+.filter-btn  {
     background-color: #f0f0f0;
     border: 1px solid #ccc;
     border-radius: 20px;
@@ -97,16 +97,18 @@
     font-weight: 500;
 }
 
-.brand-btn:hover {
+.filter-btn:hover {
     background-color: var(--main-color);
     color: white;
 }
-
-.brand-btn.active {
+.filter-btn .active {
     background-color: var(--main-color);
     color: white;
 }
-
+.price-btn:focus{
+    background-color: var(--main-color);
+    color: white;
+}
 /* Nội dung chính */
 .container {
     max-width: 1200px;
@@ -196,4 +198,136 @@
 .buy-btn:hover {
     background-color: #415ed0;
 }
+
+/*GIAO DIỆN POPUP LỌC*/
+/* ============ POPUP LỌC ============ */
+.filter-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 80px;
+  z-index: 999;
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+/* Hiệu ứng mở */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.filter-content {
+  position: relative;
+  background: #fff;
+  width: 90%;
+  max-width: 750px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  padding: 25px;
+  animation: scaleIn 0.2s ease-in-out;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.filter-content h2 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+.close-filter {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #888;
+}
+
+.close-filter:hover {
+  color: #000;
+}
+
+/* ======= Mục lọc ======= */
+.filter-section {
+  margin-top: 20px;
+}
+
+.filter-section h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #444;
+  font-weight: 600;
+}
+
+/* Hãng và giá */
+.brand-options,
+.price-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ======= Nút hành động ======= */
+.filter-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+}
+
+#resetFilter {
+  background-color: #ccc;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+#resetFilter:hover {
+  background-color: #b3b3b3;
+}
+
+#applyFilter {
+  background-color: var(--main-color);
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+#applyFilter:hover {
+  background-color: #0062d9;
+}
+
+/* ======= Mũi tên nhỏ (popup hướng lên nút lọc) ======= */
+.filter-content::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 60px; /* chỉnh vị trí mũi tên */
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent #fff transparent;
+}
+
 

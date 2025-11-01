@@ -86,7 +86,8 @@ const viewMoreBtn = document.getElementById("viewMoreBtn");
 const brandBtns = document.querySelectorAll(".brand-btn");
 let visibleProducts = 6;
 let currentBrand = "all";
-
+let minPrice = 0;
+let maxPrice = Infinity;
 // **3. Tạo hàm để tải và xử lý dữ liệu từ JSON**
 async function loadProducts() {
   try {
@@ -230,7 +231,8 @@ const buyNowBtn = document.querySelector(".buy-now-button");
 buyNowBtn.addEventListener("click", () => {
   location.hash = "thanhtoan";
 });
- 
+//POPUP LỌC SẢN PHẨM
+  
 // **6. Cập nhật lại export (nếu cần)**
 // Xóa 'products' khỏi export vì nó không còn tồn tại
 export { productsGrid, displayProducts };

@@ -121,13 +121,62 @@
       <!-- Bộ lọc sản phẩm -->
       <div class="filter-bar">
         <div class="brand-filter">
-          <button class="brand-btn active" data-brand="all">Tất cả</button>
-          <button class="brand-btn" data-brand="iphone">iPhone</button>
-          <button class="brand-btn" data-brand="samsung">Samsung</button>
-          <button class="brand-btn" data-brand="xiaomi">Xiaomi</button>
-          <button class="brand-btn" data-brand="ipad">Máy Tính Bảng</button>
+          <!-- Nút mở bộ lọc -->
+          <button id="openFilter" class="filter-btn ">
+            <i class="fa fa-filter"></i> Lọc
+          </button>
+          <!-- Các nút hãng -->
+          <button class="brand-btn filter-btn  active" data-brand="all">Tất cả</button>
+          <button class="brand-btn filter-btn " data-brand="samsung">Samsung</button>
+          <button class="brand-btn filter-btn " data-brand="iphone">iPhone</button>
+          <button class="brand-btn filter-btn " data-brand="xiaomi">Xiaomi</button>
+          <button class="brand-btn filter-btn " data-brand="oppo">Oppo</button>
+          <button class="brand-btn filter-btn " data-brand="vivo">Vivo</button>
+          <button class="brand-btn filter-btn " data-brand="realme">Realme</button>
+          <button class="brand-btn filter-btn " data-brand="honor">Honor</button>
+          <button class="brand-btn filter-btn " data-brand="nokia">Nokia</button>
         </div>
       </div>
+<!-- ========== POPUP LỌC ========== -->
+<div class="filter-popup" id="filterPopup">
+  <div class="filter-content">
+    <h2>Bộ lọc sản phẩm</h2>
+    <button class="close-filter" id="closeFilter">&times;</button>
+
+    <!-- Lọc theo hãng -->
+    <div class="filter-section">
+      <h3>Hãng</h3>
+      <div class="brand-options">
+        <button class="filter-btn " data-brand="samsung">Samsung</button>
+        <button class="filter-btn " data-brand="iphone">iPhone</button>
+        <button class="filter-btn " data-brand="xiaomi">Xiaomi</button>
+        <button class="filter-btn " data-brand="oppo">Oppo</button>
+        <button class="filter-btn " data-brand="vivo">Vivo</button>
+        <button class="filter-btn " data-brand="realme">Realme</button>
+        <button class="filter-btn " data-brand="honor">Honor</button>
+        <button class="filter-btn " data-brand="nokia">Nokia</button>
+      </div>
+    </div>
+    
+    <!-- Lọc theo giá -->
+    <div class="filter-section">
+      <h3>Giá</h3>
+      <div class="price-options">
+        <button class="filter-btn " data-min="0" data-max="2000000">Dưới 2 triệu</button>
+        <button class="filter-btn" data-min="2000000" data-max="4000000">2 - 4 triệu</button>
+        <button class="filter-btn" data-min="4000000" data-max="7000000">4 - 7 triệu</button>
+        <button class="filter-btn" data-min="7000000" data-max="13000000">7 - 13 triệu</button>
+        <button class="filter-btn" data-min="13000000" data-max="20000000">13 - 20 triệu</button>
+        <button class="filter-btn" data-min="20000000" data-max="999999999">Trên 20 triệu</button>
+      </div>
+    </div>
+    
+    <div class="filter-actions">
+      <button id="resetFilter">Bỏ chọn</button>
+      <button id="applyFilter">Áp dụng</button>
+    </div>
+    </div>
+    </div>
 
       <!-- Nội dung chính -->
       <div class="container">
