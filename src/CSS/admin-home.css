@@ -79,6 +79,7 @@
     gap: 10px;
     font-weight: bold;
     user-select: none;
+    cursor: pointer;
 }
 
 .login:hover {
