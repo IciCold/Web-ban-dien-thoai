@@ -70,3 +70,18 @@ loginForm.addEventListener("submit", function (e) {
     location.hash = "home";
   }
 });
+
+// ================== KIỂM TRA TRẠNG THÁI ĐĂNG NHẬP KHI TẢI TRANG ==================
+function checkLoginStatus() {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const userSpan = document.querySelector(".username"); // Lấy thẻ span từ header
+
+  if (currentUser && userSpan) {
+    userSpan.textContent = currentUser.userName;
+  } else if (userSpan) {
+    userSpan.textContent = "Đăng nhập";
+  }
+}
+
+// Gọi hàm này ngay khi file login.js được tải
+checkLoginStatus();

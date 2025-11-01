@@ -27,6 +27,7 @@ function updateTotalPrice() {
 }
 function handleOptionSelection(container, buttonClass) {
     return function(event) {
+        event.preventDefault();
         const clickedButton = event.target;
         if (!clickedButton.classList.contains(buttonClass)) {
             return; 
@@ -82,7 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
 const finalBuyButton = document.querySelector('.buy-now-button-large');
 if (finalBuyButton) {
     finalBuyButton.addEventListener('click', () => {
+        event.preventDefault();
         const finalPrice = totalAmountSpan ? totalAmountSpan.textContent : 'Tổng cộng';
         alert(`🛒 Thanh toán thành công!\nTổng cộng: ${finalPrice}\nĐơn hàng của bạn sẽ sớm được xử lý.`);
+        location.hash=('home');
     });
 }
