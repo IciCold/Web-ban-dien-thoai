@@ -8,6 +8,8 @@
   import "./LocSanPham.js";
   import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
   import { loadStatistics, seedOrderData } from './thongke.js';
+  import "./ds_sanpham.js";
+
   //==============Chuyển Page bằng Hash=======================//
   const pages = {
     home: document.querySelector(".Home"),

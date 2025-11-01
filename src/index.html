@@ -429,87 +429,29 @@
                       <th>Thao tác</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td><img src="https://via.placeholder.com/50" alt="sp1"></td>
-                      <td>Sản phẩm A</td>
-                      <td>Thương hiệu X</td>
-                      <td>100,000 VND</td>
-                      <td> <button class="sp-del">X</button> <button class="sp-edit">Sửa</button> </td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td><img src="https://via.placeholder.com/50" alt="sp2"></td>
-                      <td>Sản phẩm B</td>
-                      <td>Thương hiệu Y</td>
-                      <td>200,000 VND</td>
-                      <td> <button class="sp-del">X</button> <button class="sp-edit">Sửa</button> </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td><img src="https://via.placeholder.com/50" alt="sp1"></td>
-                      <td>Sản phẩm A</td>
-                      <td>Thương hiệu X</td>
-                      <td>100,000 VND</td>
-                      <td> <button class="sp-del">X</button> <button class="sp-edit">Sửa</button> </td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td><img src="https://via.placeholder.com/50" alt="sp2"></td>
-                      <td>Sản phẩm B</td>
-                      <td>Thương hiệu Y</td>
-                      <td>200,000 VND</td>
-                      <td> <button class="sp-del">X</button> <button class="sp-edit">Sửa</button> </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td><img src="https://via.placeholder.com/50" alt="sp1"></td>
-                      <td>Sản phẩm A</td>
-                      <td>Thương hiệu X</td>
-                      <td>100,000 VND</td>
-                      <td> <button class="sp-del">X</button> <button class="sp-edit">Sửa</button> </td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td><img src="https://via.placeholder.com/50" alt="sp2"></td>
-                      <td>Sản phẩm B</td>
-                      <td>Thương hiệu Y</td>
-                      <td>200,000 VND</td>
-                      <td> <button class="sp-del">X</button> <button class="sp-edit">Sửa</button> </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td><img src="https://via.placeholder.com/50" alt="sp1"></td>
-                      <td>Sản phẩm A</td>
-                      <td>Thương hiệu X</td>
-                      <td>100,000 VND</td>
-                      <td> <button class="sp-del">X</button> <button class="sp-edit">Sửa</button> </td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td><img src="https://via.placeholder.com/50" alt="sp2"></td>
-                      <td>Sản phẩm B</td>
-                      <td>Thương hiệu Y</td>
-                      <td>200,000 VND</td>
-                      <td> <button class="sp-del">X</button> <button class="sp-edit">Sửa</button> </td>
-                    </tr>
-                  </tbody>
+                  
                 </table>
               </div>
               <div class="sp-search-box">
                 <h2 class="sp-subtitle">Tìm kiếm sản phẩm</h2>
-                <form class="sp-search-form"> <input type="text" placeholder="Tên sản phẩm"> <input type="text"
-                    placeholder="Thương hiệu"> <button type="submit">Tìm</button> </form>
+                <form class="sp-search-form"> 
+                  <input id = "timten" type="text" placeholder="Tên sản phẩm"> 
+                  <input id = "timbrand" type="text" placeholder="Thương hiệu"> 
+                  <button id = "timbtn">Tìm</button> </form>
               </div>
             </div>
             <div id="sp-right">
               <div class="sp-add-box">
                 <h2 class="sp-subtitle">Thêm sản phẩm</h2>
-                <form class="sp-add-form"> <input type="text" placeholder="Tên sản phẩm"> <input type="text"
-                    placeholder="Thương hiệu"> <input type="number" placeholder="Giá">
-                  <div class="sp-image-upload"> <label>Ảnh</label> <input id="revenue1" type="file"> </div> <button
-                    type="submit">Thêm</button>
+                <form class="sp-add-form"> <input id = "tensp" type="text" placeholder="Tên sản phẩm"> <input type="text"
+                   id = "brand" placeholder="Thương hiệu"> <input id = "price" type="text" placeholder="Giá">
+                  <div class="sp-image-upload"> 
+                    <label>Ảnh</label> 
+                    <input id="revenue1" type="file"> 
+                    <img id = "preview" width = "100">
+                  </div> 
+                  <button id = "themsanphambtn">Thêm</button>
+                      
                 </form>
               </div>
             </div>
