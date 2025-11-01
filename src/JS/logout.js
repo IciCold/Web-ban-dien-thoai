@@ -75,6 +75,7 @@ function showLogoutPopup() {
 // Xử lý sự kiện click vào username
 // NOTE: listener is attached in capture phase so we can intercept the click
 // and prevent other handlers from showing the login popup when user is logged in.
+// [LƯU Ý]: Đây là hàm xử lý cho nút "Đăng xuất" BÊN TRONG trang profile
 function handleUserClick(event) {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (currentUser) {
@@ -99,7 +100,7 @@ function displayUsername() {
     }
 }
 
-// Thêm event listener cho user-name div
+// Thêm event listener cho nút "Đăng xuất" trong sidebar profile
 if (logout_btn) {
     // Use capture phase to intercept clicks before other listeners
     logout_btn.addEventListener('click', handleUserClick, true);
@@ -124,17 +125,5 @@ if (adminLoginButton) {
     }
   });
 }
-if (adminLoginButton) {
-  adminLoginButton.addEventListener("click", () => {
-    const adminSpan = adminLoginButton.querySelector("span");
-
-    // Chỉ thực hiện đăng xuất nếu đang đăng nhập (tên là "admin")
-    if (adminSpan && adminSpan.textContent === "admin") {
-      // 1. Đặt lại văn bản thành "Đăng nhập"
-      adminSpan.textContent = "Đăng nhập";
-      
-      // 2. Chuyển hướng về trang chủ của khách
-      location.hash = "home";
-    }
-  });
-}
+// [SỬA LỖI]: Đã xóa khối "if (adminLoginButton)" bị lặp lại
+// [SỬA LỖI]: Đã xóa dấu "}" thừa ở cuối file

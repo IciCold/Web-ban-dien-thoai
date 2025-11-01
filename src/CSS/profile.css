@@ -445,7 +445,7 @@
 }
 
 /* Hàng nút bấm */
-.form-actions {
+.bank-form .form-actions {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -456,7 +456,7 @@
 /* Báo lỗi CMND */
 .form-error {
     display: none; 
-    color: #ee4d2d;
+    color: red;
     font-size: 12px;
 }
 input:invalid + .form-error {

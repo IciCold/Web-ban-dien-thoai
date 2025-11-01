@@ -1,6 +1,22 @@
 document.addEventListener("DOMContentLoaded", () => {
     
     // ===================================
+    // --- (SỬA LỖI) HÀNG RÀO BẢO VỆ ---
+    // ===================================
+    // Kiểm tra đăng nhập ngay lập tức khi vào trang profile
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if (!currentUser) {
+        // Nếu KHÔNG đăng nhập, lập tức chuyển về trang chủ
+        // và DỪNG thực thi tất cả code của trang profile.
+        location.hash = "home";
+        return; 
+    }
+    // ===================================
+    // --- (KẾT THÚC SỬA LỖI) ---
+    // ===================================
+
+
+    // ===================================
     // --- KHAI BÁO BIẾN ---
     // ===================================
 
@@ -484,11 +500,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-const haveUser = JSON.parse(localStorage.getItem("currentUser"));
-const headerUserName = document.querySelector(".top-bar .user-name");
-console.log(haveUser);
-if(haveUser && headerUserName   ){
-    headerUserName.addEventListener('click', () => {
-        location.hash = "profile";
-    });
-}   
+// ===================================
+// --- (SỬA LỖI) ---
+// ĐÃ XÓA BỎ TOÀN BỘ KHỐI CODE LỖI BÊN DƯỚI.
+// (Khối code bắt đầu bằng "const haveUser = ..." và có dấu "}" thừa)
+// ===================================
