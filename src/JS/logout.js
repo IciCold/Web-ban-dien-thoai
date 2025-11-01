@@ -40,15 +40,6 @@ function handleLogout() {
     if (homePage) {
        location.hash = 'home';
     }
-    
-    // // Ẩn các trang khác
-    // const pages = document.querySelectorAll('.page-login, .page-register');
-    // pages.forEach(page => {
-    //     if (page) {
-    //         page.classList.add('hidden');
-    //         page.classList.remove('page-active', 'page-active-enter');
-    //     }
-    // });
 }   
 
 // Hiển thị popup đăng xuất

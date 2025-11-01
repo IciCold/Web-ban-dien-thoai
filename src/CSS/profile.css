@@ -8,7 +8,7 @@
     padding: 20px;
     max-width: 1200px;
     margin: 20px auto;
-    background-color: #f5f5f5; /* Nền xám nhạt giống Shopee */
+    background-color: #f5f5f5; /* Nền xám nhạt */
 }
 
 /* ===================== SIDEBAR MENU (CỘT 1) ===================== */
@@ -37,7 +37,18 @@
     align-items: center;
     font-size: 24px;
     color: #ccc;
+    /* [QUAN TRỌNG] Đảm bảo kích thước cho cả icon và img */
+    flex-shrink: 0; 
 }
+
+/* [ĐÃ THÊM] Style cho ảnh đại diện trong sidebar */
+.user-avatar-icon .sidebar-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%; /* Đảm bảo ảnh luôn tròn */
+}
+
 
 .user-info {
     display: flex;
@@ -92,9 +103,38 @@
 .submenu li a:hover {
     color: var(--main-color, #2f80ed);
 }
+/* ========== NÚT ĐĂNG XUẤT ============= */    
+   
+.logout-btn {
+  width: 150%;
+  background-color: #18b4d9; /* xanh #1bcaf1 nhưng hơi đậm hơn */
+  color: white;
+  border: none;
+  padding: 10px 0;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: all 0.25s ease;
+  letter-spacing: 1px;
+}
+
+/* Hiệu ứng hover: sáng lên trở lại #1bcaf1 */
+.logout-btn:hover {
+  background-color: #1bcaf1;
+  box-shadow: 0 0 6px rgba(27, 202, 241, 0.4);
+}
+
+/* Đảm bảo nút nằm giữa sidebar */
+.profile-sidebar .logout-btn {
+  display: block;
+  text-align: center;
+}
+
 /* Trạng thái active cho link được chọn */
 .submenu li.active a {
-    color: #ee4d2d; /* Màu cam Shopee */
+    color: var(--main-color); /* Màu cam */
     font-weight: bold;
 }
 
@@ -108,7 +148,10 @@
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     min-height: 500px;
 }
-
+/* Class chung cho các view (Hồ sơ, Ngân hàng, Địa chỉ) */
+.profile-page-view {
+    /* Không cần style, chỉ để JS tìm và ẩn/hiện */
+}
 .profile-main-content h2 {
     font-size: 20px;
     font-weight: 500;
@@ -125,14 +168,14 @@
     margin: 20px 0;
 }
 
-/* Wrapper cho form và avatar */
+/* --- Wrapper cho form và avatar --- */
 .form-and-avatar-wrapper {
     display: flex;
     flex-wrap: wrap-reverse; /* Đảo ngược trên mobile */
     gap: 30px;
 }
 
-/* Form (bên trái) */
+/* Form thông tin (bên trái) */
 .input-user {
     flex: 2.5; /* Form chiếm nhiều hơn */
     display: flex;
@@ -162,7 +205,7 @@
     outline: none;
     font-size: 14px;
     width: 100%;
-    box-sizing: border-box; /* Quan trọng để padding không làm vỡ layout */
+    box-sizing: border-box; 
 }
 /* Input bị khóa */
 .input-user input[readonly] {
@@ -179,21 +222,21 @@
     text-align: left;
 }
 
-/* Nút cam (đã đổi tên từ .input-user button) */
+/* Nút cam */
 .btn-orange {
     padding: 10px 25px;
     border: none;
-    background: #ee4d2d; /* Màu cam Shopee */
+    background: var(--main-color);
     color: white;
     border-radius: 3px;
     cursor: pointer;
     font-size: 14px;
     text-decoration: none; 
     display: inline-block;
-    transition: background 0.2s;
+    transition: 0.2s ease;
 }
 .btn-orange:hover {
-    background: #d73210;
+   filter: brightness(120%);
 }
 
 
@@ -220,6 +263,8 @@
     font-size: 50px;
     color: #ccc;
     margin-bottom: 20px;
+    /* [QUAN TRỌNG] Thêm overflow để ảnh bị cắt tròn */
+    overflow: hidden; 
 }
 .btn-select-image {
     padding: 8px 15px;
@@ -243,15 +288,15 @@
 
 
 /* ================================== */
-/* === PHẦN BỔ SUNG CHO TRANG NGÂN HÀNG === */
+/* === PHẦN NGÂN HÀNG & ĐỊA CHỈ === */
 /* ================================== */
 
-/* Ẩn các trang/modal không active */
+/* Class để ẩn các view/modal không active */
 .hidden-view {
     display: none;
 }
 
-/* Nút "Trở Lại" */
+/* Nút "Trở Lại" trong modal */
 .btn-link {
     background: none;
     border: none;
@@ -262,21 +307,22 @@
     padding: 10px 20px;
 }
 .btn-link:hover {
-    color: #ee4d2d;
+    color: var(--main-color);
 }
 
-/* --- Trang Bank --- */
+/* --- Header của trang Bank/Địa chỉ --- */
 .banking-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 5px; /* Giảm margin của h2 */
+    margin-bottom: 5px; 
+    gap:20px;
 }
 .banking-header h2 {
-    margin: 0; /* Xóa margin mặc định của h2 */
+    margin: 0; 
 }
 
-/* Trạng thái rỗng */
+/* Trạng thái rỗng (khi chưa có bank/địa chỉ) */
 .banking-empty-state {
     display: flex; 
     flex-direction: column;
@@ -291,7 +337,7 @@
 
 /* Danh sách bank */
 .banking-list-container {
-    display: none; /* Mặc định ẩn */
+    display: none; /* Mặc định ẩn, JS sẽ hiện khi có item */
     flex-direction: column;
     gap: 15px;
     margin-top: 20px;
@@ -306,13 +352,11 @@
     border: 1px solid #e0e0e0;
     border-radius: 4px;
 }
-
 .bank-card-info {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
-
 .bank-card-info .bank-name {
     font-weight: bold;
     font-size: 16px;
@@ -324,18 +368,16 @@
     font-size: 14px;
     color: #333;
 }
-
 .bank-card-actions {
     display: flex;
     gap: 10px;
 }
-
 .bank-card-actions .btn-link {
     font-size: 13px;
     text-transform: none;
     padding: 5px;
 }
-
+/* Tag "Mặc định" */
 .bank-card-default {
     background-color: #f0f0f0;
     color: #555;
@@ -364,6 +406,7 @@
     gap: 20px;
 }
 
+/* Style cho các nhóm label + input xếp chồng */
 .form-group-stacked {
     display: flex;
     flex-direction: column;
@@ -374,7 +417,8 @@
     color: #333;
 }
 .form-group-stacked input,
-.form-group-stacked select {
+.form-group-stacked select,
+.form-group-stacked textarea {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 3px;
@@ -382,9 +426,17 @@
     font-size: 14px;
     width: 100%;
     box-sizing: border-box;
-    background: #fff; /* Đảm bảo nền trắng cho select */
+    background: #fff;
+    font-family: inherit;
 }
 
+/* Ô nhập địa chỉ cụ thể */
+.form-group-stacked textarea {
+    min-height: 100px; /* Tăng chiều cao cho ô địa chỉ */
+    resize: vertical;
+}
+
+/* Checkbox */
 .form-group-checkbox {
     display: flex;
     align-items: center;
@@ -392,6 +444,7 @@
     font-size: 14px;
 }
 
+/* Hàng nút bấm */
 .form-actions {
     display: flex;
     justify-content: flex-end;
@@ -402,7 +455,7 @@
 
 /* Báo lỗi CMND */
 .form-error {
-    display: none; /* Ẩn ban đầu */
+    display: none; 
     color: #ee4d2d;
     font-size: 12px;
 }
@@ -412,9 +465,10 @@ input:invalid + .form-error {
 
 
 /* ================================== */
-/* === BỔ SUNG: STYLES CHO MODAL (POPUP) === */
+/* === MODAL (POPUP) CHUNG === */
 /* ================================== */
 
+/* Nền mờ */
 .bank-modal-overlay {
     position: fixed;
     top: 0;
@@ -425,6 +479,7 @@ input:invalid + .form-error {
     z-index: 1000;
 }
 
+/* Khung modal */
 .bank-modal {
     position: fixed;
     top: 50%;
@@ -439,37 +494,95 @@ input:invalid + .form-error {
     z-index: 1001;
 }
 
-/* NÚT "X" ĐÃ BỊ XÓA */
+
+/* ================================== */
+/* === BỔ SUNG: TRANG ĐỊA CHỈ === */
+/* ================================== */
+
+/* Danh sách địa chỉ (dùng chung style .banking-list-container) */
+.address-list-container {
+    display: none; 
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    gap:20px;
+}
+
+/* Thẻ địa chỉ */
+.address-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Để nút xóa căn đúng */
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+.address-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-right: 15px; /* Khoảng cách với nút xóa */
+}
+
+.address-card-info .user-name {
+    font-weight: bold;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+.address-card-info .user-phone,
+.address-card-info .user-address {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.4;
+}
+
+.address-card-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+.address-card-actions .btn-link {
+    font-size: 13px;
+    text-transform: none;
+    padding: 5px;
+}
+/* Tag "Mặc định" cho địa chỉ */
+.address-card-default {
+    background-color: #f0f0f0;
+    color: #555;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-left: 10px;
+    font-weight: normal;
+}
 
 
-/* ===================== RESPONSIVE ===================== */
+/* ===================== RESPONSIVE (Cho điện thoại) ===================== */
 @media (max-width: 768px) {
     .profile-container {
         flex-direction: column;
         padding: 10px;
     }
-
     .profile-sidebar {
         flex-basis: 100%;
         width: 100%;
     }
-    
     .profile-main-content {
         width: 100%;
         padding: 15px;
     }
-
     .form-and-avatar-wrapper {
         gap: 10px;
     }
-
     .avatar-upload-container {
         border-left: none;
         border-top: 1px solid #efefef;
         padding-top: 30px;
     }
-
-    /* Form "Hồ Sơ" về 1 cột */
     .form-group {
         grid-template-columns: 1fr;
         gap: 5px;
@@ -477,23 +590,17 @@ input:invalid + .form-error {
     .form-group label {
         text-align: left;
     }
-
-    /* Form "Ngân Hàng" căn giữa đẹp hơn */
     .bank-form {
         margin: 20px 0;
     }
     .form-actions {
         justify-content: center;
     }
-
-    /* Header trang bank */
     .banking-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
     }
-    
-    /* Modal trên mobile */
     .bank-modal {
         width: 95%;
         padding: 20px;

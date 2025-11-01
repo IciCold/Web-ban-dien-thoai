@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hồ Sơ Của Tôi</title>
+    
     <link rel="stylesheet" href="../asset/icon/fontawesome-free-7.1.0-web/css/all.min.css">
+    
     <link rel="stylesheet" href="CSS/main.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="CSS/profile.css">
+    
     <script src="JS/profile.js" defer></script>
 </head>
 
@@ -41,10 +45,11 @@
     
     <section class="profile-container profile-style">
         
-        <div class="profile-sidebar">
+        <aside class="profile-sidebar">
             <div class="profile-sidebar-user">
                 <div class="user-avatar-icon">
-                    <i class="fa-solid fa-user"></i>
+                    <i class="fa-solid fa-user" id="sidebar-avatar-icon-default"></i>
+                    <img src="" alt="" class="sidebar-avatar-img" style="display: none;">
                 </div>
                 <div class="user-info">
                     <span class="user-Name">nguyentruonghiep</span>
@@ -61,11 +66,12 @@
                     <li class="active"><a href="#profile" id="nav-profile-link">Hồ Sơ</a></li>
                     <li><a href="#banking" id="nav-banking-link">Ngân Hàng</a></li>
                     <li><a href="#address" id="nav-address-link">Địa Chỉ</a></li>
-                </ul>
+                    <li> <button class="logout-btn">Đăng xuất</button> </li>
+                    </ul>
             </ul>
-        </div>
+        </aside>
 
-        <div class="profile-main-content">
+        <main class="profile-main-content">
 
             <div class="profile-page-view" id="profile-view">
                 <h2>Hồ Sơ Của Tôi</h2>
@@ -87,14 +93,14 @@
                         </div>
                         <div class="form-group">
                             <label for="phone">Số điện thoại</label>
-                            <input type="text" id="phone" placeholder="Thêm số điện thoại">
+                            <input type="text" id="phone" placeholder="Thêm số điện thoại" value="0123456789">
                         </div>
                         <div class="form-group">
                             <label>Giới tính</label>
                             <div class="gender">
-                                <label><input type="radio" name="gender" checked> Nam</label>
-                                <label><input type="radio" name="gender"> Nữ</label>
-                                <label><input type="radio" name="gender"> Khác</label>
+                                <label><input type="radio" name="gender" value="Nam" checked> Nam</label>
+                                <label><input type="radio" name="gender" value="Nữ"> Nữ</label>
+                                <label><input type="radio" name="gender" value="Khác"> Khác</label>
                             </div>
                         </div>
                         <div class="form-group">
@@ -133,12 +139,19 @@
             </div>
 
             <div class="profile-page-view hidden-view" id="address-view">
-                <h2>Địa Chỉ Của Tôi</h2>
+                <div class="banking-header"> <h2>Địa Chỉ Của Tôi</h2>
+                    <button class="btn-orange" id="btn-open-address-modal">+ Thêm Địa Chỉ Mới</button>
+                </div>
                 <hr>
-                <p>Nội dung trang địa chỉ...</p>
+                
+                <div class="banking-empty-state" id="address-empty"> <p>Bạn chưa có địa chỉ.</p>
+                </div>
+            
+                <div class="address-list-container" id="address-list">
+                    </div>
             </div>
             
-        </div>
+        </main>
     </section>
 
 
@@ -197,11 +210,33 @@
         </form>
     </div>
 
+    <div class="bank-modal hidden-view" id="add-address-modal">
+        <h2 class="view-title">Địa chỉ mới</h2>
+        <hr>
+        <form class="bank-form" id="add-address-form">
+            
+            <div class="form-group-stacked">
+                <label for="addr-specific">Địa chỉ cụ thể</label>
+                <textarea id="addr-specific" placeholder="Nhập địa chỉ cụ thể (Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố)" required></textarea>
+            </div>
+
+            <div class="form-group-checkbox">
+                <input type="checkbox" id="addr-default">
+                <label for="addr-default">Đặt làm địa chỉ mặc định</label>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-link" id="add-address-modal-back">TRỞ LẠI</button>
+                <button type="submit" class="btn-orange">Hoàn Thành</button>
+            </div>
+        </form>
+    </div>
+
 
     <footer class="footer">
         <div class="footer-logo">Logo</div>
         <p>Copyrighted 2025 by iciii</p>
-        <div class="socials">
+        <div classs="socials">
             <i class="fa-brands fa-github"></i>
             <i class="fa-brands fa-facebook"></i>
             <i class="fa-brands fa-youtube"></i>
