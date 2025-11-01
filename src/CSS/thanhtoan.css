@@ -2,24 +2,31 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    color: white;
+    min-height: 100vh;
+    color: black;
     width: auto;
+    /* Thêm padding để form không dính sát mép khi zoom */
+    padding: 20px; 
 }
 
 .payment-form{
+  /* Bỏ position: relative, max-height, height */
+  /* Thêm display: flex để sắp xếp .payment-title và .payment-grid */
+  display: flex;
+  flex-direction: column; 
+  align-items: center; /* Căn giữa form theo chiều ngang */
   max-width: 900px;
-  max-height: 700px;
   width: 100%;
-  height: 100%;
   padding: 40px;
-  background: #1bcaf1;
+  background: #d5ddfc;
   border-radius: 10px;
   box-shadow: 0px 10px 30px #0000001a;
 }
 
 /* Tiêu đề lớn "Thanh toán" */
 .payment-title {
+    /* Bỏ position: absolute và top */
+    width: 100%; /* Đảm bảo text-align center hoạt động */
     text-align: center;
     font-size: 2.5rem;
     font-weight: 700;
@@ -34,6 +41,8 @@
     grid-template-columns: 1fr 1fr; 
     gap: 80px;
     text-align: left;
+    /* Bỏ position: absolute và top */
+    width: 100%; /* Đảm bảo grid chiếm đủ không gian */
 }
 
 /* --- Tóm Tắt Đơn Hàng (Order Summary) --- */
