@@ -25,6 +25,11 @@ loginForm.addEventListener("submit", function (e) {
   if (usernameInput.value === "admin" && passwordInput.value === "123") {
     const footer = document.querySelector('.footer');
     const header = document.querySelector('.header');
+    // --- BỔ SUNG: Cập nhật tên "admin" trên giao diện admin ---
+    const adminUsernameSpan = document.querySelector(".admin .main .login span");
+    if (adminUsernameSpan) {
+      adminUsernameSpan.textContent = "admin";
+    }
     location.hash ='admin' // Chuyển sang trang admin
     return;
   }
