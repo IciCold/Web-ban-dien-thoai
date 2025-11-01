@@ -5,7 +5,8 @@
   import "./thanhtoan.js";
   import "./logout.js";
   import "./cart.js";
-
+  import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
+  import { loadStatistics, seedOrderData } from './thongke.js';
   //==============Chuyển Page bằng Hash=======================//
   const pages = {
     home: document.querySelector(".Home"),
@@ -61,7 +62,32 @@
       requestAnimationFrame(() => {
         subPage.classList.add("page-active-enter");
       });
+      // === THÊM CODE
+      //  ===
+            // Load dữ liệu khi trang con admin được hiển thị
+            setTimeout(() => {
+                if (subPage.id === "ds_khachHang") {
+                    console.log("Đang load danh sách khách hàng...");
+                    loadCustomerList();
+                    setupCustomerSearch();
+                }
+                // Có thể thêm các trang admin khác ở đây
+                if (subPage.id === "ds_sanPham") {
+                    // loadProductList(); // Nếu có
+                }
+                if (subPage.id === "ds_donHang") {
+                    // loadOrderList(); // Nếu có
+                }
+                if (subPage.id === "thongKe") {
+                    console.log("Loading statistics data...");
+                    // Tạo dữ liệu mẫu cho đơn hàng (chạy một lần)
+                    seedOrderData();
+                    loadStatistics();
+                }
+            }, 100); // Delay nhỏ để đảm bảo DOM đã render xong
+            // === KẾT THÚC PHẦN THÊM ===
     }
+    
     } else {
       document.body.classList.remove("no-header-footer");
       if (!page) {

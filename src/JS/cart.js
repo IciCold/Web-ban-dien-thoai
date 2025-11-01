@@ -278,4 +278,101 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCart();
   });
 
+  //THÊM CODE CÓ THỂ CẦN
+  // === 7. HÀM HỖ TRỢ ĐỊNH DẠNG TIỀN ===
+  function formatVND(amount) {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(amount);
+  }
+
+  function parseVNDPrice(priceText) {
+    if (!priceText) return 0;
+    const numericString = priceText.replace(' VND', '').replace(/\./g, '').trim();
+    return parseInt(numericString) || 0;
+  }
+
+  // === 8. HÀM XÓA GIỎ HÀNG ===
+  function clearUserCart() {
+    const username = getCurrentUsername();
+    if (username) {
+      const cartKey = 'cart_' + username;
+      localStorage.removeItem(cartKey);
+    }
+  }
+
+  // === 9. THANH TOÁN TỪ GIỎ HÀNG ===
+  function handleCheckoutFromCart() {
+    const cart = getUserCart();
+    if (cart.length === 0) {
+      alert('Giỏ hàng của bạn đang trống!');
+      return;
+    }
+
+    const currentUser = getCurrentUser();
+    if (!currentUser) {
+      location.hash = 'login';
+      return;
+    }
+
+    // Tạo đơn hàng từ giỏ hàng
+    const newOrder = {
+      id: 'ORD_' + Date.now(),
+      customer: currentUser.userName,
+      customerEmail: currentUser.email,
+      products: cart.map(item => ({
+        name: item.name,
+        price: parseVNDPrice(item.price),
+        quantity: item.quantity,
+        image: item.image
+      })),
+      total: cart.reduce((sum, item) => sum + (parseVNDPrice(item.price) * item.quantity), 0),
+      status: 'completed',
+      date: new Date().toISOString(),
+      paymentMethod: 'Cart Checkout'
+    };
+
+    // Lưu đơn hàng
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    orders.push(newOrder);
+    localStorage.setItem('orders', JSON.stringify(orders));
+
+    // Xóa giỏ hàng
+    clearUserCart();
+    
+    alert(`✅ Đặt hàng thành công!\nMã đơn hàng: ${newOrder.id}\nTổng tiền: ${formatVND(newOrder.total)}`);
+    
+    // Đóng popup giỏ hàng
+    if (cartPopup) {
+      cartPopup.classList.remove('show');
+    }
+    
+    // Cập nhật lại giao diện
+    renderCart();
+    
+    // Chuyển về trang chủ
+    setTimeout(() => {
+      location.hash = 'home';
+    }, 1000);
+  }
+
+  // Thêm nút "Thanh toán" vào popup giỏ hàng
+  function addCheckoutButton() {
+    const cartFooter = document.querySelector('.cart-footer');
+    if (!cartFooter) return;
+    
+    // Xóa nút cũ nếu có
+    const existingBtn = cartFooter.querySelector('.checkout-btn');
+    if (existingBtn) {
+      existingBtn.remove();
+    }
+
+    // Thêm nút mới
+    const checkoutBtn = document.createElement('button');
+    checkoutBtn.className = 'checkout-btn';
+    checkoutBtn.textContent = 'Thanh toán';
+    checkoutBtn.addEventListener('click', handleCheckoutFromCart);
+    cartFooter.appendChild(checkoutBtn);
+  }
 });
