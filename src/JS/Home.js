@@ -190,6 +190,8 @@ loadProducts(); // THÊM DÒNG NÀY ĐỂ BẮT ĐẦU TẢI DỮ LIỆU
 // ======= POPUP =======
 const userName = document.querySelector(".user-name");
 const popUp = document.getElementById("overlay-Popup");
+const haveUser = JSON.parse(localStorage.getItem("currentUser"));
+if(!haveUser){
 userName.addEventListener("click", (e) => {
   popUp.style.opacity = "1";
   popUp.style.visibility = "visible";
@@ -200,7 +202,7 @@ popUp.addEventListener("click", (e) => {
     popUp.style.opacity = "0";
   }
 });
-
+}
 //=======Click Option============
 const option = document.querySelector(".option");
 option.addEventListener("click", (e) => {

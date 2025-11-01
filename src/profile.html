@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hồ Sơ Của Tôi</title>
-    
+
     <link rel="stylesheet" href="../asset/icon/fontawesome-free-7.1.0-web/css/all.min.css">
-    
+
     <link rel="stylesheet" href="CSS/main.css">
-    
+
     <link rel="stylesheet" href="CSS/profile.css">
-    
+
     <script src="JS/profile.js" defer></script>
 </head>
 
@@ -42,195 +42,200 @@
             </div>
         </div>
     </header>
-    
-    <section class="profile-container profile-style">
-        
-        <aside class="profile-sidebar">
-            <div class="profile-sidebar-user">
-                <div class="user-avatar-icon">
-                    <i class="fa-solid fa-user" id="sidebar-avatar-icon-default"></i>
-                    <img src="" alt="" class="sidebar-avatar-img" style="display: none;">
-                </div>
-                <div class="user-info">
-                    <span class="user-Name">nguyentruonghiep</span>
-                    <span><i class="fa-solid fa-pen"></i> Sửa hồ sơ</span>
-                </div>
-            </div>
 
-            <ul class="menu">
-                <li class="menu-category">
-                    <i class="fa-solid fa-user-circle"></i>
-                    <span>Tài khoản của tôi</span>
-                </li>
-                <ul class="submenu">    
-                    <li class="active"><a href="#profile" id="nav-profile-link">Hồ Sơ</a></li>
-                    <li><a href="#banking" id="nav-banking-link">Ngân Hàng</a></li>
-                    <li><a href="#address" id="nav-address-link">Địa Chỉ</a></li>
-                    <li> <button class="logout-btn">Đăng xuất</button> </li>
+    <section class="page-profile">
+        <section class="profile-container profile-style">
+            <aside class="profile-sidebar">
+                <div class="profile-sidebar-user">
+                    <div class="user-avatar-icon">
+                        <i class="fa-solid fa-user" id="sidebar-avatar-icon-default"></i>
+                        <img src="" alt="" class="sidebar-avatar-img" style="display: none;">
+                    </div>
+                    <div class="user-info">
+                        <span class="user-Name">nguyentruonghiep</span>
+                        <span><i class="fa-solid fa-pen"></i> Sửa hồ sơ</span>
+                    </div>
+                </div>
+
+                <ul class="menu">
+                    <li class="menu-category">
+                        <i class="fa-solid fa-user-circle"></i>
+                        <span>Tài khoản của tôi</span>
+                    </li>
+                    <ul class="submenu">
+                        <li class="active"><a href="#profile" id="nav-profile-link">Hồ Sơ</a></li>
+                        <li><a href="#banking" id="nav-banking-link">Ngân Hàng</a></li>
+                        <li><a href="#address" id="nav-address-link">Địa Chỉ</a></li>
+                        <li> <button class="logout-btn">Đăng xuất</button> </li>
                     </ul>
-            </ul>
-        </aside>
+                </ul>
+            </aside>
 
-        <main class="profile-main-content">
+            <main class="profile-main-content">
 
-            <div class="profile-page-view" id="profile-view">
-                <h2>Hồ Sơ Của Tôi</h2>
-                <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
-                <hr>
-                <div class="form-and-avatar-wrapper">
-                    <form class="input-user">
-                        <div class="form-group">
-                            <label for="username">Tên đăng nhập</label>
-                            <input type="text" id="username" value="nguyentruonghiep2006" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="fullname">Tên</label>
-                            <input type="text" id="fullname" value="Nguyễn Trường Hiệp">
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" value="nguyentruonghiep2006@gmail.com" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Số điện thoại</label>
-                            <input type="text" id="phone" placeholder="Thêm số điện thoại" value="0123456789">
-                        </div>
-                        <div class="form-group">
-                            <label>Giới tính</label>
-                            <div class="gender">
-                                <label><input type="radio" name="gender" value="Nam" checked> Nam</label>
-                                <label><input type="radio" name="gender" value="Nữ"> Nữ</label>
-                                <label><input type="radio" name="gender" value="Khác"> Khác</label>
+                <div class="profile-page-view" id="profile-view">
+                    <h2>Hồ Sơ Của Tôi</h2>
+                    <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
+                    <hr>
+                    <div class="form-and-avatar-wrapper">
+                        <form class="input-user">
+                            <div class="form-group">
+                                <label for="username">Tên đăng nhập</label>
+                                <input type="text" id="username" value="nguyentruonghiep2006" readonly>
                             </div>
+                            <div class="form-group">
+                                <label for="fullname">Tên</label>
+                                <input type="text" id="fullname" value="Nguyễn Trường Hiệp">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" value="nguyentruonghiep2006@gmail.com" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Số điện thoại</label>
+                                <input type="text" id="phone" placeholder="Thêm số điện thoại" value="0123456789">
+                            </div>
+                            <div class="form-group">
+                                <label>Giới tính</label>
+                                <div class="gender">
+                                    <label><input type="radio" name="gender" value="Nam" checked> Nam</label>
+                                    <label><input type="radio" name="gender" value="Nữ"> Nữ</label>
+                                    <label><input type="radio" name="gender" value="Khác"> Khác</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="birthday">Ngày sinh</label>
+                                <input type="date" id="birthday" placeholder="dd/mm/yyyy">
+                            </div>
+                            <div class="form-group">
+                                <label></label>
+                                <button type="submit" class="btn-orange">Lưu</button>
+                            </div>
+                        </form>
+                        <div class="avatar-upload-container">
+                            <div class="avatar-placeholder">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <button type="button" class="btn-select-image">Chọn Ảnh</button>
+                            <p>Dụng lượng file tối đa 1 MB</p>
+                            <p>Định dạng: .JPEG, .PNG</p>
                         </div>
-                        <div class="form-group">
-                            <label for="birthday">Ngày sinh</label>
-                            <input type="date" id="birthday" placeholder="dd/mm/yyyy">
-                        </div>
-                        <div class="form-group">
-                            <label></label>
-                            <button type="submit" class="btn-orange">Lưu</button>
-                        </div>
-                    </form>
-                    <div class="avatar-upload-container">
-                        <div class="avatar-placeholder">
-                            <i class="fa-solid fa-user"></i>
-                        </div>
-                        <button type="button" class="btn-select-image">Chọn Ảnh</button>
-                        <p>Dụng lượng file tối đa 1 MB</p>
-                        <p>Định dạng: .JPEG, .PNG</p>
                     </div>
                 </div>
-            </div>
 
-            <div class="profile-page-view hidden-view" id="banking-view">
-                <div class="banking-header">
-                    <h2>Tài Khoản Ngân Hàng Của Tôi</h2>
-                    <button class="btn-orange" id="btn-open-cmnd-modal">+ Thêm Ngân Hàng Liên Kết</button>
-                </div>
-                <hr>
-                
-                <div class="banking-empty-state" id="banking-empty">
-                    <p>Bạn chưa có tài khoản ngân hàng.</p>
-                </div>
-            
-                <div class="banking-list-container" id="banking-list">
+                <div class="profile-page-view hidden-view" id="banking-view">
+                    <div class="banking-header">
+                        <h2>Tài Khoản Ngân Hàng Của Tôi</h2>
+                        <button class="btn-orange" id="btn-open-cmnd-modal">+ Thêm Ngân Hàng Liên Kết</button>
                     </div>
-            </div>
+                    <hr>
 
-            <div class="profile-page-view hidden-view" id="address-view">
-                <div class="banking-header"> <h2>Địa Chỉ Của Tôi</h2>
-                    <button class="btn-orange" id="btn-open-address-modal">+ Thêm Địa Chỉ Mới</button>
-                </div>
-                <hr>
-                
-                <div class="banking-empty-state" id="address-empty"> <p>Bạn chưa có địa chỉ.</p>
-                </div>
-            
-                <div class="address-list-container" id="address-list">
+                    <div class="banking-empty-state" id="banking-empty">
+                        <p>Bạn chưa có tài khoản ngân hàng.</p>
                     </div>
-            </div>
-            
-        </main>
+
+                    <div class="banking-list-container" id="banking-list">
+                    </div>
+                </div>
+
+                <div class="profile-page-view hidden-view" id="address-view">
+                    <div class="banking-header">
+                        <h2>Địa Chỉ Của Tôi</h2>
+                        <button class="btn-orange" id="btn-open-address-modal">+ Thêm Địa Chỉ Mới</button>
+                    </div>
+                    <hr>
+
+                    <div class="banking-empty-state" id="address-empty">
+                        <p>Bạn chưa có địa chỉ.</p>
+                    </div>
+
+                    <div class="address-list-container" id="address-list">
+                    </div>
+                </div>
+
+            </main>
+        </section>
+
+
+        <div class="bank-modal-overlay hidden-view" id="bank-modal-overlay"></div>
+
+        <div class="bank-modal hidden-view" id="cmnd-modal">
+            <h2 class="view-title">Thông Tin Người Dùng</h2>
+            <hr>
+            <form class="bank-form" id="cmnd-form">
+                <div class="form-group-stacked">
+                    <label for="bank-fullname">Tên</label>
+                    <input type="text" id="bank-fullname" placeholder="Tên" required>
+                </div>
+                <div class="form-group-stacked">
+                    <label for="bank-cmnd">Số CMND</label>
+                    <input type="text" id="bank-cmnd" placeholder="Số CMND" required maxlength="10" pattern="\d{10}">
+                    <small id="cmnd-error" class="form-error">Vui lòng nhập đủ 10 số CMND.</small>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-link" id="cmnd-modal-back">TRỞ LẠI</button>
+                    <button type="submit" class="btn-orange">Hoàn Thành</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bank-modal hidden-view" id="add-bank-modal">
+            <h2 class="view-title">Thêm Tài Khoản Ngân Hàng</h2>
+            <hr>
+            <form class="bank-form" id="add-bank-form">
+                <div class="form-group-stacked">
+                    <label for="bank-name">Tên ngân hàng</label>
+                    <select id="bank-name" required>
+                        <option value="" disabled selected>Chọn ngân hàng</option>
+                        <option value="sacombank">Sacombank</option>
+                        <option value="vietcombank">Vietcombank</option>
+                        <option value="agribank">Agribank</option>
+                        <option value="vietinbank">Vietinbank</option>
+                    </select>
+                </div>
+                <div class="form-group-stacked">
+                    <label for="bank-account">Số tài khoản</label>
+                    <input type="text" id="bank-account" placeholder="Số tài khoản" required>
+                </div>
+                <div class="form-group-stacked">
+                    <label for="bank-holder-name">Tên đầy đủ (viết in hoa, không dấu)</label>
+                    <input type="text" id="bank-holder-name" placeholder="Tên đầy đủ (viết in hoa, không dấu)" required>
+                </div>
+                <div class="form-group-checkbox">
+                    <input type="checkbox" id="bank-default" checked>
+                    <label for="bank-default">Đặt làm mặc định</label>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-link" id="add-bank-modal-back">TRỞ LẠI</button>
+                    <button type="submit" class="btn-orange">Hoàn Thành</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bank-modal hidden-view" id="add-address-modal">
+            <h2 class="view-title">Địa chỉ mới</h2>
+            <hr>
+            <form class="bank-form" id="add-address-form">
+
+                <div class="form-group-stacked">
+                    <label for="addr-specific">Địa chỉ cụ thể</label>
+                    <textarea id="addr-specific"
+                        placeholder="Nhập địa chỉ cụ thể (Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố)"
+                        required></textarea>
+                </div>
+
+                <div class="form-group-checkbox">
+                    <input type="checkbox" id="addr-default">
+                    <label for="addr-default">Đặt làm địa chỉ mặc định</label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-link" id="add-address-modal-back">TRỞ LẠI</button>
+                    <button type="submit" class="btn-orange">Hoàn Thành</button>
+                </div>
+            </form>
+        </div>
     </section>
-
-
-    <div class="bank-modal-overlay hidden-view" id="bank-modal-overlay"></div>
-
-    <div class="bank-modal hidden-view" id="cmnd-modal">
-        <h2 class="view-title">Thông Tin Người Dùng</h2>
-        <hr>
-        <form class="bank-form" id="cmnd-form">
-            <div class="form-group-stacked">
-                <label for="bank-fullname">Tên</label>
-                <input type="text" id="bank-fullname" placeholder="Tên" required>
-            </div>
-            <div class="form-group-stacked">
-                <label for="bank-cmnd">Số CMND</label>
-                <input type="text" id="bank-cmnd" placeholder="Số CMND" required maxlength="10" pattern="\d{10}">
-                <small id="cmnd-error" class="form-error">Vui lòng nhập đủ 10 số CMND.</small>
-            </div>
-            <div class="form-actions">
-                <button type="button" class="btn-link" id="cmnd-modal-back">TRỞ LẠI</button>
-                <button type="submit" class="btn-orange">Hoàn Thành</button>
-            </div>
-        </form>
-    </div>
-
-    <div class="bank-modal hidden-view" id="add-bank-modal">
-        <h2 class="view-title">Thêm Tài Khoản Ngân Hàng</h2>
-        <hr>
-        <form class="bank-form" id="add-bank-form">
-            <div class="form-group-stacked">
-                <label for="bank-name">Tên ngân hàng</label>
-                <select id="bank-name" required>
-                    <option value="" disabled selected>Chọn ngân hàng</option>
-                    <option value="sacombank">Sacombank</option>
-                    <option value="vietcombank">Vietcombank</option>
-                    <option value="agribank">Agribank</option>
-                    <option value="vietinbank">Vietinbank</option>
-                </select>
-            </div>
-            <div class="form-group-stacked">
-                <label for="bank-account">Số tài khoản</label>
-                <input type="text" id="bank-account" placeholder="Số tài khoản" required>
-            </div>
-            <div class="form-group-stacked">
-                <label for="bank-holder-name">Tên đầy đủ (viết in hoa, không dấu)</label>
-                <input type="text" id="bank-holder-name" placeholder="Tên đầy đủ (viết in hoa, không dấu)" required>
-            </div>
-            <div class="form-group-checkbox">
-                <input type="checkbox" id="bank-default" checked>
-                <label for="bank-default">Đặt làm mặc định</label>
-            </div>
-            <div class="form-actions">
-                <button type="button" class="btn-link" id="add-bank-modal-back">TRỞ LẠI</button>
-                <button type="submit" class="btn-orange">Hoàn Thành</button>
-            </div>
-        </form>
-    </div>
-
-    <div class="bank-modal hidden-view" id="add-address-modal">
-        <h2 class="view-title">Địa chỉ mới</h2>
-        <hr>
-        <form class="bank-form" id="add-address-form">
-            
-            <div class="form-group-stacked">
-                <label for="addr-specific">Địa chỉ cụ thể</label>
-                <textarea id="addr-specific" placeholder="Nhập địa chỉ cụ thể (Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố)" required></textarea>
-            </div>
-
-            <div class="form-group-checkbox">
-                <input type="checkbox" id="addr-default">
-                <label for="addr-default">Đặt làm địa chỉ mặc định</label>
-            </div>
-
-            <div class="form-actions">
-                <button type="button" class="btn-link" id="add-address-modal-back">TRỞ LẠI</button>
-                <button type="submit" class="btn-orange">Hoàn Thành</button>
-            </div>
-        </form>
-    </div>
 
 
     <footer class="footer">
@@ -243,4 +248,5 @@
         </div>
     </footer>
 </body>
+
 </html>

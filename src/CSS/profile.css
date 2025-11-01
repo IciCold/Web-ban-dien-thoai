@@ -292,9 +292,9 @@
 /* ================================== */
 
 /* Class để ẩn các view/modal không active */
-.hidden-view {
-    display: none;
-}
+    .hidden-view {
+        display: none;
+    }
 
 /* Nút "Trở Lại" trong modal */
 .btn-link {

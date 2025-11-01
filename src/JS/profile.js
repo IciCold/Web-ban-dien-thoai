@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const avatarContainer = document.querySelector(".avatar-upload-container");
     const avatarPlaceholder = document.querySelector(".avatar-placeholder");
     
-    // [ĐÃ SỬA] Lấy cả thẻ ảnh và icon
+    // Lấy cả thẻ ảnh và icon
     const sidebarAvatar = document.querySelector(".sidebar-avatar-img"); 
     const sidebarAvatarIcon = document.getElementById("sidebar-avatar-icon-default");
     
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- QUY TRÌNH HỒ SƠ (PROFILE) ---
     // ===================================
 
-    // --- 1. [ĐÃ SỬA] Tải dữ liệu Hồ Sơ ---
+    // --- 1. Tải dữ liệu Hồ Sơ ---
     function loadProfileData() {
         try {
             const savedName = localStorage.getItem("userFullName");
@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- 2. [ĐÃ SỬA] Xử lý Nút "Lưu" Hồ Sơ ---
+    // --- 2. Xử lý Nút "Lưu" Hồ Sơ ---
     if (profileForm) {
         profileForm.addEventListener("submit", (e) => {
             e.preventDefault(); 
@@ -167,7 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // --- 3. Xử lý Nút "Chọn Ảnh" ---
-    // (Phần này giữ nguyên, nó đã đúng)
     let hiddenFileInput;
     if (avatarContainer) {
         hiddenFileInput = document.createElement("input");
@@ -419,9 +418,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // ===================================
 
     // --- Gắn Sự Kiện Cho Sidebar ---
-    if(navProfile) navProfile.addEventListener("click", (e) => { e.preventDefault(); showView(profileView, navProfile); });
-    if(navBanking) navBanking.addEventListener("click", (e) => { e.preventDefault(); showView(bankingView, navBanking); });
-    if(navAddress) navAddress.addEventListener("click", (e) => { e.preventDefault(); showView(addressView, navAddress); });
+    if(navProfile) navProfile.addEventListener("click", (e) => { 
+        e.preventDefault(); 
+        showView(profileView, navProfile);
+        // ✅ THÊM: Cập nhật hash nhưng không reload page
+        history.replaceState(null, '', '#profile');
+    });
+    if(navBanking) navBanking.addEventListener("click", (e) => { 
+        e.preventDefault(); 
+        showView(bankingView, navBanking);
+        history.replaceState(null, '', '#banking');
+    });
+    if(navAddress) navAddress.addEventListener("click", (e) => { 
+        e.preventDefault(); 
+        showView(addressView, navAddress);
+        history.replaceState(null, '', '#address');
+    });
 
     // --- Gắn Sự Kiện Mở Modal ---
     if (btnOpenCmndModal) btnOpenCmndModal.addEventListener("click", () => openModal(cmndModal));
@@ -460,5 +472,23 @@ document.addEventListener("DOMContentLoaded", () => {
     renderBankingList(); // Tải và vẽ danh sách Ngân Hàng
     renderAddressList(); // Tải và vẽ danh sách Địa Chỉ
     
-    showView(profileView, navProfile); // Hiển thị trang Hồ Sơ làm mặc định
+    // ✅ THÊM: Kiểm tra hash để hiển thị đúng tab khi load
+    const currentHash = location.hash.replace("#", "");
+    if (currentHash === "banking") {
+        showView(bankingView, navBanking);
+    } else if (currentHash === "address") {
+        showView(addressView, navAddress);
+    } else {
+        showView(profileView, navProfile); // Mặc định hiển thị Hồ Sơ
+    }
 });
+
+
+const haveUser = JSON.parse(localStorage.getItem("currentUser"));
+const headerUserName = document.querySelector(".top-bar .user-name");
+console.log(haveUser);
+if(haveUser && headerUserName   ){
+    headerUserName.addEventListener('click', () => {
+        location.hash = "profile";
+    });
+}   

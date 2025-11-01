@@ -1,5 +1,5 @@
 // Lấy reference đến các elements
-const userNameDiv = document.querySelector('.user-name');
+const logout_btn = document.querySelector('.logout-btn');
 const userSpan = document.querySelector('.username');
 
 // Tạo các elements cho popup
@@ -40,6 +40,7 @@ function handleLogout() {
     if (homePage) {
        location.hash = 'home';
     }
+
 }   
 
 // Hiển thị popup đăng xuất
@@ -99,9 +100,9 @@ function displayUsername() {
 }
 
 // Thêm event listener cho user-name div
-if (userNameDiv) {
+if (logout_btn) {
     // Use capture phase to intercept clicks before other listeners
-    userNameDiv.addEventListener('click', handleUserClick, true);
+    logout_btn.addEventListener('click', handleUserClick, true);
 }
 
 // Gọi hàm hiển thị username khi trang được tải
