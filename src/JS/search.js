@@ -10,31 +10,58 @@ const viewMoreBtn = document.getElementById("viewMoreBtn"); // Lấy nút "Xem t
 let allProducts = [];
 
 // 3. Hàm tải dữ liệu JSON (giống hệt Home.js)
+// File: search.js
+
+// (XÓA HÀM CŨ)
+
+// ✅ HÀM MỚI (Dán hàm này vào)
 async function loadSearchData() {
   try {
-    const response = await fetch("../asset/data/dienthoai.json"); // Đảm bảo đường dẫn này đúng
-    if (!response.ok) throw new Error("Không thể tải JSON cho tìm kiếm");
+    // 1. Tải tệp JSON (dữ liệu gốc)
+    const response = await fetch("../asset/data/dienthoai.json");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const jsonProducts = await response.json();
 
-    const data = await response.json();
+    // 2. Tải dữ liệu từ localStorage (dữ liệu admin đã thêm)
+    const savedProductsRaw = localStorage.getItem("datalist");
+    const localProducts = savedProductsRaw ? JSON.parse(savedProductsRaw) : [];
 
-    // 4. Ánh xạ dữ liệu từ JSON
-    allProducts = data.map(item => {
-      let effectiveBrand = item.brand;
+    // 3. Gộp hai nguồn dữ liệu
+    const allData = [...localProducts];
+    const localIds = new Set(localProducts.map(p => p.id));
+
+    // 4. Thêm dữ liệu từ JSON nếu ID chưa tồn tại trong localStorage
+    jsonProducts.forEach(sp => {
+      // Chuẩn hóa ID từ JSON (nếu cần)
+      const adminId = sp.id.toString().startsWith("S") ? sp.id : "S" + String(sp.id).padStart(3, "0");
+      if (!localIds.has(adminId)) {
+        allData.push({ ...sp, id: adminId });
+      }
+    });
+
+    // 5. Ánh xạ (map) dữ liệu TỔNG HỢP sang định dạng mà search.js mong đợi
+    allProducts = allData.map(item => {
+      let effectiveBrand = (item.brand || item.thuonghieu || "");
       if (item.loai === 'Tablet') {
         effectiveBrand = 'ipad';
       }
+
+      // Giữ lại ID để có thể click vào chi tiết
       return {
-        name: item.ten,
-        brand: effectiveBrand,
+        ...item, // Quan trọng: Giữ lại 'id' và các trường gốc
+        name: item.ten || item.tensp,         // Lấy 'ten' (JSON) hoặc 'tensp' (admin)
+        brand: effectiveBrand.toLowerCase(), // Chuẩn hóa brand về chữ thường
         price: item.gia,
-        img: item.src
+        img: item.src || item.anh            // Lấy 'src' (JSON) hoặc 'anh' (admin)
       };
     });
+
   } catch (error) {
     console.error("Lỗi tải dữ liệu cho search:", error);
   }
 }
-
 // 5. Hàm riêng để hiển thị KẾT QUẢ TÌM KIẾM
 // (Chúng ta không dùng displayProducts từ Home.js vì nó có logic "Xem thêm")
 function displaySearchResults(list) {
