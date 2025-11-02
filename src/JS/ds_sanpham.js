@@ -14,7 +14,7 @@ let datalist = [];
 
 // Khi tải trang
 window.addEventListener("DOMContentLoaded", async () => {
-    // 1️⃣ Lấy dữ liệu từ localStorage
+    //  Lấy dữ liệu từ localStorage
     const saved = localStorage.getItem("datalist");
     if (saved) {
         datalist = JSON.parse(saved);
@@ -24,12 +24,12 @@ window.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // 2️⃣ Lấy dữ liệu từ file dienthoai.json
+    //  Lấy dữ liệu từ file dienthoai.json
     try {
         const res = await fetch("../asset/data/dienthoai.json");
         const jsonData = await res.json();
 
-        // 3️⃣ Chọn ra tất cả các trường cần thiết từ file (bao gồm chi tiết)
+        // 3️Chọn ra tất cả các trường cần thiết từ file (bao gồm chi tiết)
         const fromFile = jsonData.map(sp => ({
             id: sp.id.toString().startsWith("S") ? sp.id : "S" + String(sp.id).padStart(3, "0"),
             tensp: sp.ten || sp.tensp || "",
@@ -37,7 +37,7 @@ window.addEventListener("DOMContentLoaded", async () => {
             gia: sp.gia || 0,
             anh: sp.src || sp.anh || "",
 
-            // ✅ Bổ sung các thông tin chi tiết
+            //  Bổ sung các thông tin chi tiết
             color: sp.color || sp.mau_sac || "",
             camera: sp.camera || "",
             cpu: sp.cpu || "",
@@ -46,8 +46,7 @@ window.addEventListener("DOMContentLoaded", async () => {
             battery: sp.battery || sp.dung_luong_pin || ""
         }));
 
-
-        // 4️⃣ Gộp 2 nguồn dữ liệu lại (tránh trùng id)
+        // 4️ Gộp 2 nguồn dữ liệu lại (tránh trùng id)
         const existingIds = new Set(datalist.map(sp => sp.id));
         datalist = [
             ...datalist,
