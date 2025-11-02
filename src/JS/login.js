@@ -23,13 +23,13 @@ loginForm.addEventListener("submit", function (e) {
   passwordInput.style.border = "none";
   // Nếu là admin, chuyển hướng sang trang admin
   if (usernameInput.value === "admin" && passwordInput.value === "123") {
-    const footer = document.querySelector('.footer');
-    const header = document.querySelector('.header');
+    localStorage.setItem("adminLogged", "true"); //Lưu trạng thái đăng nhập của admin
     // --- BỔ SUNG: Cập nhật tên "admin" trên giao diện admin ---
     const adminUsernameSpan = document.querySelector(".admin .main .login span");
     if (adminUsernameSpan) {
       adminUsernameSpan.textContent = "admin";
     }
+    
     location.hash ='admin' // Chuyển sang trang admin
     return;
   }

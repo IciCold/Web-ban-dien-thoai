@@ -33,7 +33,7 @@ function hideAll() {
         el.classList.add("hidden");
         el.classList.remove("page-active", "page-active-enter");
       });
-    } else if (page) { // ✅ THÊM: Kiểm tra page có tồn tại
+    } else if (page) { // THÊM: Kiểm tra page có tồn tại
       page.classList.add("hidden");
       page.classList.remove("page-active", "page-active-enter");
     }
@@ -94,7 +94,7 @@ function showPage() {
     }
     
   } else {
-    // ✅ XỬ LÝ CÁC PAGE THÔNG THƯỜNG
+    // XỬ LÝ CÁC PAGE THÔNG THƯỜNG
     document.body.classList.remove("no-header-footer");
     if (!page) {
       console.log("Không tìm thấy page");
