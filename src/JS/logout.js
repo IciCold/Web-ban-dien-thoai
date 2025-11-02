@@ -1,5 +1,5 @@
 // Lấy reference đến các elements
-const userNameDiv = document.querySelector('.user-name');
+const logout_btn = document.querySelector('.logout-btn');
 const userSpan = document.querySelector('.username');
 
 // Tạo các elements cho popup
@@ -40,15 +40,7 @@ function handleLogout() {
     if (homePage) {
        location.hash = 'home';
     }
-    
-    // // Ẩn các trang khác
-    // const pages = document.querySelectorAll('.page-login, .page-register');
-    // pages.forEach(page => {
-    //     if (page) {
-    //         page.classList.add('hidden');
-    //         page.classList.remove('page-active', 'page-active-enter');
-    //     }
-    // });
+
 }   
 
 // Hiển thị popup đăng xuất
@@ -83,6 +75,7 @@ function showLogoutPopup() {
 // Xử lý sự kiện click vào username
 // NOTE: listener is attached in capture phase so we can intercept the click
 // and prevent other handlers from showing the login popup when user is logged in.
+// [LƯU Ý]: Đây là hàm xử lý cho nút "Đăng xuất" BÊN TRONG trang profile
 function handleUserClick(event) {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (currentUser) {
@@ -107,10 +100,10 @@ function displayUsername() {
     }
 }
 
-// Thêm event listener cho user-name div
-if (userNameDiv) {
+// Thêm event listener cho nút "Đăng xuất" trong sidebar profile
+if (logout_btn) {
     // Use capture phase to intercept clicks before other listeners
-    userNameDiv.addEventListener('click', handleUserClick, true);
+    logout_btn.addEventListener('click', handleUserClick, true);
 }
 
 // Gọi hàm hiển thị username khi trang được tải
@@ -132,17 +125,5 @@ if (adminLoginButton) {
     }
   });
 }
-if (adminLoginButton) {
-  adminLoginButton.addEventListener("click", () => {
-    const adminSpan = adminLoginButton.querySelector("span");
-
-    // Chỉ thực hiện đăng xuất nếu đang đăng nhập (tên là "admin")
-    if (adminSpan && adminSpan.textContent === "admin") {
-      // 1. Đặt lại văn bản thành "Đăng nhập"
-      adminSpan.textContent = "Đăng nhập";
-      
-      // 2. Chuyển hướng về trang chủ của khách
-      location.hash = "home";
-    }
-  });
-}
+// [SỬA LỖI]: Đã xóa khối "if (adminLoginButton)" bị lặp lại
+// [SỬA LỖI]: Đã xóa dấu "}" thừa ở cuối file

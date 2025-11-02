@@ -184,16 +184,29 @@ viewMoreBtn.addEventListener("click", () => {
 loadProducts(); // THÊM DÒNG NÀY ĐỂ BẮT ĐẦU TẢI DỮ LIỆU
 
 // ===================================================
-// PHẦN LOGIC POPUP VÀ CHUYỂN TRANG (giữ nguyên)
+// PHẦN LOGIC POPUP VÀ CHUYỂN TRANG (ĐÃ SỬA)
 // ===================================================
 
-// ======= POPUP =======
+// [SỬA LỖI] ======= POPUP / USER PROFILE NAVIGATION =======
 const userName = document.querySelector(".user-name");
 const popUp = document.getElementById("overlay-Popup");
+
+// Luôn gắn listener vào .user-name
 userName.addEventListener("click", (e) => {
-  popUp.style.opacity = "1";
-  popUp.style.visibility = "visible";
+  // Kiểm tra trạng thái đăng nhập MỖI KHI CLICK
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  
+  if (currentUser) {
+    // ĐÃ ĐĂNG NHẬP: Chuyển đến trang profile
+    location.hash = "profile";
+  } else {
+    // CHƯA ĐĂNG NHẬP: Hiển thị popup đăng nhập/đăng ký
+    popUp.style.opacity = "1";
+    popUp.style.visibility = "visible";
+  }
 });
+
+// Gắn listener để đóng popup (luôn luôn)
 popUp.addEventListener("click", (e) => {
   if (e.target === popUp) {
     popUp.style.visibility = "hidden";
@@ -236,3 +249,4 @@ buyNowBtn.addEventListener("click", () => {
 // **6. Cập nhật lại export (nếu cần)**
 // Xóa 'products' khỏi export vì nó không còn tồn tại
 export { productsGrid, displayProducts };
+// [SỬA LỖI]: Đã xóa dấu '}' thừa ở đây
