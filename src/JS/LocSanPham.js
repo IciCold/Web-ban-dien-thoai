@@ -1,3 +1,4 @@
+import { allProducts, displayProducts } from "./Home.js";
 //  BIẾN TOÀN CỤC
 // ========================
 let currentBrand = "all"; // cho hàng nút bên ngoài

@@ -88,35 +88,71 @@ let visibleProducts = 8;
 let currentBrand = "all";
 let minPrice = 0;
 let maxPrice = Infinity;
-// **3. Tạo hàm để tải và xử lý dữ liệu từ JSON**
+// đọc sản phẩm từ json và localstorage
+
 async function loadProducts() {
   try {
-    // Tải tệp JSON (đường dẫn này là tương đối so với tệp index.html)
+    // 1. Tải tệp JSON (dữ liệu gốc)
     const response = await fetch("../asset/data/dienthoai.json");
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data = await response.json();
+    const jsonProducts = await response.json();
 
-    // **Quan trọng: Ánh xạ dữ liệu từ JSON sang định dạng mà code của bạn mong đợi**
-    allProducts = data.map(item => {
-      let effectiveBrand = item.brand;
+    // 2. Tải dữ liệu từ localStorage (dữ liệu admin đã thêm)
+    const savedProductsRaw = localStorage.getItem("datalist");
+    const localProducts = savedProductsRaw ? JSON.parse(savedProductsRaw) : [];
+
+    // 3. Gộp hai nguồn dữ liệu
+    // Ưu tiên dữ liệu từ localStorage (localProducts)
+    const allData = [...localProducts];
+    const localIds = new Set(localProducts.map(p => p.id));
+
+    // 4. Thêm dữ liệu từ JSON nếu ID chưa tồn tại trong localStorage
+    jsonProducts.forEach(sp => {
+      // Chuẩn hóa ID từ JSON (nếu cần) để khớp với format "S001"
+      const adminId = sp.id.toString().startsWith("S") ? sp.id : "S" + String(sp.id).padStart(3, "0");
+      
+      if (!localIds.has(adminId)) {
+        // Chỉ thêm sản phẩm từ JSON nếu nó chưa có trong danh sách của admin
+        allData.push({
+            ...sp, // Giữ tất cả: cpu, camera, group_id, v.v.
+            id: adminId // Đảm bảo ID đã chuẩn hóa
+        });
+      }
+    });
+
+    // 5. Quan trọng: Ánh xạ (map) dữ liệu TỔNG HỢP sang định dạng mà code của bạn mong đợi
+    // Code này sẽ chuẩn hóa các tên trường (ví dụ: 'tensp' và 'ten' -> 'name')
+    allProducts = allData.map(item => {
+      let effectiveBrand = item.brand || item.thuonghieu; // Lấy brand (từ JSON) hoặc thuonghieu (từ admin)
       if (item.loai === 'Tablet') {
         effectiveBrand = 'ipad';
       }
 
-      // (SỬA) Giữ lại toàn bộ dữ liệu gốc từ item
+      // Giữ lại toàn bộ dữ liệu gốc (item) để chuyển sang trang chi tiết
+      // và thêm các trường đã chuẩn hóa (name, price, img) để hiển thị
       return {
-        ...item, // Giữ tất cả: id, ten, cpu, camera, group_id, v.v.
-        brand: effectiveBrand, // Ghi đè brand nếu là tablet
-        // Thêm các trường đã map để tương thích code hiển thị
-        name: item.ten,         
-        price: item.gia,        
-        img: item.src           
+        ...item, // Giữ tất cả: id, cpu, camera, ram, battery, memory, color, group_id, v.v.
+        
+        // Chuẩn hóa cho Home.js hiển thị
+        name: item.ten || item.tensp,         // Lấy 'ten' (JSON) hoặc 'tensp' (admin)
+        price: item.gia,                      // 'gia' (cả hai đều có)
+        img: item.src || item.anh,            // Lấy 'src' (JSON) hoặc 'anh' (admin)
+
+        // Chuẩn hóa trường brand
+        brand: effectiveBrand,
+        
+        // Chuẩn hóa các trường chi tiết (để chitiet.js dễ sử dụng)
+        ten: item.ten || item.tensp,
+        src: item.src || item.anh,
+        bo_nho: item.bo_nho || item.memory,
+        mau_sac: item.mau_sac || item.color,
+        dung_luong_pin: item.dung_luong_pin || item.battery
       };
     });
 
-    // **4. Sau khi tải và xử lý xong, gọi hàm hiển thị lần đầu**
+    // 6. Sau khi tải và xử lý xong, gọi hàm hiển thị lần đầu
     updateDisplay();
 
   } catch (error) {
@@ -124,7 +160,6 @@ async function loadProducts() {
     productsGrid.innerHTML = "<p>Lỗi khi tải sản phẩm. Vui lòng thử lại.</p>";
   }
 }
-
 // ======= HIỂN THỊ SẢN PHẨM =======
 function displayProducts(list) {
   productsGrid.innerHTML = "";
@@ -262,5 +297,5 @@ function actionsBuy(){
   
 // **6. Cập nhật lại export (nếu cần)**
 // Xóa 'products' khỏi export vì nó không còn tồn tại
-export { productsGrid, displayProducts };
+export { allProducts, productsGrid, displayProducts };
 // [SỬA LỖI]: Đã xóa dấu '}' thừa ở đây

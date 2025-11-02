@@ -30,12 +30,46 @@ export async function initChiTietPage() {
     return;
   }
 
-  // 2. Tải dữ liệu JSON (nếu chưa tải)
+  // 2. Tải dữ liệu (nếu chưa tải)
   if (allProductsData.length === 0) {
     try {
+      // 2.1. Tải tệp JSON (dữ liệu gốc)
       const response = await fetch("../asset/data/dienthoai.json");
       if (!response.ok) throw new Error("Không thể tải JSON");
-      allProductsData = await response.json();
+      const jsonProducts = await response.json();
+
+      // 2.2. Tải dữ liệu từ localStorage (dữ liệu admin đã thêm)
+      const savedProductsRaw = localStorage.getItem("datalist");
+      const localProducts = savedProductsRaw ? JSON.parse(savedProductsRaw) : [];
+
+      // 2.3. Gộp hai nguồn dữ liệu (Logic y hệt Home.js)
+      const allData = [...localProducts];
+      const localIds = new Set(localProducts.map(p => p.id));
+
+      jsonProducts.forEach(sp => {
+        const adminId = sp.id.toString().startsWith("S") ? sp.id : "S" + String(sp.id).padStart(3, "0");
+        if (!localIds.has(adminId)) {
+          allData.push({ ...sp, id: adminId });
+        }
+      });
+
+      // 2.4. Ánh xạ (chuẩn hóa) toàn bộ dữ liệu cho trang chi tiết
+      allProductsData = allData.map(item => ({
+          ...item,
+          id: item.id,
+          ten: item.ten || item.tensp,
+          src: item.src || item.anh,
+          gia: item.gia,
+          cpu: item.cpu,
+          camera: item.camera,
+          ram: item.ram,
+          dung_luong_pin: item.dung_luong_pin || item.battery,
+          bo_nho: item.bo_nho || item.memory,
+          mau_sac: item.mau_sac || item.color,
+          group_id: item.group_id
+          // Các trường khác từ item sẽ được giữ nguyên
+      }));
+
     } catch (error) {
       console.error(error);
       productSection.innerHTML = "<h1>Lỗi tải dữ liệu sản phẩm.</h1>";
