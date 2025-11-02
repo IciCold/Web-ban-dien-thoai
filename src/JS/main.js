@@ -9,7 +9,8 @@ import "./LocSanPham.js";
 import "./ds_sanpham.js";
 import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
 import { loadStatistics, seedOrderData } from './thongke.js';
-import "./profile.js"
+import { initProfilePage } from "./profile.js";
+import { initChiTietPage } from "./chitiet.js"; // (THÊM) Import file chi tiết
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
@@ -107,6 +108,21 @@ function showPage() {
     requestAnimationFrame(() => {
       page.classList.add("page-active-enter"); // opacity: 1
     });
+
+    // ===================================
+    // --- (SỬA Ở ĐÂY) ---
+    // ===================================
+    // Gọi hàm khởi tạo của trang profile
+    if (key === "profile") {
+        initProfilePage();
+    }
+    // (THÊM) Gọi hàm khởi tạo của trang chi tiết
+    if (key === "chitiet") {
+        initChiTietPage();
+    }
+    // ===================================
+    // --- (KẾT THÚC SỬA) ---
+    // ===================================
   }
 }
 

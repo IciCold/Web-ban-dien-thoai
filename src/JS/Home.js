@@ -100,20 +100,19 @@ async function loadProducts() {
 
     // **Quan trọng: Ánh xạ dữ liệu từ JSON sang định dạng mà code của bạn mong đợi**
     allProducts = data.map(item => {
-      // Xử lý logic cho "Máy Tính Bảng"
-      // Nút lọc của bạn dùng 'data-brand="ipad"' cho Máy Tính Bảng.
-      // Tệp JSON dùng 'loai: "Tablet"'.
-      // Chúng ta sẽ gán lại 'brand' thành 'ipad' nếu 'loai' là 'Tablet'.
       let effectiveBrand = item.brand;
       if (item.loai === 'Tablet') {
         effectiveBrand = 'ipad';
       }
 
+      // (SỬA) Giữ lại toàn bộ dữ liệu gốc từ item
       return {
-        name: item.ten,         // 'ten' từ JSON -> 'name'
-        brand: effectiveBrand,  // 'brand' hoặc 'ipad' (nếu là tablet)
-        price: item.gia,        // 'gia' từ JSON -> 'price'
-        img: item.src           // 'src' từ JSON -> 'img'
+        ...item, // Giữ tất cả: id, ten, cpu, camera, group_id, v.v.
+        brand: effectiveBrand, // Ghi đè brand nếu là tablet
+        // Thêm các trường đã map để tương thích code hiển thị
+        name: item.ten,         
+        price: item.gia,        
+        img: item.src           
       };
     });
 
@@ -134,6 +133,7 @@ function displayProducts(list) {
   shown.forEach((product) => {
     const card = document.createElement("div");
     card.className = "product-card";
+    card.dataset.id = product.id; // (THÊM) Thêm ID vào data-attribute
     card.innerHTML = `
                     <img src="${product.img}" alt="${product.name}">
                     <div class="product-name">${product.name}</div>
@@ -230,20 +230,34 @@ option.addEventListener("click", (e) => {
   popUp.style.opacity = "0";
 });
 
-// ======= ẤN MUA SẼ HIỆN TRANG THANH TOÁN-CHI TIẾT=======
+// (SỬA) ======= ẤN VÀO SẢN PHẨM SẼ LƯU ID VÀ CHUYỂN TRANG=======
 function actionsBuy(){
-  // Gắn lại sự kiện cho tất cả nút "Mua ngay" mới tạo
+  // Gắn lại sự kiện cho tất cả card sản phẩm mới tạo
     const clickOnProduct = productsGrid.querySelectorAll(".product-card");
-    clickOnProduct.forEach((element) => {
-      element.addEventListener("click", () => {
-        location.hash = "chitiet";
+    clickOnProduct.forEach((card) => {
+      card.addEventListener("click", (e) => {
+        // Ngăn việc click vào nút "Mua ngay" cũng kích hoạt
+        if (e.target.classList.contains('buy-btn')) {
+            // Xử lý logic thêm vào giỏ hàng ở đây nếu muốn
+            console.log("Thêm vào giỏ hàng (chưa làm)");
+            e.stopPropagation(); // Ngăn sự kiện nổi bọt lên card
+            return;
+        }
+
+        const productId = card.dataset.id;
+        if(productId) {
+            localStorage.setItem("selectedProductId", productId);
+            location.hash = "chitiet";
+        }
       });
     });
 }
-const buyNowBtn = document.querySelector(".buy-now-button");
-buyNowBtn.addEventListener("click", () => {
-  location.hash = "thanhtoan";
-});
+// (XÓA) Xóa bỏ listener bị sai
+// const buyNowBtn = document.querySelector(".buy-now-button");
+// buyNowBtn.addEventListener("click", () => {
+//   location.hash = "thanhtoan";
+// });
+
 //POPUP LỌC SẢN PHẨM
   
 // **6. Cập nhật lại export (nếu cần)**

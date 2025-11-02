@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", () => {
+// (SỬA) Gói toàn bộ code vào một hàm export
+export function initProfilePage() {
     
     // ===================================
     // --- (SỬA LỖI) HÀNG RÀO BẢO VỆ ---
@@ -522,7 +523,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         showView(profileView, navProfile); // Mặc định hiển thị Hồ Sơ
     }
-});
+// (SỬA) Xóa dòng "});" ở đây
 
 
 // ===================================
@@ -530,3 +531,4 @@ document.addEventListener("DOMContentLoaded", () => {
 // ĐÃ XÓA BỎ TOÀN BỘ KHỐI CODE LỖI BÊN DƯỚI.
 // (Khối code bắt đầu bằng "const haveUser = ..." và có dấu "}" thừa)
 // ===================================
+} // (SỬA) Dấu '}' này dùng để đóng hàm 'initProfilePage'
