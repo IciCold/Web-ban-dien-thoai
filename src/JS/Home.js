@@ -141,7 +141,7 @@ async function loadProducts() {
         img: item.src || item.anh,            // Lấy 'src' (JSON) hoặc 'anh' (admin)
 
         // Chuẩn hóa trường brand
-        brand: effectiveBrand,
+        brand: effectiveBrand.toLowerCase(),
         
         // Chuẩn hóa các trường chi tiết (để chitiet.js dễ sử dụng)
         ten: item.ten || item.tensp,
