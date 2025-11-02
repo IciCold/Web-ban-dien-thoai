@@ -8,8 +8,8 @@ import "./cart.js";
 import "./LocSanPham.js";
 import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
 import { loadStatistics, seedOrderData } from './thongke.js';
-// (SỬA) Import hàm initProfilePage thay vì import toàn bộ file
 import { initProfilePage } from "./profile.js";
+import { initChiTietPage } from "./chitiet.js"; // (THÊM) Import file chi tiết
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
@@ -109,14 +109,18 @@ function showPage() {
     });
 
     // ===================================
-    // --- (THÊM CODE MỚI) ---
-    // =G_C_S_REPLACE_0---
+    // --- (SỬA Ở ĐÂY) ---
+    // ===================================
     // Gọi hàm khởi tạo của trang profile
     if (key === "profile") {
         initProfilePage();
     }
+    // (THÊM) Gọi hàm khởi tạo của trang chi tiết
+    if (key === "chitiet") {
+        initChiTietPage();
+    }
     // ===================================
-    // --- (KẾT THÚC CODE MỚI) ---
+    // --- (KẾT THÚC SỬA) ---
     // ===================================
   }
 }

@@ -122,13 +122,17 @@ document.addEventListener('DOMContentLoaded', () => {
    * (Hàm này chỉ được gọi SAU KHI đã vượt qua kiểm tra đăng nhập).
    */
   function handleAddToCart() {
-    // 1. Thu thập thông tin sản phẩm từ trang chi tiết
-    const productName = document.querySelector('.product-title').textContent.trim();
-    const productPrice = document.querySelector('.product-price').textContent.trim();
-    const productImage = document.querySelector('.product-image').src;
-    const productQuantity = parseInt(document.querySelector('.qty-input').value, 10);
-    const productId = productName; // Tạm dùng tên làm ID
-
+    // 1. Lấy đúng khu vực trang chi tiết
+  const productSection = document.getElementById("productSection");
+  
+  // 2. Thu thập thông tin SẢN PHẨM BÊN TRONG khu vực đó
+  const productName = productSection.querySelector('.product-title').textContent.trim();
+  const productPrice = productSection.querySelector('.product-price').textContent.trim();
+  const productImage = productSection.querySelector('.product-image').src;
+  const productQuantity = parseInt(productSection.querySelector('.qty-input').value, 10);
+  
+  // Lấy ID thật sự (đã được chitiet.js lưu) thay vì dùng tên
+  const productId = productSection.dataset.currentId;
     // 2. Lấy giỏ hàng CŨ của user từ localStorage
     let cart = getUserCart();
 
