@@ -7,6 +7,7 @@ let currentSlide = 0;
 let slideInterval;
 const slideCount = document.querySelectorAll(".carousel-slide").length;
 
+// ... (Toàn bộ code Carousel của bạn giữ nguyên)...
 // Hàm chuyển slide
 function goToSlide(index) {
   currentSlide = index;
@@ -75,21 +76,16 @@ carousel.addEventListener("mouseleave", startSlideShow);
 startSlideShow();
 
 // ===================================================
-// PHẦN LOGIC SẢN PHẨM ĐÃ THAY ĐỔI
+// PHẦN LOGIC SẢN PHẨM
 // ===================================================
 
-// **2. Tạo một biến để lưu trữ tất cả sản phẩm**
 let allProducts = [];
-
 const productsGrid = document.getElementById("productsGrid");
 const viewMoreBtn = document.getElementById("viewMoreBtn");
-const brandBtns = document.querySelectorAll(".brand-btn");
 const logo = document.querySelector(".logo");
-let visibleProducts = 8;
-let currentBrand = "all";
-let minPrice = 0;
-let maxPrice = Infinity;
-// đọc sản phẩm từ json và localstorage
+
+let visibleProducts = 8; // Số sản phẩm hiển thị ban đầu
+let currentFilteredList = []; // Lưu trữ danh sách đã lọc cho nút "Xem thêm"
 
 if(logo){
   logo.addEventListener("click",e =>{
@@ -97,60 +93,52 @@ if(logo){
   })
 }
 
+// Hàm reset số lượng sản phẩm (để LocSanPham.js gọi)
+export function resetVisibleProducts() {
+  visibleProducts = 8;
+}
+
 async function loadProducts() {
   try {
-    // 1. Tải tệp JSON (dữ liệu gốc)
+    // 1. Tải tệp JSON
     const response = await fetch("../asset/data/dienthoai.json");
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const jsonProducts = await response.json();
 
-    // 2. Tải dữ liệu từ localStorage (dữ liệu admin đã thêm)
+    // 2. Tải dữ liệu từ localStorage
     const savedProductsRaw = localStorage.getItem("datalist");
     const localProducts = savedProductsRaw ? JSON.parse(savedProductsRaw) : [];
 
     // 3. Gộp hai nguồn dữ liệu
-    // Ưu tiên dữ liệu từ localStorage (localProducts)
     const allData = [...localProducts];
     const localIds = new Set(localProducts.map(p => p.id));
 
-    // 4. Thêm dữ liệu từ JSON nếu ID chưa tồn tại trong localStorage
+    // 4. Thêm dữ liệu từ JSON nếu ID chưa tồn tại
     jsonProducts.forEach(sp => {
-      // Chuẩn hóa ID từ JSON (nếu cần) để khớp với format "S001"
       const adminId = sp.id.toString().startsWith("S") ? sp.id : "S" + String(sp.id).padStart(3, "0");
       
       if (!localIds.has(adminId)) {
-        // Chỉ thêm sản phẩm từ JSON nếu nó chưa có trong danh sách của admin
         allData.push({
-            ...sp, // Giữ tất cả: cpu, camera, group_id, v.v.
-            id: adminId // Đảm bảo ID đã chuẩn hóa
+            ...sp,
+            id: adminId
         });
       }
     });
 
-    // 5. Quan trọng: Ánh xạ (map) dữ liệu TỔNG HỢP sang định dạng mà code của bạn mong đợi
-    // Code này sẽ chuẩn hóa các tên trường (ví dụ: 'tensp' và 'ten' -> 'name')
+    // 5. Ánh xạ (map) dữ liệu TỔNG HỢP sang định dạng chuẩn
     allProducts = allData.map(item => {
-      let effectiveBrand = item.brand || item.thuonghieu; // Lấy brand (từ JSON) hoặc thuonghieu (từ admin)
+      let effectiveBrand = item.brand || item.thuonghieu;
       if (item.loai === 'Tablet') {
         effectiveBrand = 'ipad';
       }
-
-      // Giữ lại toàn bộ dữ liệu gốc (item) để chuyển sang trang chi tiết
-      // và thêm các trường đã chuẩn hóa (name, price, img) để hiển thị
       return {
-        ...item, // Giữ tất cả: id, cpu, camera, ram, battery, memory, color, group_id, v.v.
-        
-        // Chuẩn hóa cho Home.js hiển thị
-        name: item.ten || item.tensp,         // Lấy 'ten' (JSON) hoặc 'tensp' (admin)
-        price: item.gia,                      // 'gia' (cả hai đều có)
-        img: item.src || item.anh,            // Lấy 'src' (JSON) hoặc 'anh' (admin)
-
-        // Chuẩn hóa trường brand
+        ...item,
+        name: item.ten || item.tensp,
+        price: item.gia,
+        img: item.src || item.anh,
         brand: effectiveBrand.toLowerCase(),
-        
-        // Chuẩn hóa các trường chi tiết (để chitiet.js dễ sử dụng)
         ten: item.ten || item.tensp,
         src: item.src || item.anh,
         bo_nho: item.bo_nho || item.memory,
@@ -159,8 +147,8 @@ async function loadProducts() {
       };
     });
 
-    // 6. Sau khi tải và xử lý xong, gọi hàm hiển thị lần đầu
-    updateDisplay();
+    // 6. Hiển thị lần đầu (hiển thị tất cả sản phẩm)
+    displayProducts(allProducts);
 
   } catch (error) {
     console.error("Không thể tải sản phẩm:", error);
@@ -168,14 +156,22 @@ async function loadProducts() {
   }
 }
 // ======= HIỂN THỊ SẢN PHẨM =======
-function displayProducts(list) {
+// Hàm này giờ sẽ được gọi từ cả Home.js (lần đầu) và LocSanPham.js (khi lọc)
+export function displayProducts(list) {
+  // 1. Lưu lại danh sách đã lọc để "Xem thêm" có thể dùng
+  currentFilteredList = list;
+  
+  // 2. Xóa nội dung cũ
   productsGrid.innerHTML = "";
 
+  // 3. Cắt danh sách theo số lượng `visibleProducts`
   const shown = list.slice(0, visibleProducts);
+  
+  // 4. Hiển thị
   shown.forEach((product) => {
     const card = document.createElement("div");
     card.className = "product-card";
-    card.dataset.id = product.id; // (THÊM) Thêm ID vào data-attribute
+    card.dataset.id = product.id;
     card.innerHTML = `
                     <img src="${product.img}" alt="${product.name}">
                     <div class="product-name">${product.name}</div>
@@ -184,71 +180,43 @@ function displayProducts(list) {
                 `;
     productsGrid.appendChild(card);
   });
-  // Gắn lại sự kiện cho tất cả nút "Mua ngay" mới tạo
+  
+  // 5. Gắn lại sự kiện cho các card sản phẩm
   actionsBuy();
+  
+  // 6. Ẩn/hiện nút "Xem thêm"
   viewMoreBtn.style.display = visibleProducts >= list.length ? "none" : "block";
 }
 
-// ======= LỌC THEO HÃNG =======
-// Hàm này giờ sẽ dùng 'allProducts' thay vì 'products'
-function filterByBrand() {
-  if (currentBrand === "all") return [...allProducts];
-  // Vì đã xử lý 'ipad' ở hàm loadProducts, logic lọc này vẫn đúng
-  return allProducts.filter((p) => p.brand === currentBrand);
-}
-
-// ======= CẬP NHẬT HIỂN THỊ =======
-function updateDisplay() {
-  const filtered = filterByBrand();
-  displayProducts(filtered);
-}
-
-// ======= SỰ KIỆN NHẤN NÚT HÃNG =======
-brandBtns.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    brandBtns.forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentBrand = btn.dataset.brand;
-    visibleProducts = 8;
-    updateDisplay();
-  });
-});
 
 // ======= NÚT XEM THÊM =======
 viewMoreBtn.addEventListener("click", () => {
-  visibleProducts += 4;
-  updateDisplay();
+  visibleProducts += 4; // Tăng số lượng
+  displayProducts(currentFilteredList); // Vẽ lại từ danh sách đã lọc
 });
 
 // ======= KHỞI TẠO =======
-// **5. Gọi hàm loadProducts() thay vì updateDisplay()**
-// updateDisplay(); // XÓA DÒNG NÀY
-loadProducts(); // THÊM DÒNG NÀY ĐỂ BẮT ĐẦU TẢI DỮ LIỆU
+loadProducts(); // Bắt đầu tải dữ liệu
 
 // ===================================================
-// PHẦN LOGIC POPUP VÀ CHUYỂN TRANG (ĐÃ SỬA)
+// PHẦN LOGIC POPUP VÀ CHUYỂN TRANG
 // ===================================================
 
-// [SỬA LỖI] ======= POPUP / USER PROFILE NAVIGATION =======
+// ... (Phần code này của bạn đã chính xác, giữ nguyên) ...
 const userName = document.querySelector(".user-name");
 const popUp = document.getElementById("overlay-Popup");
 
-// Luôn gắn listener vào .user-name
 userName.addEventListener("click", (e) => {
-  // Kiểm tra trạng thái đăng nhập MỖI KHI CLICK
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   
   if (currentUser) {
-    // ĐÃ ĐĂNG NHẬP: Chuyển đến trang profile
     location.hash = "profile";
   } else {
-    // CHƯA ĐĂNG NHẬP: Hiển thị popup đăng nhập/đăng ký
     popUp.style.opacity = "1";
     popUp.style.visibility = "visible";
   }
 });
 
-// Gắn listener để đóng popup (luôn luôn)
 popUp.addEventListener("click", (e) => {
   if (e.target === popUp) {
     popUp.style.visibility = "hidden";
@@ -256,7 +224,6 @@ popUp.addEventListener("click", (e) => {
   }
 });
 
-//=======Click Option============
 const option = document.querySelector(".option");
 option.addEventListener("click", (e) => {
   if (!e.target.classList || !e.target.classList.contains("text")) return;
@@ -266,23 +233,17 @@ option.addEventListener("click", (e) => {
   if (e.target.textContent === "Đăng ký") {
     location.hash = "register";
   }
-
-  // Ẩn popup sau khi chọn
   popUp.style.visibility = "hidden";
   popUp.style.opacity = "0";
 });
 
-// (SỬA) ======= ẤN VÀO SẢN PHẨM SẼ LƯU ID VÀ CHUYỂN TRANG=======
 function actionsBuy(){
-  // Gắn lại sự kiện cho tất cả card sản phẩm mới tạo
     const clickOnProduct = productsGrid.querySelectorAll(".product-card");
     clickOnProduct.forEach((card) => {
       card.addEventListener("click", (e) => {
-        // Ngăn việc click vào nút "Mua ngay" cũng kích hoạt
         if (e.target.classList.contains('buy-btn')) {
-            // Xử lý logic thêm vào giỏ hàng ở đây nếu muốn
             console.log("Thêm vào giỏ hàng (chưa làm)");
-            e.stopPropagation(); // Ngăn sự kiện nổi bọt lên card
+            e.stopPropagation();
             return;
         }
 
@@ -294,15 +255,6 @@ function actionsBuy(){
       });
     });
 }
-// (XÓA) Xóa bỏ listener bị sai
-// const buyNowBtn = document.querySelector(".buy-now-button");
-// buyNowBtn.addEventListener("click", () => {
-//   location.hash = "thanhtoan";
-// });
-
-//POPUP LỌC SẢN PHẨM
   
-// **6. Cập nhật lại export (nếu cần)**
-// Xóa 'products' khỏi export vì nó không còn tồn tại
-export { allProducts, productsGrid, displayProducts };
-// [SỬA LỖI]: Đã xóa dấu '}' thừa ở đây
+// **6. Cập nhật lại export**
+export { allProducts, productsGrid };
