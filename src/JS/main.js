@@ -8,7 +8,8 @@ import "./cart.js";
 import "./LocSanPham.js";
 import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
 import { loadStatistics, seedOrderData } from './thongke.js';
-import "./profile.js"
+// (SỬA) Import hàm initProfilePage thay vì import toàn bộ file
+import { initProfilePage } from "./profile.js";
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
@@ -106,6 +107,17 @@ function showPage() {
     requestAnimationFrame(() => {
       page.classList.add("page-active-enter"); // opacity: 1
     });
+
+    // ===================================
+    // --- (THÊM CODE MỚI) ---
+    // =G_C_S_REPLACE_0---
+    // Gọi hàm khởi tạo của trang profile
+    if (key === "profile") {
+        initProfilePage();
+    }
+    // ===================================
+    // --- (KẾT THÚC CODE MỚI) ---
+    // ===================================
   }
 }
 
