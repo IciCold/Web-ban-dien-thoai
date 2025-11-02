@@ -463,7 +463,7 @@ export function initProfilePage() {
     if(navProfile) navProfile.addEventListener("click", (e) => { 
         e.preventDefault(); 
         showView(profileView, navProfile);
-        // ✅ THÊM: Cập nhật hash nhưng không reload page
+        // THÊM: Cập nhật hash nhưng không reload page
         history.replaceState(null, '', '#profile');
     });
     if(navBanking) navBanking.addEventListener("click", (e) => { 
@@ -514,7 +514,7 @@ export function initProfilePage() {
     renderBankingList(); // Tải và vẽ danh sách Ngân Hàng
     renderAddressList(); // Tải và vẽ danh sách Địa Chỉ
     
-    // ✅ THÊM: Kiểm tra hash để hiển thị đúng tab khi load
+    // THÊM: Kiểm tra hash để hiển thị đúng tab khi load
     const currentHash = location.hash.replace("#", "");
     if (currentHash === "banking") {
         showView(bankingView, navBanking);

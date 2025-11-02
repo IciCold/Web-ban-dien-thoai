@@ -109,21 +109,21 @@ if (logout_btn) {
 // Gọi hàm hiển thị username khi trang được tải
 window.addEventListener('load', displayUsername);
 
+
 // --- BỔ SUNG: XỬ LÝ ĐĂNG XUẤT CHO ADMIN ---
 const adminLoginButton = document.querySelector(".admin .main .login");
+const adminSpan = adminLoginButton?.querySelector("span");
+
+// Khi load trang, kiểm tra trạng thái đăng nhập
+const isAdminLogged = localStorage.getItem("adminLogged") === "true";
+if (isAdminLogged && adminSpan) {
+  adminSpan.textContent = "admin"; // Hiện là admin nếu đã đăng nhập
+}
 if (adminLoginButton) {
   adminLoginButton.addEventListener("click", () => {
-    const adminSpan = adminLoginButton.querySelector("span");
-
-    // Chỉ thực hiện đăng xuất nếu đang đăng nhập (tên là "admin")
-    if (adminSpan && adminSpan.textContent === "admin") {
-      // 1. Đặt lại văn bản thành "Đăng nhập"
+      // Đăng xuất
       adminSpan.textContent = "Đăng nhập";
-      
-      // 2. Chuyển hướng về trang chủ của khách
+      localStorage.removeItem("adminLogged");
       location.hash = "home";
-    }
   });
 }
-// [SỬA LỖI]: Đã xóa khối "if (adminLoginButton)" bị lặp lại
-// [SỬA LỖI]: Đã xóa dấu "}" thừa ở cuối file
