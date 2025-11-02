@@ -7,7 +7,9 @@
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     margin: 20px auto;
     width: 1240px;    
-    height: 570px;    
+    height: 700px;    
+    align-items: stretch;
+    overflow: hidden;
 }
 
 /* --- Phần trái: Danh sách sản phẩm + Tìm kiếm sản phẩm --- */
@@ -36,7 +38,9 @@
     padding: 15px;
     flex: 1;
     overflow-x: auto;
+    overflow-y: auto;
     box-shadow: none; 
+    max-height: 100%;
 }
 
 .sp-table {
@@ -64,35 +68,43 @@
     width: 50px;  
     height: 50px;
     border-radius: 5px;
+    object-fit: cover;
 }
 
-/* Nút thao tác (Xóa và Sửa) */
-.sp-del, .sp-edit {
+/* Nút thao tác (Xóa, Sửa, Chi tiết) */
+.sp-del, .sp-edit, .sp-view {
     padding: 6px 10px;
     border: none;
     border-radius: 5px;
     color: #fff;
     cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-/* Màu nền của nút Xóa */
+/* Màu nền của từng nút */
 .sp-del {
     background-color: #dc3545;
 }
-
-/* Màu nền của nút Sửa */
 .sp-edit {
     background-color: #007bff;
 }
-
-/* Hiệu ứng khi di chuột vào nút Xóa */
-.sp-del:hover {
-    background-color: #c82333;
+.sp-view {
+    background-color: #28a745;
 }
 
-/* Hiệu ứng khi di chuột vào nút Sửa */
+/* Hiệu ứng hover cho từng nút */
+.sp-del:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+}
 .sp-edit:hover {
     background-color: #0056b3;
+    transform: scale(1.05);
+}
+.sp-view:hover {
+    background-color: #218838;
+    transform: scale(1.05);
 }
 
 /* --- Phần phải: Thêm sản phẩm --- */
@@ -104,6 +116,9 @@
     justify-content: flex-start; 
     gap: 20px; 
     flex-shrink: 0; 
+    overflow-y: auto;
+    padding-right: 5px;
+    scrollbar-gutter: stable;
 }
 
 /* Thêm sản phẩm */
@@ -113,6 +128,8 @@
     width: 100%; 
     box-shadow: none; 
     background-color: #ffffff; 
+    flex-shrink: 0;
+
 }
 
 /* Form thêm sản phẩm */
@@ -174,6 +191,8 @@
     width: 90%; 
     box-shadow: none; 
     background-color: #ffffff; 
+    flex-shrink: 0;
+    margin-bottom: 10px;
 }
 
 /* Tiêu đề của ô tìm kiếm */
@@ -216,4 +235,3 @@
 .sp-search-form button:hover {
     background-color: #375aeb; 
 }
-

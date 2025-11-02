@@ -29,14 +29,23 @@ window.addEventListener("DOMContentLoaded", async () => {
         const res = await fetch("../asset/data/dienthoai.json");
         const jsonData = await res.json();
 
-        // 3️⃣ Chọn ra các trường cần thiết (giả sử file có các thuộc tính phức tạp)
+        // 3️⃣ Chọn ra tất cả các trường cần thiết từ file (bao gồm chi tiết)
         const fromFile = jsonData.map(sp => ({
             id: sp.id.toString().startsWith("S") ? sp.id : "S" + String(sp.id).padStart(3, "0"),
-            tensp: sp.ten,
-            thuonghieu: sp.brand,
-            gia: sp.gia,
-            anh: sp.src
+            tensp: sp.ten || sp.tensp || "",
+            thuonghieu: sp.brand || sp.thuonghieu || "",
+            gia: sp.gia || 0,
+            anh: sp.src || sp.anh || "",
+
+            // ✅ Bổ sung các thông tin chi tiết
+            color: sp.color || sp.mau_sac || "",
+            camera: sp.camera || "",
+            cpu: sp.cpu || "",
+            ram: sp.ram || "",
+            memory: sp.memory || sp.bo_nho || "",
+            battery: sp.battery || sp.dung_luong_pin || ""
         }));
+
 
         // 4️⃣ Gộp 2 nguồn dữ liệu lại (tránh trùng id)
         const existingIds = new Set(datalist.map(sp => sp.id));
@@ -80,28 +89,56 @@ themsanpham.addEventListener("click", function () {
 });
 
 function saveProduct(tensp, thuonghieu, gia, base64) {
+    const color = document.getElementById("color").value.trim();
+    const camera = document.getElementById("camera").value.trim();
+    const cpu = document.getElementById("cpu").value.trim();
+    const memory = document.getElementById("memory").value.trim();
+    const ram = document.getElementById("ram").value.trim();
+    const battery = document.getElementById("battery").value.trim();
+
     const existed = datalist.find(item => item.tensp === tensp);
 
     if (existed) {
         existed.thuonghieu = thuonghieu;
         existed.gia = gia;
+        existed.color = color;
+        existed.camera = camera;
+        existed.cpu = cpu;
+        existed.memory = memory;
+        existed.ram = ram;
+        existed.battery = battery;
         if (base64) existed.anh = base64;
     } else {
         id++;
         const newId = "S" + String(id).padStart(3, "0");
-        datalist.push({ id: newId, anh: base64, tensp, thuonghieu, gia });
+        datalist.push({
+            id: newId,
+            anh: base64,
+            tensp,
+            thuonghieu,
+            gia,
+            color,
+            camera,
+            cpu,
+            memory,
+            ram,
+            battery
+        });
     }
 
     localStorage.setItem("datalist", JSON.stringify(datalist));
 
-    tenspinp.value = "";
-    thuonghieuinp.value = "";
-    giainp.value = "";
+    // Reset form
+    [
+        "tensp", "brand", "price", "color", "camera",
+        "cpu", "memory", "ram", "battery"
+    ].forEach(id => document.getElementById(id).value = "");
     image.value = "";
     preview.src = "";
 
     updateBang();
 }
+
 
 // Hiển thị bảng
 function updateBang() {
@@ -164,6 +201,7 @@ function updateBang() {
         actionCell.innerHTML = `
             <button class="sp-edit">Sửa</button>
             <button class="sp-del">X</button>
+            <button class="sp-view">Chi tiết</button>
         `;
         row.appendChild(actionCell);
 
@@ -172,7 +210,15 @@ function updateBang() {
             tenspinp.value = item.tensp;
             thuonghieuinp.value = item.thuonghieu;
             giainp.value = item.gia;
+            document.getElementById("color").value = item.color || "";
+            document.getElementById("camera").value = item.camera || "";
+            document.getElementById("cpu").value = item.cpu || "";
+            document.getElementById("memory").value = item.memory || "";
+            document.getElementById("ram").value = item.ram || "";
+            document.getElementById("battery").value = item.battery || "";
             preview.src = item.anh;
+
+            // Xóa sản phẩm cũ trước khi thêm lại
             datalist = datalist.filter(sp => sp.id !== item.id);
             localStorage.setItem("datalist", JSON.stringify(datalist));
             updateBang();
@@ -183,6 +229,20 @@ function updateBang() {
             datalist = datalist.filter(sp => sp.id !== item.id);
             localStorage.setItem("datalist", JSON.stringify(datalist));
             updateBang();
+        });
+
+        actionCell.querySelector(".sp-view").addEventListener("click", () => {
+            alert(`
+        Tên: ${item.tensp}
+        Thương hiệu: ${item.thuonghieu}
+        Giá: ${item.gia.toLocaleString("vi-VN")}₫
+        Màu: ${item.color || "-"}
+        Camera: ${item.camera || "-"}
+        CPU: ${item.cpu || "-"}
+        RAM: ${item.ram || "-"}
+        Bộ nhớ: ${item.memory || "-"}
+        Pin: ${item.battery || "-"}
+            `);
         });
 
         table.appendChild(row);

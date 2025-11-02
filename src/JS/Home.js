@@ -84,7 +84,7 @@ let allProducts = [];
 const productsGrid = document.getElementById("productsGrid");
 const viewMoreBtn = document.getElementById("viewMoreBtn");
 const brandBtns = document.querySelectorAll(".brand-btn");
-let visibleProducts = 6;
+let visibleProducts = 8;
 let currentBrand = "all";
 let minPrice = 0;
 let maxPrice = Infinity;
@@ -167,14 +167,14 @@ brandBtns.forEach((btn) => {
     brandBtns.forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
     currentBrand = btn.dataset.brand;
-    visibleProducts = 6;
+    visibleProducts = 8;
     updateDisplay();
   });
 });
 
 // ======= NÚT XEM THÊM =======
 viewMoreBtn.addEventListener("click", () => {
-  visibleProducts += 3;
+  visibleProducts += 4;
   updateDisplay();
 });
 
