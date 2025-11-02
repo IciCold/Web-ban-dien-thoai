@@ -391,3 +391,92 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+document.addEventListener('DOMContentLoaded', function() {
+    const currentUser = getCurrentUser();
+    
+    // Các trường cần điền tự động
+    const addressInput = document.getElementById('delivery-address');
+    const cardNameInput = document.getElementById('card-name');
+    const cardNumberInput = document.getElementById('card-number');
+    
+    if (currentUser) {
+        // Tự động điền địa chỉ nếu có
+        if (addressInput && currentUser.address) {
+            addressInput.value = currentUser.address;
+        }
+
+        // Tự động điền tên chủ thẻ
+        if (cardNameInput && currentUser.cardName) {
+            cardNameInput.value = currentUser.cardName;
+        }
+
+        // Tự động điền số tài khoản
+        if (cardNumberInput && currentUser.cardNumber) {
+            cardNumberInput.value = currentUser.cardNumber;
+        }
+    }
+});
+document.addEventListener("DOMContentLoaded", function () {
+  // --- Lấy dữ liệu từ localStorage ---
+  const userFullName = localStorage.getItem("userFullName");
+  const userPhone = localStorage.getItem("userPhone");
+
+  // --- Parse JSON nếu có ---
+  let users = [];
+  try {
+    users = usersData ? JSON.parse(usersData) : [];
+  } catch (e) {
+    console.error("Lỗi đọc users từ localStorage:", e);
+  }
+
+  // --- Gộp dữ liệu khách hàng ---
+  const userInfo = {
+    name: userFullName || "Không rõ tên",
+    phone: userPhone || "Không rõ số điện thoại",
+  };
+  const bank = JSON.parse(localStorage.getItem("userBankingList"))[0].account;
+
+  // --- Tự động điền địa chỉ giao hàng ---
+  const addressInput = document.getElementById("delivery-address");
+  if (addressInput) {
+    const specific = JSON.parse(localStorage.getItem("userAddressList"))[0].specific;
+    addressInput.value = specific;
+  }
+  // --- Khi chọn phương thức thanh toán ---
+  const paymentButtons = document.querySelectorAll(".payment-button");
+  const cardInfoBox = document.querySelector(".info");
+  const cardNameInput = document.getElementById("card-name");
+  const cardNumberInput = document.getElementById("card-number");
+
+  paymentButtons.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      paymentButtons.forEach((b) => b.classList.remove("active"));
+      this.classList.add("active");
+
+      if (this.classList.contains("visa")) {
+        // Hiện khung nhập thẻ
+        cardInfoBox.style.display = "block";
+
+        // Tự động điền thông tin chủ thẻ
+        if (cardNameInput) cardNameInput.value = userInfo.name;
+        if (cardNumberInput)
+          cardNumberInput.value = bank; // Ví dụ thẻ Visa test
+      }else{
+        if(this.classList.contains("momo")){
+            // Hiện khung nhập thẻ
+            cardInfoBox.style.display = "block";
+
+            if (cardNameInput) cardNameInput.value = userInfo.name;
+            if (cardNumberInput)
+            cardNumberInput.value = userPhone; // Ví dụ thẻ Visa test
+        }else {
+        // Ẩn khung nhập thẻ khi chọn phương thức khác
+        cardInfoBox.style.display = "none";
+        if (cardNameInput) cardNameInput.value = "";
+        if (cardNumberInput) cardNumberInput.value = "";
+        }
+      }
+       
+    });
+  });
+});
