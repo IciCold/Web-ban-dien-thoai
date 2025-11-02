@@ -356,4 +356,38 @@ if (typeof module !== 'undefined' && module.exports) {
         getTotalRevenue,
         getOrdersByCustomer
     };
-}
+}   
+
+// Thêm code mới cho xử lý payment
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentContainer = document.querySelector('.payment-methods');
+    const cardDetailsGroup = document.querySelector('.info');
+    
+    if (paymentContainer && cardDetailsGroup) {
+        // Handler cho việc click payment button
+        paymentContainer.addEventListener('click', function(e) {
+            const clickedButton = e.target.closest('.payment-button');
+            if (!clickedButton) return;
+
+            // Remove active class from all buttons
+            const allButtons = paymentContainer.querySelectorAll('.payment-button');
+            allButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            clickedButton.classList.add('active');
+
+            // Show/hide card details based on payment method
+            if (clickedButton.classList.contains('cash')) {
+                cardDetailsGroup.style.display = 'none';
+            } else {
+                cardDetailsGroup.style.display = 'block';
+            }
+        });
+
+        // Set default payment method (cash)
+        const defaultButton = paymentContainer.querySelector('.payment-button.cash');
+        if (defaultButton) {
+            defaultButton.click();
+        }
+    }
+});
