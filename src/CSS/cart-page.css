@@ -1,0 +1,200 @@
+/* File: CSS/cart-page.css */
+
+/* Container chính của trang giỏ hàng chi tiết */
+.cart-detail-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.cart-detail-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Tiêu đề của bảng (Sản phẩm, Đơn giá...) */
+.cart-detail-header {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #fafafa;
+  border-radius: 5px;
+  font-weight: 600;
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+/* Định dạng các cột cho tiêu đề và item */
+.header-product, .item-product-info {
+  flex: 3; /* Cột sản phẩm chiếm nhiều không gian nhất */
+  min-width: 250px;
+}
+.header-price, .item-unit-price,
+.header-total, .item-total-price {
+  flex: 1.2;
+  text-align: center;
+  min-width: 120px;
+}
+.header-quantity, .item-quantity-control {
+  flex: 1;
+  text-align: center;
+  min-width: 100px;
+}
+.header-action, .item-actions {
+  flex: 0.8;
+  text-align: center;
+  min-width: 80px;
+}
+
+/* Mỗi hàng sản phẩm */
+.cart-detail-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.cart-detail-item:last-child {
+  border-bottom: none;
+}
+
+/* Cột thông tin sản phẩm (Ảnh + Tên) */
+.item-product-info {
+  display: flex;
+  align-items: center;
+}
+.item-product-info img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 15px;
+  border: 1px solid #eee;
+}
+.item-product-info .item-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #222;
+}
+
+/* Cột đơn giá và thành tiền */
+.item-unit-price, .item-total-price {
+  font-size: 1rem;
+  font-weight: 600;
+  color: black; 
+}
+
+/* Cột điều khiển số lượng */
+.item-quantity-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.item-quantity-control .qty-change-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 26px;
+}
+.item-quantity-control input {
+  width: 40px;
+  height: 28px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-left: none;
+  border-right: none;
+  font-size: 1rem;
+  font-weight: 500;
+  /* Tắt mũi tên mặc định của input number */
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.item-quantity-control input::-webkit-outer-spin-button,
+.item-quantity-control input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Cột thao tác (Nút Xóa) */
+.item-actions .item-delete-btn {
+  background: none;
+  border: none;
+  color: red;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.item-actions .item-delete-btn:hover {
+  opacity: 0.7;
+}
+
+/* Footer (Tổng tiền và Mua ngay) */
+.cart-detail-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 25px;
+  padding: 20px 15px;
+  border-top: 2px solid #f0f0f0;
+  background-color: #fdfdfd;
+}
+
+.cart-grand-total {
+  margin-right: 20px;
+  font-size: 1.1rem;
+}
+.cart-grand-total .total-label {
+  color: #555;
+  font-weight: 500;
+}
+.cart-grand-total .total-amount {
+  color: var(--main-color);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-left: 10px;
+}
+
+.cart-checkout-all-btn {
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--main-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.cart-checkout-all-btn:hover {
+  filter: brightness(120%);
+ 
+}
+
+/* Trạng thái giỏ hàng trống */
+.cart-detail-empty {
+  text-align: center;
+  padding: 50px 20px;
+  color: #777;
+}
+.cart-detail-empty .btn-back-to-home {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 600;
+}

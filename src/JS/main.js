@@ -11,6 +11,7 @@ import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
 import { loadStatistics, seedOrderData } from './thongke.js';
 import { initProfilePage } from "./profile.js";
 import { initChiTietPage } from "./chitiet.js"; // (THÊM) Import file chi tiết
+import { initCartDetailPage } from './cart-page.js';
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
@@ -21,7 +22,8 @@ const pages = {
   chitiet: document.querySelector(".product-section"),
   admin: document.querySelector(".admin"),
   adminPages: document.querySelectorAll(".page-section"),
-  profile: document.querySelector(".page-profile")
+  profile: document.querySelector(".page-profile"),
+  cartDetailPage: document.getElementById("cartDetailPage")
 };
 
 //Ẩn tất cả page
@@ -123,6 +125,9 @@ function showPage() {
     // ===================================
     // --- (KẾT THÚC SỬA) ---
     // ===================================
+    if(key == "cartDetailPage"){
+      initCartDetailPage();
+    }
   }
 }
 
