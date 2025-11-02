@@ -1,49 +1,3 @@
-<<<<<<< HEAD
-  import "./register.js";
-  import "./login.js";
-  import "./Home.js";
-  import "./search.js";
-  import "./thanhtoan.js";
-  import "./logout.js";
-  import "./cart.js";
-  import "./LocSanPham.js";
-  import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
-  import { loadStatistics, seedOrderData } from './thongke.js';
-  import "./ds_sanpham.js";
-
-  //==============Chuyển Page bằng Hash=======================//
-  const pages = {
-    home: document.querySelector(".Home"),
-    login: document.querySelector(".page-login"),
-    register: document.querySelector(".page-register"),
-    thanhtoan: document.querySelector(".payment-section"),
-    chitiet: document.querySelector(".product-section"),
-    admin: document.querySelector(".admin"),
-    adminPages: document.querySelectorAll(".page-section"),
-  };
-  //Ẩn tất cả page
-  function hideAll() {
-    Object.values(pages).forEach((page) => {
-      // Nếu là NodeList (nhiều phần tử)
-      if (page instanceof NodeList) {
-        page.forEach((el) => {
-          el.classList.add("hidden");
-          el.classList.remove("page-active", "page-active-enter");
-        });
-      } else {
-        page.classList.add("hidden");
-        page.classList.remove("page-active", "page-active-enter");
-      }
-    });
-  }
-  //Hiện page
-  function showPage() {
-    
-    const key = location.hash.replace("#", "") || "home";
-    const subPage = document.querySelector(`#${key}`);
-    const isAdminSubPage = subPage?.closest(".admin");
-    const page = pages[key] || pages.home;
-=======
 import "./register.js";
 import "./login.js";
 import "./Home.js";
@@ -52,10 +6,10 @@ import "./thanhtoan.js";
 import "./logout.js";
 import "./cart.js";
 import "./LocSanPham.js";
+import "./ds_sanpham.js";
 import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
 import { loadStatistics, seedOrderData } from './thongke.js';
 import "./profile.js"
->>>>>>> origin/main
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
