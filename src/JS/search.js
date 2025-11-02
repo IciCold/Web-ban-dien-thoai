@@ -65,8 +65,13 @@ async function loadSearchData() {
 // 5. Hàm riêng để hiển thị KẾT QUẢ TÌM KIẾM
 // (Chúng ta không dùng displayProducts từ Home.js vì nó có logic "Xem thêm")
 function displaySearchResults(list) {
+  const carousel = document.querySelector('.carousel-container');
+  if(carousel) carousel.style.display = 'none';
+  const filterbar = document.querySelector('.filter-bar');
+  if(filterbar) filterbar.style.display = 'none';
+  const heading = document.querySelector('.products-section h2');
+  if(heading) heading.innerHTML = "Danh sách sản phẩm theo tìm kiếm";
   productsGrid.innerHTML = ""; // Xóa các sản phẩm cũ
-
   // Nếu không có kết quả
   if (list.length === 0) {
     productsGrid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:20px;color:gray;">Không tìm thấy sản phẩm</div>`;

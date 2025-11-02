@@ -84,11 +84,18 @@ let allProducts = [];
 const productsGrid = document.getElementById("productsGrid");
 const viewMoreBtn = document.getElementById("viewMoreBtn");
 const brandBtns = document.querySelectorAll(".brand-btn");
+const logo = document.querySelector(".logo");
 let visibleProducts = 8;
 let currentBrand = "all";
 let minPrice = 0;
 let maxPrice = Infinity;
 // đọc sản phẩm từ json và localstorage
+
+if(logo){
+  logo.addEventListener("click",e =>{
+    location.reload();
+  })
+}
 
 async function loadProducts() {
   try {
