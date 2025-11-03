@@ -87,10 +87,14 @@ const logo = document.querySelector(".logo");
 let visibleProducts = 8; // Số sản phẩm hiển thị ban đầu
 let currentFilteredList = []; // Lưu trữ danh sách đã lọc cho nút "Xem thêm"
 
-if(logo){
-  logo.addEventListener("click",e =>{
-    location.reload();
-  })
+if (logo) {
+  if (location.hash !== "home") {
+    location.hash = "home";
+  } else {
+    logo.addEventListener("click", (e) => {
+      location.reload();
+    });
+  }
 }
 
 // Hàm reset số lượng sản phẩm (để LocSanPham.js gọi)

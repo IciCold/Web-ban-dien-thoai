@@ -200,14 +200,12 @@ function handleCheckout() {
   // Xóa giỏ hàng
   clearUserCart();
   
-  alert(`✅ Đặt hàng thành công!\nMã đơn hàng: ${newOrder.id}\nTổng tiền: ${formatVND(newOrder.total)}`);
   
   // Cập nhật lại giao diện (cả popup và trang chi tiết)
   initCartDetailPage(); // "Vẽ" lại trang (sẽ thấy giỏ hàng trống)
   window.dispatchEvent(new Event('cartUpdated')); // Báo cho popup biết
   
   // Chuyển về trang chủ
-  setTimeout(() => {
-    location.hash = 'home';
-  }, 1000);
+    location.hash = 'thanhtoan';
+
 }
