@@ -1,15 +1,15 @@
 import "./ds_sanpham.js";
 import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
-import { loadStatistics, seedOrderData } from './thongke.js';
-import "./login.js"
-import "./logout.js"
+import { loadStatistics, seedOrderData } from "./thongke.js";
+import "./login.js";
+import "./logout.js";
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
   login: document.querySelector(".page-login"),
   register: document.querySelector(".page-register"),
   adminPages: document.querySelectorAll(".page-section"),
-  admin: document.querySelector('.admin')
+  admin: document.querySelector(".page-admin"),
 };
 
 //Ẩn tất cả page
@@ -21,7 +21,8 @@ function hideAll() {
         el.classList.add("hidden");
         el.classList.remove("page-active", "page-active-enter");
       });
-    } else if (page) { // THÊM: Kiểm tra page có tồn tại
+    } else if (page) {
+      // THÊM: Kiểm tra page có tồn tại
       page.classList.add("hidden");
       page.classList.remove("page-active", "page-active-enter");
     }
@@ -36,23 +37,32 @@ function showPage() {
   const page = pages[key];
 
   hideAll();
-  
-    // Hiển thị page con cụ thể
-    if (subPage && isAdminSubPage) {
-      subPage.classList.remove("hidden","page-active-enter");
-      subPage.classList.add("page-active");
-      requestAnimationFrame(() => {
-        subPage.classList.add("page-active-enter");
-      });
-      if(key === "ds_khachHang"){
+
+  if (subPage && isAdminSubPage) {
+    pages.admin.classList.remove("hidden");
+    subPage.classList.remove("hidden", "page-active-enter");
+    subPage.classList.add("page-active");
+    requestAnimationFrame(() => {
+      subPage.classList.add("page-active-enter");
+    });
+
+    // Load dữ liệu khi trang con admin được hiển thị
+    setTimeout(() => {
+      if (subPage.id === "ds_khachHang") {
+        console.log("Đang load danh sách khách hàng...");
         loadCustomerList();
         setupCustomerSearch();
+      } 
+      if (subPage.id === "ds_donHang") {
+        // loadOrderList(); // Nếu có
       }
-      else if(key === "thongke"){
-        loadStatistics();
+      if (subPage.id === "thongKe") {
+        console.log("Loading statistics data...");
         seedOrderData();
+        loadStatistics();
       }
-    } else {
+    }, 100);
+  } else {
     // XỬ LÝ CÁC PAGE THÔNG THƯỜNG
     if (!page) {
       console.log("Không tìm thấy page");
@@ -85,6 +95,3 @@ window.addEventListener("load", () => {
   }
   showPage();
 });
-
-
-
