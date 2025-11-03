@@ -125,8 +125,9 @@ function updateDisplay() {
   // **BƯỚC QUAN TRỌNG:** Reset về trang 1 khi lọc
   resetToFirstPage();
 
-  let filtered = [...allProducts];
 
+  let filtered = [...allProducts];
+  
   // Lọc theo hãng (ngoài popup)
   // Chỉ lọc nếu *không* có lọc hãng nào trong popup được chọn
   if (currentBrand !== "all" && selectedBrands.length === 0) {
@@ -151,4 +152,5 @@ function updateDisplay() {
 
   // Gọi hàm hiển thị của Home.js với phân trang
   displayProducts(filtered);
+  console.log(filtered);
 }

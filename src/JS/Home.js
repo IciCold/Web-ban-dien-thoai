@@ -1,3 +1,4 @@
+import { docJSONvaLuuLocalStorage, docdulieuLocalStorage } from "./readandwrite.js";
 // Carousel Logic
 const carousel = document.getElementById("carousel");
 const prevBtn = document.getElementById("prevBtn");
@@ -102,63 +103,58 @@ export function resetToFirstPage() {
   currentPage = 1;
 }
 
-/*async function loadProducts() {
+export async function loadProducts() {
   try {
-    // 1. Tải tệp JSON
-    const response = await fetch("../asset/data/dienthoai.json");
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const jsonProducts = await response.json();
+    // 1️⃣ Đọc dữ liệu JSON (nếu chưa có thì lưu)
+    const jsonProducts = await docJSONvaLuuLocalStorage("jsonData", "../asset/data/dienthoai.json");
 
-    // 2. Tải dữ liệu từ localStorage
-    const savedProductsRaw = localStorage.getItem("datalist");
-    const localProducts = savedProductsRaw ? JSON.parse(savedProductsRaw) : [];
+    // 2️⃣ Đọc dữ liệu người dùng từ localStorage
+    const localProducts = docdulieuLocalStorage("datalist");
 
-    // 3. Gộp hai nguồn dữ liệu
+    // 3️⃣ Gộp dữ liệu (tránh trùng id)
     const allData = [...localProducts];
     const localIds = new Set(localProducts.map(p => p.id));
 
-    // 4. Thêm dữ liệu từ JSON nếu ID chưa tồn tại
     jsonProducts.forEach(sp => {
       const adminId = sp.id.toString().startsWith("S") ? sp.id : "S" + String(sp.id).padStart(3, "0");
-      
       if (!localIds.has(adminId)) {
-        allData.push({
-            ...sp,
-            id: adminId
-        });
+        allData.push({ ...sp, id: adminId });
       }
     });
 
-    // 5. Ánh xạ dữ liệu TỔNG HỢP sang định dạng chuẩn
+    // 4️⃣ Chuẩn hóa dữ liệu
     allProducts = allData.map(item => {
-      let effectiveBrand = item.brand || item.thuonghieu;
-      if (item.loai === 'Tablet') {
-        effectiveBrand = 'ipad';
-      }
+      let brand = item.brand || item.thuonghieu;
+      if (item.loai === "Tablet") brand = "ipad";
       return {
         ...item,
+        id: item.id,
         name: item.ten || item.tensp,
         price: item.gia,
         img: item.src || item.anh,
-        brand: effectiveBrand.toLowerCase(),
+        src: item.src || item.anh,
+        brand: brand ? brand.toLowerCase() : "khác",
         ten: item.ten || item.tensp,
         src: item.src || item.anh,
         bo_nho: item.bo_nho || item.memory,
         mau_sac: item.mau_sac || item.color,
-        dung_luong_pin: item.dung_luong_pin || item.battery
+        dung_luong_pin: item.dung_luong_pin || item.battery,
+        cpu: item.cpu,
+        ram: item.ram,
+        gia: item.gia,
+        camera: item.camera,
+        group_id: item.group_id
       };
     });
 
-    // 6. Hiển thị lần đầu
+    // 5️⃣ Hiển thị ban đầu
     displayProducts(allProducts);
 
   } catch (error) {
     console.error("Không thể tải sản phẩm:", error);
     productsGrid.innerHTML = "<p>Lỗi khi tải sản phẩm. Vui lòng thử lại.</p>";
   }
-}*/
+}
 
 
 
@@ -312,10 +308,7 @@ function calculatePagesToShow(current, total) {
 }
 
 // ======= KHỞI TẠO =======
-(async () => {
-  allProducts = await docJSONvaLuuLocalStorage("allProducts", "../asset/data/dienthoai.json");
-  displayProducts(allProducts);
-})();
+loadProducts();
 
 
 // ===================================================
@@ -378,52 +371,5 @@ function actionsBuy(){
 // Export
 export { allProducts, productsGrid };
 
-function docdulieuLocalStorage(tenmang) {
-  try {
-    const saved = localStorage.getItem(tenmang);
-    return saved ? JSON.parse(saved) : [];
-  } catch (error) {
-    console.error("Lỗi khi đọc dữ liệu từ localStorage:", error);
-    return [];
-  }
-}
 
-function ghidulieuLocalStorage(tenmang, datamang) {
-  try {
-    localStorage.setItem(tenmang, JSON.stringify(datamang));
-    console.log(`Dữ liệu '${tenmang}' đã được lưu.`);
-  } catch (error) {
-    console.error(`Lỗi khi ghi dữ liệu '${tenmang}':`, error);
-  }
-}
-//ham doc và ghi dulieu localStorage su dung cho các file code khác
-
-async function docJSONvaLuuLocalStorage(tenmang, duongdanJSON) {
-  try {
-    // 1️⃣ Kiểm tra xem localStorage đã có dữ liệu chưa
-    const saved = localStorage.getItem(tenmang);
-    if (saved) {
-      console.log(`✅ Mảng '${tenmang}' đã có dữ liệu, không cần đọc lại JSON.`);
-      return JSON.parse(saved); // Dừng tại đây, trả về dữ liệu cũ
-    }
-
-    // 2️⃣ Nếu chưa có, đọc dữ liệu từ file JSON
-    const response = await fetch(duongdanJSON);
-    if (!response.ok) {
-      throw new Error(`Không thể đọc file JSON: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    // 3️⃣ Lưu dữ liệu vào localStorage
-    localStorage.setItem(tenmang, JSON.stringify(data));
-    console.log(`Dữ liệu '${tenmang}' đã được lưu vào localStorage.`);
-
-    return data; // Trả về dữ liệu mới
-  } catch (error) {
-    console.error(`Lỗi khi đọc/lưu dữ liệu '${tenmang}':`, error);
-    return [];
-  }
-}
-//đây là hàm khởi tạo
 
