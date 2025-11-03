@@ -1,0 +1,104 @@
+/* ============ PHÂN TRANG ============ */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 30px;
+  padding: 20px 0;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  min-width: 40px;
+  height: 40px;
+  border: 1px solid #ddd;
+  background-color: white;
+  color: #333;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: var(--main-color);
+  color: white;
+  border-color: var(--main-color);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+.pagination-btn.active {
+  background-color: var(--main-color);
+  color: white;
+  border-color: var(--main-color);
+  font-weight: 600;
+}
+
+.pagination-btn:disabled {
+  background-color: #f5f5f5;
+  color: #ccc;
+  cursor: not-allowed;
+  border-color: #e0e0e0;
+}
+
+.pagination-btn i {
+  font-size: 12px;
+}
+
+.pagination-dots {
+  color: #666;
+  padding: 0 8px;
+  font-weight: 600;
+  user-select: none;
+}
+
+/* Responsive cho phân trang */
+@media (max-width: 600px) {
+  .pagination-container {
+    gap: 5px;
+  }
+  
+  .pagination-btn {
+    min-width: 36px;
+    height: 36px;
+    font-size: 13px;
+    padding: 0 8px;
+  }
+  
+  .pagination-dots {
+    padding: 0 4px;
+  }
+}
+
+/* Ẩn nút "Xem thêm" */
+.view-more-btn {
+  display: none !important;
+}
+
+/* ============ CẬP NHẬT CHO POPUP LỌC ============ */
+/* Đảm bảo các nút lọc trong popup có class active đúng */
+.brand-options .filter-btn.active,
+.price-options .filter-btn.active {
+  background-color: var(--main-color);
+  color: white;
+  border-color: var(--main-color);
+  font-weight: 600;
+}
+
+/* Hiệu ứng hover cho nút trong popup */
+.filter-popup .filter-btn:hover {
+  background-color: var(--main-color);
+  color: white;
+  border-color: var(--main-color);
+}
+
+.filter-popup .filter-btn.active:hover {
+  background-color: #0056b3;
+}

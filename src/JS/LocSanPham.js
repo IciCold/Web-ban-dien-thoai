@@ -1,5 +1,5 @@
-// Import thêm hàm resetVisibleProducts
-import { allProducts, displayProducts, resetVisibleProducts } from "./Home.js";
+// Import hàm resetToFirstPage thay vì resetVisibleProducts
+import { allProducts, displayProducts, resetToFirstPage } from "./Home.js";
 
 //  BIẾN TOÀN CỤC
 // ========================
@@ -10,7 +10,7 @@ let selectedPrice = { min: 0, max: Infinity };
 // ========================
 //  THANH LỌC HÃNG Ở NGOÀI
 // ========================
-const brandBtns = document.querySelectorAll(".filter-bar .brand-btn"); // Sửa selector để chính xác hơn
+const brandBtns = document.querySelectorAll(".filter-bar .brand-btn");
 
 brandBtns.forEach(btn => {
   btn.addEventListener("click", () => {
@@ -21,9 +21,10 @@ brandBtns.forEach(btn => {
     if (currentBrand === btn.dataset.brand) {
       currentBrand = "all";
       // Tìm nút "Tất cả" và active nó
-      document.querySelector('.filter-bar .brand-btn[data-brand="all"]').classList.add("active");
+      const allBtn = document.querySelector('.filter-bar .brand-btn[data-brand="all"]');
+      if (allBtn) allBtn.classList.add("active");
     } else {
-       // Thêm active cho nút được nhấn
+      // Thêm active cho nút được nhấn
       btn.classList.add("active");
       currentBrand = btn.dataset.brand;
     }
@@ -42,30 +43,36 @@ const applyFilter = document.getElementById("applyFilter");
 const resetFilter = document.getElementById("resetFilter");
 
 if (openFilter) {
-    openFilter.addEventListener("click", () => {
-        filterPopup.style.display = "flex";
-    });
+  openFilter.addEventListener("click", () => {
+    filterPopup.style.display = "flex";
+  });
 }
 
 if (closeFilter) {
-    closeFilter.addEventListener("click", () => {
-        filterPopup.style.display = "none";
-    });
+  closeFilter.addEventListener("click", () => {
+    filterPopup.style.display = "none";
+  });
 }
 
+// Đóng popup khi click ra ngoài
+filterPopup?.addEventListener("click", (e) => {
+  if (e.target === filterPopup) {
+    filterPopup.style.display = "none";
+  }
+});
 
 // --------- Hãng (đa chọn) ---------
 const popupBrandBtns = document.querySelectorAll(".brand-options .filter-btn");
 popupBrandBtns.forEach(btn => {
   btn.addEventListener("click", () => {
-    const brand = btn.dataset.brand; // Lấy từ data-brand cho nhất quán
+    const brand = btn.dataset.brand;
 
     if (selectedBrands.includes(brand)) {
       selectedBrands = selectedBrands.filter(b => b !== brand);
-      btn.classList.remove("active-btn");
+      btn.classList.remove("active");
     } else {
       selectedBrands.push(brand);
-      btn.classList.add("active-btn");
+      btn.classList.add("active");
     }
   });
 });
@@ -74,48 +81,49 @@ popupBrandBtns.forEach(btn => {
 const popupPriceBtns = document.querySelectorAll(".price-options .filter-btn");
 popupPriceBtns.forEach(btn => {
   btn.addEventListener("click", () => {
-    popupPriceBtns.forEach(p => p.classList.remove("active-btn"));
-    btn.classList.add("active-btn");
+    popupPriceBtns.forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
 
     selectedPrice = {
-      min: parseInt(btn.dataset.min) || 0, // Thêm || 0 để tránh NaN
-      max: parseInt(btn.dataset.max) || Infinity, // Thêm || Infinity để tránh NaN
+      min: parseInt(btn.dataset.min) || 0,
+      max: parseInt(btn.dataset.max) || Infinity,
     };
   });
 });
 
 // --------- Áp dụng lọc ---------
 if (applyFilter) {
-    applyFilter.addEventListener("click", () => {
-      filterPopup.style.display = "none";
-      updateDisplay(); // Áp dụng lọc và hiển thị
-    });
+  applyFilter.addEventListener("click", () => {
+    filterPopup.style.display = "none";
+    updateDisplay(); // Áp dụng lọc và hiển thị
+  });
 }
 
 // --------- Bỏ lọc (Reset) ---------
 if (resetFilter) {
-    resetFilter.addEventListener("click", () => {
-      // Reset popup
-      popupBrandBtns.forEach(b => b.classList.remove("active-btn"));
-      popupPriceBtns.forEach(p => p.classList.remove("active-btn"));
-      selectedBrands = [];
-      selectedPrice = { min: 0, max: Infinity };
-      
-      // Reset thanh ngoài
-      brandBtns.forEach(b => b.classList.remove("active"));
-      document.querySelector('.filter-bar .brand-btn[data-brand="all"]').classList.add("active");
-      currentBrand = "all";
+  resetFilter.addEventListener("click", () => {
+    // Reset popup
+    popupBrandBtns.forEach(b => b.classList.remove("active"));
+    popupPriceBtns.forEach(p => p.classList.remove("active"));
+    selectedBrands = [];
+    selectedPrice = { min: 0, max: Infinity };
+    
+    // Reset thanh ngoài
+    brandBtns.forEach(b => b.classList.remove("active"));
+    const allBtn = document.querySelector('.filter-bar .brand-btn[data-brand="all"]');
+    if (allBtn) allBtn.classList.add("active");
+    currentBrand = "all";
 
-      updateDisplay(); // Hiển thị lại
-    });
+    updateDisplay(); // Hiển thị lại tất cả sản phẩm
+  });
 }
 
 // ========================
 // HÀM LỌC & HIỂN THỊ (TRUNG TÂM)
 // ========================
 function updateDisplay() {
-  // **BƯỚC QUAN TRỌNG:** Reset lại số lượng "Xem thêm" về 8
-  resetVisibleProducts();
+  // **BƯỚC QUAN TRỌNG:** Reset về trang 1 khi lọc
+  resetToFirstPage();
 
   let filtered = [...allProducts];
 
@@ -138,6 +146,9 @@ function updateDisplay() {
     p => p.price >= selectedPrice.min && p.price <= selectedPrice.max
   );
 
-  // Gọi hàm hiển thị của Home.js
+  // Hiển thị số lượng kết quả tìm được (tùy chọn)
+  console.log(`Tìm thấy ${filtered.length} sản phẩm`);
+
+  // Gọi hàm hiển thị của Home.js với phân trang
   displayProducts(filtered);
 }

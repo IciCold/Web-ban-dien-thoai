@@ -7,13 +7,11 @@ let currentSlide = 0;
 let slideInterval;
 const slideCount = document.querySelectorAll(".carousel-slide").length;
 
-// ... (Toàn bộ code Carousel của bạn giữ nguyên)...
 // Hàm chuyển slide
 function goToSlide(index) {
   currentSlide = index;
   carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
 
-  // Cập nhật indicator
   indicators.forEach((indicator, i) => {
     if (i === currentSlide) {
       indicator.classList.add("active");
@@ -37,7 +35,7 @@ function prevSlide() {
 
 // Bắt đầu tự động chuyển slide
 function startSlideShow() {
-  slideInterval = setInterval(nextSlide, 5000); // 5 giây
+  slideInterval = setInterval(nextSlide, 5000);
 }
 
 // Dừng tự động chuyển slide
@@ -76,30 +74,31 @@ carousel.addEventListener("mouseleave", startSlideShow);
 startSlideShow();
 
 // ===================================================
-// PHẦN LOGIC SẢN PHẨM
+// PHẦN LOGIC SẢN PHẨM VỚI PHÂN TRANG
 // ===================================================
 
 let allProducts = [];
 const productsGrid = document.getElementById("productsGrid");
-const viewMoreBtn = document.getElementById("viewMoreBtn");
 const logo = document.querySelector(".logo");
 
-let visibleProducts = 8; // Số sản phẩm hiển thị ban đầu
-let currentFilteredList = []; // Lưu trữ danh sách đã lọc cho nút "Xem thêm"
+// Cấu hình phân trang
+const PRODUCTS_PER_PAGE = 16; // Số sản phẩm mỗi trang
+let currentPage = 1; // Trang hiện tại
+let currentFilteredList = []; // Danh sách đã lọc
 
 if (logo) {
   if (location.hash !== "home") {
     location.hash = "home";
-  } else {
+  } 
     logo.addEventListener("click", (e) => {
       location.reload();
     });
-  }
+  
 }
 
-// Hàm reset số lượng sản phẩm (để LocSanPham.js gọi)
-export function resetVisibleProducts() {
-  visibleProducts = 8;
+// Hàm reset về trang 1 (để LocSanPham.js gọi)
+export function resetToFirstPage() {
+  currentPage = 1;
 }
 
 async function loadProducts() {
@@ -131,7 +130,7 @@ async function loadProducts() {
       }
     });
 
-    // 5. Ánh xạ (map) dữ liệu TỔNG HỢP sang định dạng chuẩn
+    // 5. Ánh xạ dữ liệu TỔNG HỢP sang định dạng chuẩn
     allProducts = allData.map(item => {
       let effectiveBrand = item.brand || item.thuonghieu;
       if (item.loai === 'Tablet') {
@@ -151,7 +150,7 @@ async function loadProducts() {
       };
     });
 
-    // 6. Hiển thị lần đầu (hiển thị tất cả sản phẩm)
+    // 6. Hiển thị lần đầu
     displayProducts(allProducts);
 
   } catch (error) {
@@ -159,54 +158,163 @@ async function loadProducts() {
     productsGrid.innerHTML = "<p>Lỗi khi tải sản phẩm. Vui lòng thử lại.</p>";
   }
 }
-// ======= HIỂN THỊ SẢN PHẨM =======
-// Hàm này giờ sẽ được gọi từ cả Home.js (lần đầu) và LocSanPham.js (khi lọc)
+
+// ======= HIỂN THỊ SẢN PHẨM VỚI PHÂN TRANG =======
 export function displayProducts(list) {
-  // 1. Lưu lại danh sách đã lọc để "Xem thêm" có thể dùng
+  // 1. Lưu lại danh sách đã lọc
   currentFilteredList = list;
   
-  // 2. Xóa nội dung cũ
-  productsGrid.innerHTML = "";
-
-  // 3. Cắt danh sách theo số lượng `visibleProducts`
-  const shown = list.slice(0, visibleProducts);
+  // 2. Tính toán phân trang
+  const totalPages = Math.ceil(list.length / PRODUCTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
+  const endIndex = startIndex + PRODUCTS_PER_PAGE;
+  const productsToShow = list.slice(startIndex, endIndex);
   
-  // 4. Hiển thị
-  shown.forEach((product) => {
+  // 3. Xóa nội dung cũ
+  productsGrid.innerHTML = "";
+  
+  // 4. Hiển thị sản phẩm
+  productsToShow.forEach((product) => {
     const card = document.createElement("div");
     card.className = "product-card";
     card.dataset.id = product.id;
     card.innerHTML = `
-                    <img src="${product.img}" alt="${product.name}">
-                    <div class="product-name">${product.name}</div>
-                    <div class="product-price">${product.price.toLocaleString()} VND</div>
-                    <button class="buy-btn">Mua ngay</button>
-                `;
+      <img src="${product.img}" alt="${product.name}">
+      <div class="product-name">${product.name}</div>
+      <div class="product-price">${product.price.toLocaleString()} VND</div>
+      <button class="buy-btn">Mua ngay</button>
+    `;
     productsGrid.appendChild(card);
   });
   
   // 5. Gắn lại sự kiện cho các card sản phẩm
   actionsBuy();
   
-  // 6. Ẩn/hiện nút "Xem thêm"
-  viewMoreBtn.style.display = visibleProducts >= list.length ? "none" : "block";
+  // 6. Hiển thị phân trang
+  renderPagination(totalPages);
+  
+  // 7. Cuộn lên đầu danh sách sản phẩm
+  document.querySelector(".products-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+// ======= TẠO GIAO DIỆN PHÂN TRANG =======
+function renderPagination(totalPages) {
+  // Tìm hoặc tạo container phân trang
+  let paginationContainer = document.getElementById("pagination-container");
+  
+  if (!paginationContainer) {
+    paginationContainer = document.createElement("div");
+    paginationContainer.id = "pagination-container";
+    paginationContainer.className = "pagination-container";
+    
+    // Chèn sau products-grid
+    const productsSection = document.querySelector(".products-section");
+    productsSection.appendChild(paginationContainer);
+  }
+  
+  // Xóa nội dung cũ
+  paginationContainer.innerHTML = "";
+  
+  // Nếu chỉ có 1 trang hoặc không có sản phẩm, ẩn phân trang
+  if (totalPages <= 1) {
+    paginationContainer.style.display = "none";
+    return;
+  }
+  
+  paginationContainer.style.display = "flex";
+  
+  // Nút Previous
+  const prevButton = document.createElement("button");
+  prevButton.className = "pagination-btn";
+  prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+  prevButton.disabled = currentPage === 1;
+  prevButton.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      displayProducts(currentFilteredList);
+    }
+  });
+  paginationContainer.appendChild(prevButton);
+  
+  // Tính toán các trang cần hiển thị
+  const pagesToShow = calculatePagesToShow(currentPage, totalPages);
+  
+  pagesToShow.forEach(pageNum => {
+    if (pageNum === "...") {
+      const dots = document.createElement("span");
+      dots.className = "pagination-dots";
+      dots.textContent = "...";
+      paginationContainer.appendChild(dots);
+    } else {
+      const pageButton = document.createElement("button");
+      pageButton.className = "pagination-btn";
+      if (pageNum === currentPage) {
+        pageButton.classList.add("active");
+      }
+      pageButton.textContent = pageNum;
+      pageButton.addEventListener("click", () => {
+        currentPage = pageNum;
+        displayProducts(currentFilteredList);
+      });
+      paginationContainer.appendChild(pageButton);
+    }
+  });
+  
+  // Nút Next
+  const nextButton = document.createElement("button");
+  nextButton.className = "pagination-btn";
+  nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+  nextButton.disabled = currentPage === totalPages;
+  nextButton.addEventListener("click", () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      displayProducts(currentFilteredList);
+    }
+  });
+  paginationContainer.appendChild(nextButton);
+}
 
-// ======= NÚT XEM THÊM =======
-viewMoreBtn.addEventListener("click", () => {
-  visibleProducts += 4; // Tăng số lượng
-  displayProducts(currentFilteredList); // Vẽ lại từ danh sách đã lọc
-});
+// ======= TÍNH TOÁN CÁC TRANG CẦN HIỂN THỊ =======
+function calculatePagesToShow(current, total) {
+  const pages = [];
+  const delta = 2; // Số trang hiển thị xung quanh trang hiện tại
+  
+  // Luôn hiển thị trang 1
+  pages.push(1);
+  
+  // Tính toán khoảng hiển thị
+  for (let i = current - delta; i <= current + delta; i++) {
+    if (i > 1 && i < total) {
+      // Thêm dấu ... nếu cần
+      if (pages[pages.length - 1] !== i - 1 && pages[pages.length - 1] !== "...") {
+        pages.push("...");
+      }
+      pages.push(i);
+    }
+  }
+  
+  // Thêm dấu ... trước trang cuối nếu cần
+  if (pages[pages.length - 1] !== total - 1 && pages[pages.length - 1] !== total && total > 1) {
+    if (pages[pages.length - 1] !== "...") {
+      pages.push("...");
+    }
+  }
+  
+  // Luôn hiển thị trang cuối
+  if (total > 1) {
+    pages.push(total);
+  }
+  
+  return pages;
+}
 
 // ======= KHỞI TẠO =======
-loadProducts(); // Bắt đầu tải dữ liệu
+loadProducts();
 
 // ===================================================
 // PHẦN LOGIC POPUP VÀ CHUYỂN TRANG
 // ===================================================
 
-// ... (Phần code này của bạn đã chính xác, giữ nguyên) ...
 const userName = document.querySelector(".user-name");
 const popUp = document.getElementById("overlay-Popup");
 
@@ -260,5 +368,5 @@ function actionsBuy(){
     });
 }
   
-// **6. Cập nhật lại export**
+// Export
 export { allProducts, productsGrid };

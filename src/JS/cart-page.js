@@ -207,5 +207,4 @@ function handleCheckout() {
   
   // Chuyển về trang chủ
     location.hash = 'thanhtoan';
-
 }
