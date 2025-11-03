@@ -10,6 +10,8 @@
     height: 570px;
     gap: 25px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 /* Phần bên trái (Bảng thống kê) */
@@ -83,6 +85,8 @@
     display: flex;
     flex-direction: column;
     gap: 25px;
+    max-height: 100%;
+    overflow: hidden;
 }
 
 .stats-subtitle {
@@ -101,6 +105,8 @@
     border-radius: 10px;
     border: 1px solid #dee2e6;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    max-height: 300px;
+    overflow: hidden;
 }
 
 .stats-filter-section label {
@@ -110,6 +116,11 @@
     font-weight: 600;
     display: block;
 }
+
+.stats-filter-section h3.stats-subtitle {
+    font-size: 16px;
+    margin-bottom: 15px;
+}   
 
 .stats-filter-section select, 
 .stats-filter-section input {
@@ -190,6 +201,9 @@
     border: 1px solid #dee2e6;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
     flex: 1;
+    max-height: 400px;
+    overflow-y: auto; 
+    overflow-x: hidden;
 }
 
 .stats-result p {
@@ -202,6 +216,34 @@
     border-left: 4px solid #28a745;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease;
+    line-height: 1.4; 
+    word-break: break-word; 
+}
+
+.stats-result h3.stats-subtitle {
+    font-size: 16px; 
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #4e73df;
+    color: #2c3e50;
+}
+
+.stats-result::-webkit-scrollbar {
+    width: 6px;
+}
+
+.stats-result::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.stats-result::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.stats-result::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
 }
 
 .stats-result p:hover {
