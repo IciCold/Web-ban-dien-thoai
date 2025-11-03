@@ -1,13 +1,11 @@
-// File: cart.js
-
 // ======================================================
-// === PHẦN 1: HÀM HỖ TRỢ DÙNG CHUNG (EXPORTED) ===
-// (Di chuyển ra ngoài để cart-page.js có thể import)
+// PHẦN 1: CÁC HÀM TIỆN ÍCH (LOGIC CỐT LÕI)
+// Các hàm này được export để cart-page.js và các file khác có thể dùng chung.
 // ======================================================
 
 /**
  * Kiểm tra xem người dùng đã đăng nhập hay chưa.
- * @returns {boolean} True nếu đã đăng nhập, False nếu chưa.
+ * @returns {boolean} True (đã đăng nhập) hoặc False (chưa đăng nhập).
  */
 export function isUserLoggedIn() {
   return localStorage.getItem("currentUser") !== null;
@@ -15,44 +13,45 @@ export function isUserLoggedIn() {
 
 /**
  * Lấy username của người dùng đang đăng nhập.
- * @returns {string|null} Trả về username, hoặc null nếu không ai đăng nhập.
+ * @returns {string|null} Username (ví dụ: "admin") hoặc null nếu chưa đăng nhập.
  */
 export function getCurrentUsername() {
   if (!isUserLoggedIn()) {
     return null;
   }
   const user = JSON.parse(localStorage.getItem("currentUser"));
-  return user.userName; // Giả sử object user có key là 'userName'
+  return user.userName; // Đảm bảo object 'currentUser' có key là 'userName'
 }
 
 /**
- * Lấy giỏ hàng của ĐÚNG user đang đăng nhập.
- * @returns {Array} Mảng giỏ hàng của user (hoặc mảng rỗng [] nếu chưa có).
+ * Lấy mảng giỏ hàng từ localStorage cho ĐÚNG user đang đăng nhập.
+ * Mỗi user sẽ có một key giỏ hàng riêng, ví dụ: "cart_admin", "cart_user1".
+ * @returns {Array} Mảng các sản phẩm trong giỏ, hoặc mảng rỗng [].
  */
 export function getUserCart() {
   const username = getCurrentUsername();
   if (!username) {
-    return []; // Nếu không đăng nhập, trả về giỏ hàng trống
+    return []; // Trả về giỏ hàng trống nếu không có ai đăng nhập
   }
   const cartKey = 'cart_' + username;
   return JSON.parse(localStorage.getItem(cartKey)) || [];
 }
 
 /**
- * Lưu mảng giỏ hàng (biến 'cart') vào localStorage cho user hiện tại.
- * @param {Array} cart - Mảng giỏ hàng cần lưu.
+ * Lưu mảng giỏ hàng (đã cập nhật) vào localStorage cho user hiện tại.
+ * @param {Array} cart - Mảng giỏ hàng mới cần lưu.
  */
 export function saveUserCart(cart) {
   const username = getCurrentUsername();
   if (!username) {
-    return; // Không thể lưu nếu không đăng nhập
+    return; // Không thể lưu nếu chưa đăng nhập
   }
   const cartKey = 'cart_' + username;
   localStorage.setItem(cartKey, JSON.stringify(cart));
 }
 
 /**
- * Xóa giỏ hàng của user hiện tại (thường dùng sau khi thanh toán).
+ * Xóa giỏ hàng của user hiện tại khỏi localStorage (thường dùng sau khi thanh toán).
  */
 export function clearUserCart() {
   const username = getCurrentUsername();
@@ -63,7 +62,10 @@ export function clearUserCart() {
 }
 
 /**
- * Định dạng một SỐ thành chuỗi tiền tệ VND (ví dụ: 10000 -> 10.000 ₫)
+ * Định dạng một SỐ thành chuỗi tiền tệ VND.
+ * Ví dụ: 10000 -> "10.000 ₫"
+ * @param {number} amount - Số tiền cần định dạng.
+ * @returns {string} Chuỗi tiền tệ đã định dạng.
  */
 export function formatVND(amount) {
   if (typeof amount !== 'number') {
@@ -76,63 +78,78 @@ export function formatVND(amount) {
 }
 
 /**
- * Chuyển đổi một CHUỖI tiền tệ VND về SỐ (ví dụ: "10.000.000 VND" -> 10000000)
+ * Chuyển đổi một CHUỖI tiền tệ (từ giao diện) về dạng SỐ để tính toán.
+ * Ví dụ: "23.000.000 VND" -> 23000000
+ * @param {string} priceText - Chuỗi giá tiền lấy từ DOM.
+ * @returns {number} Số tiền đã được làm sạch.
  */
 export function parseVNDPrice(priceText) {
   if (!priceText) return 0;
-  // Xóa "VND", "₫", và tất cả dấu chấm
+  // Dùng regex để xóa tất cả ký tự không phải số (dấu chấm, phẩy, ₫, VND)
   const numericString = priceText.replace(/[\.,₫VND]/g, '').trim();
   return parseInt(numericString) || 0;
 }
 
 
 // ======================================================
-// === PHẦN 2: LOGIC POPUP GIỎ HÀNG (HEADER) ===
-// (Bọc trong 'DOMContentLoaded' để đảm bảo HTML đã tải)
+// PHẦN 2: LOGIC CHO POPUP GIỎ HÀNG (TRÊN HEADER)
 // ======================================================
+
+// Chỉ chạy code khi toàn bộ cây DOM đã được tải xong.
 document.addEventListener('DOMContentLoaded', () => {
 
-  // === 1. LẤY CÁC PHẦN TỬ HTML (CHO POPUP) ===
-  const addToCartBtn = document.querySelector('.add-to-cart-button'); 
-  const cartItemsList = document.getElementById('cart-items-list'); 
-  const cartEmptyMsg = document.getElementById('cart-empty-msg');
-  const cartWrapper = document.querySelector('.cart-wrapper');
-  const cartIcon = document.getElementById('icon-cart');
-  const cartPopup = document.getElementById('cart-popup');
-  const toastOverlay = document.getElementById('toast-overlay');
-  const toastText = document.getElementById('toast-text-content');
-  
-  // *** THÊM NÚT "XEM GIỎ HÀNG" ***
-  const viewCartBtn = document.querySelector('.view-cart-btn');
+  // --- 1. Lấy các phần tử DOM cố định trên trang ---
+  const addToCartBtn = document.querySelector('.add-to-cart-button'); // Nút ở trang chi tiết
+  const cartItemsList = document.getElementById('cart-items-list'); // <ul> trong popup
+  const cartEmptyMsg = document.getElementById('cart-empty-msg'); // Thông báo "giỏ hàng trống"
+  const cartWrapper = document.querySelector('.cart-wrapper'); // <div> bọc icon và popup
+  const cartIcon = document.getElementById('icon-cart'); // Icon giỏ hàng
+  const cartPopup = document.getElementById('cart-popup'); // Popup
+  const toastOverlay = document.getElementById('toast-overlay'); // Lớp phủ thông báo
+  const toastText = document.getElementById('toast-text-content'); // Nội dung thông báo
+  const viewCartBtn = document.querySelector('.view-cart-btn'); // Nút "Xem giỏ hàng"
 
   
-  // === 2. HÀM XỬ LÝ THÔNG BÁO (TOAST) ===
+  // --- 2. Các hàm xử lý Giao diện (UI) ---
+
+  /**
+   * Hiển thị thông báo (toast) "Đã thêm vào giỏ hàng".
+   * Nó hoạt động bằng cách thêm class 'active' vào overlay, và tự động xóa sau 1.5s.
+   * @param {string} message - Nội dung cần hiển thị.
+   */
   function showSuccessToast(message) {
     if (!toastOverlay || !toastText) return; 
 
     toastText.textContent = message;
     toastOverlay.classList.add('active');
 
+    // Tự động ẩn thông báo
     setTimeout(() => {
       toastOverlay.classList.remove('active');
     }, 1500);
   }
 
-  // === 3. HÀM "VẼ" (RENDER) LẠI POPUP GIỎ HÀNG ===
+  /**
+   * "Vẽ" lại toàn bộ nội dung bên trong popup giỏ hàng.
+   * Được gọi mỗi khi giỏ hàng thay đổi (thêm, sửa, xóa, login, logout).
+   */
   function renderCart() {
-    const cart = getUserCart();
+    const cart = getUserCart(); // Lấy giỏ hàng mới nhất
     
-    if (!cartItemsList || !cartEmptyMsg) return; // Bảo vệ
+    // Bảo vệ: Thoát nếu không tìm thấy phần tử (ví dụ: ở trang admin)
+    if (!cartItemsList || !cartEmptyMsg) return; 
     
     cartItemsList.innerHTML = ''; // Xóa sạch nội dung cũ
 
+    // Nếu chưa đăng nhập hoặc giỏ hàng rỗng
     if (!isUserLoggedIn() || cart.length === 0) {
-      cartEmptyMsg.style.display = 'block';
+      cartEmptyMsg.style.display = 'block'; // Hiện thông báo "trống"
     } else {
-      cartEmptyMsg.style.display = 'none';
+      // Nếu có sản phẩm
+      cartEmptyMsg.style.display = 'none'; // Ẩn thông báo "trống"
       
+      // Lặp qua mảng giỏ hàng và tạo HTML cho mỗi sản phẩm
       cart.forEach(item => {
-        // *** SỬA: Dùng formatVND để hiển thị giá từ SỐ ***
         const itemHTML = `
           <div class="cart-item">
             <img src="${item.image}" alt="${item.name}">
@@ -148,47 +165,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // === 4. HÀM XỬ LÝ "THÊM VÀO GIỎ HÀNG" ===
+  // --- 3. Hàm Xử lý Logic Chính ---
+
+  /**
+   * Xử lý logic khi người dùng nhấn nút "Thêm vào giỏ hàng" (ở trang chi tiết).
+   */
   function handleAddToCart() {
     const productSection = document.getElementById("productSection");
     
-    // Thu thập thông tin
+    // 1. Thu thập thông tin sản phẩm từ trang chi tiết (DOM)
     const productName = productSection.querySelector('.product-title').textContent.trim();
-    const productPriceText = productSection.querySelector('.product-price').textContent.trim(); // Lấy dạng chuỗi
+    const productPriceText = productSection.querySelector('.product-price').textContent.trim();
     const productImage = productSection.querySelector('.product-image').src;
     const productQuantity = parseInt(productSection.querySelector('.qty-input').value, 10);
     const productId = productSection.dataset.currentId;
 
-    // *** SỬA QUAN TRỌNG: Chuyển giá về SỐ trước khi lưu ***
+    // 2. Chuyển đổi giá từ chuỗi (ví dụ: "10.000.000 VND") về SỐ (10000000)
     const productPrice = parseVNDPrice(productPriceText);
 
+    // 3. Lấy giỏ hàng hiện tại từ localStorage
     let cart = getUserCart();
+
+    // 4. Kiểm tra xem sản phẩm đã có trong giỏ chưa
     const existingItemIndex = cart.findIndex(item => item.id === productId);
 
     if (existingItemIndex > -1) {
+      // 5a. Nếu đã có: Chỉ tăng số lượng
       cart[existingItemIndex].quantity += productQuantity;
     } else {
+      // 5b. Nếu chưa có: Thêm sản phẩm mới vào mảng
       const product = {
         id: productId,
         name: productName,
-        price: productPrice, // *** LƯU GIÁ DẠNG SỐ ***
+        price: productPrice, // Lưu giá dạng SỐ
         image: productImage,
         quantity: productQuantity
       };
       cart.push(product);
     }
 
+    // 6. Lưu mảng giỏ hàng đã cập nhật trở lại localStorage
     saveUserCart(cart);
-    renderCart(); // Cập nhật lại giao diện popup
+
+    // 7. Cập nhật giao diện
+    renderCart(); // "Vẽ" lại popup
     showSuccessToast('Đã thêm vào Giỏ hàng!');
   }
 
 
-  // === 5. GẮN KẾT SỰ KIỆN (EVENT LISTENERS) ===
+  // --- 4. Gắn các Event Listeners (Bắt sự kiện) ---
 
-  // Nút "Thêm vào giỏ hàng" (ở trang chi tiết)
+  // Bắt sự kiện click nút "Thêm vào giỏ hàng"
   if (addToCartBtn) {
     addToCartBtn.addEventListener('click', () => {
+      // Chuyển hướng sang trang login nếu chưa đăng nhập
       if (!isUserLoggedIn()) {
         location.hash = '#login';
         return; 
@@ -197,61 +227,68 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Icon giỏ hàng (mở popup)
+  // Bắt sự kiện click vào icon giỏ hàng (để mở popup)
   if (cartIcon && cartPopup && cartWrapper) {
     cartIcon.addEventListener('click', (event) => {
-      event.stopPropagation();
+      event.stopPropagation(); // Ngăn sự kiện click lan ra ngoài (gây đóng popup)
+      // Yêu cầu đăng nhập trước khi xem
       if (!isUserLoggedIn()) {
         alert('Bạn cần đăng nhập để xem giỏ hàng.');
         location.hash = '#login';
         return;
       }
+      // Bật/tắt popup bằng cách thêm/xóa class 'show'
       cartPopup.classList.toggle('show');
     });
   }
 
-  // Đóng popup khi click ra bên ngoài
+  // Bắt sự kiện click vào bất cứ đâu trên trang (để đóng popup)
   document.addEventListener('click', (event) => {
+    // Chỉ đóng nếu popup đang mở VÀ click vào bên ngoài popup
     if (cartPopup && cartPopup.classList.contains('show') && !cartWrapper.contains(event.target)) {
       cartPopup.classList.remove('show');
     }
   });
 
-  // Đóng toast khi click vào nền mờ
+  // Đóng thông báo (toast) khi click vào lớp nền mờ
   if (toastOverlay) {
     toastOverlay.addEventListener('click', (event) => {
-      if (event.target === toastOverlay) {
+      if (event.target === toastOverlay) { // Chỉ đóng khi click vào nền
         toastOverlay.classList.remove('active');
       }
     });
   }
 
-  // *** THÊM SỰ KIỆN CHO NÚT "XEM GIỎ HÀNG" ***
+  // Bắt sự kiện click nút "Xem giỏ hàng" (trong popup)
   if (viewCartBtn) {
     viewCartBtn.addEventListener('click', () => {
-      location.hash = 'cartDetailPage'; // Chuyển đến trang chi tiết giỏ hàng
+      // Chuyển hướng đến trang chi tiết giỏ hàng
+      location.hash = 'cartDetailPage'; 
       cartPopup.classList.remove('show'); // Đóng popup
     });
   }
 
 
-  // === 6. KHỞI CHẠY VÀ LẮNG NGHE THAY ĐỔI ===
+  // --- 5. Khởi chạy và Đồng bộ hóa ---
 
-  renderCart(); // "Vẽ" giỏ hàng 1 lần khi tải trang
+  // 1. "Vẽ" giỏ hàng lần đầu tiên khi trang vừa tải xong
+  renderCart(); 
 
-  // Lắng nghe Login/Logout
+  // 2. Lắng nghe sự kiện 'storage' (khi login/logout ở tab khác)
   window.addEventListener('storage', (event) => {
     if (event.key === 'currentUser') {
-      renderCart(); 
+      renderCart(); // "Vẽ" lại popup để đồng bộ
     }
   });
 
-  // Lắng nghe chuyển trang (hash)
+  // 3. Lắng nghe sự kiện 'hashchange' (khi chuyển trang)
   window.addEventListener('hashchange', () => {
-    renderCart();
+    renderCart(); // "Vẽ" lại popup (ví dụ: sau khi login thành công)
   });
   
-  // Lắng nghe sự kiện TÙY CHỈNH (khi cart-page.js thay đổi giỏ hàng)
+  // 4. Lắng nghe sự kiện tùy chỉnh 'cartUpdated'
+  // Sự kiện này được bắn từ file cart-page.js (khi user +/-/Xóa ở trang chi tiết)
+  // để popup này tự động cập nhật theo.
   window.addEventListener('cartUpdated', () => {
     renderCart();
   });
