@@ -102,7 +102,7 @@ export function resetToFirstPage() {
   currentPage = 1;
 }
 
-async function loadProducts() {
+/*async function loadProducts() {
   try {
     // 1. Tải tệp JSON
     const response = await fetch("../asset/data/dienthoai.json");
@@ -158,7 +158,10 @@ async function loadProducts() {
     console.error("Không thể tải sản phẩm:", error);
     productsGrid.innerHTML = "<p>Lỗi khi tải sản phẩm. Vui lòng thử lại.</p>";
   }
-}
+}*/
+
+
+
 
 // ======= HIỂN THỊ SẢN PHẨM VỚI PHÂN TRANG =======
 export function displayProducts(list) {
@@ -180,9 +183,9 @@ export function displayProducts(list) {
     card.className = "product-card";
     card.dataset.id = product.id;
     card.innerHTML = `
-      <img src="${product.img}" alt="${product.name}">
-      <div class="product-name">${product.name}</div>
-      <div class="product-price">${product.price.toLocaleString()} VND</div>
+      <img src="${product.src}" alt="${product.ten}">
+      <div class="product-name">${product.ten}</div>
+      <div class="product-price">${product.gia.toLocaleString()} VND</div>
     `;
     productsGrid.appendChild(card);
   });
@@ -309,7 +312,11 @@ function calculatePagesToShow(current, total) {
 }
 
 // ======= KHỞI TẠO =======
-loadProducts();
+(async () => {
+  allProducts = await docJSONvaLuuLocalStorage("allProducts", "../asset/data/dienthoai.json");
+  displayProducts(allProducts);
+})();
+
 
 // ===================================================
 // PHẦN LOGIC POPUP VÀ CHUYỂN TRANG
@@ -370,3 +377,53 @@ function actionsBuy(){
   
 // Export
 export { allProducts, productsGrid };
+
+function docdulieuLocalStorage(tenmang) {
+  try {
+    const saved = localStorage.getItem(tenmang);
+    return saved ? JSON.parse(saved) : [];
+  } catch (error) {
+    console.error("Lỗi khi đọc dữ liệu từ localStorage:", error);
+    return [];
+  }
+}
+
+function ghidulieuLocalStorage(tenmang, datamang) {
+  try {
+    localStorage.setItem(tenmang, JSON.stringify(datamang));
+    console.log(`Dữ liệu '${tenmang}' đã được lưu.`);
+  } catch (error) {
+    console.error(`Lỗi khi ghi dữ liệu '${tenmang}':`, error);
+  }
+}
+//ham doc và ghi dulieu localStorage su dung cho các file code khác
+
+async function docJSONvaLuuLocalStorage(tenmang, duongdanJSON) {
+  try {
+    // 1️⃣ Kiểm tra xem localStorage đã có dữ liệu chưa
+    const saved = localStorage.getItem(tenmang);
+    if (saved) {
+      console.log(`✅ Mảng '${tenmang}' đã có dữ liệu, không cần đọc lại JSON.`);
+      return JSON.parse(saved); // Dừng tại đây, trả về dữ liệu cũ
+    }
+
+    // 2️⃣ Nếu chưa có, đọc dữ liệu từ file JSON
+    const response = await fetch(duongdanJSON);
+    if (!response.ok) {
+      throw new Error(`Không thể đọc file JSON: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    // 3️⃣ Lưu dữ liệu vào localStorage
+    localStorage.setItem(tenmang, JSON.stringify(data));
+    console.log(`Dữ liệu '${tenmang}' đã được lưu vào localStorage.`);
+
+    return data; // Trả về dữ liệu mới
+  } catch (error) {
+    console.error(`Lỗi khi đọc/lưu dữ liệu '${tenmang}':`, error);
+    return [];
+  }
+}
+//đây là hàm khởi tạo
+
