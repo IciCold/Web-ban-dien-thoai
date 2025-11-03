@@ -4,6 +4,7 @@ const usernameInput = document.getElementById("username");
 const passwordInput = document.getElementById("password");
 const warningUser = document.querySelector(".warning-user");
 const warningPassword = document.querySelector(".warning-incorrect-password");
+const adminUsernameSpan = document.querySelector(".container-admin .main .login span");
 
 loginForm.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -22,6 +23,13 @@ loginForm.addEventListener("submit", function (e) {
   usernameInput.style.border = "none";
   passwordInput.style.border = "none";
   
+  // Nếu là admin, cho đăng nhập vào
+  if (usernameInput.value === "admin" && passwordInput.value === "123") {
+    localStorage.setItem("adminLogged", "true"); //Lưu trạng thái đăng nhập của admin
+    // --- BỔ SUNG: Cập nhật tên "admin" trên giao diện admin ---
+    location.hash ='home' // Chuyển sang trang admin
+    return;
+  }
   // ====== Kiểm tra tài khoản tồn tại ======
   if (!foundUser) {
     // Hiện thông báo lỗi "Tài khoản không tồn tại"

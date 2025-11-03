@@ -1,24 +1,15 @@
-import "./register.js";
-import "./login.js";
-import "./Home.js";
-import "./search.js";
-import "./thanhtoan.js";
-import "./logout.js";
-import "./cart.js";
-import "./LocSanPham.js";
-import { initProfilePage } from "./profile.js";
-import { initChiTietPage } from "./chitiet.js"; // (THÊM) Import file chi tiết
-import { initCartDetailPage } from './cart-page.js';
+import "./ds_sanpham.js";
+import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
+import { loadStatistics, seedOrderData } from './thongke.js';
+import "./login.js"
+import "./logout.js"
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
-  home: document.querySelector(".Home"),
   login: document.querySelector(".page-login"),
   register: document.querySelector(".page-register"),
-  thanhtoan: document.querySelector(".payment-section"),
-  chitiet: document.querySelector(".product-section"),
-  profile: document.querySelector(".page-profile"),
-  cartDetailPage: document.getElementById("cartDetailPage")
+  adminPages: document.querySelectorAll(".page-section"),
+  admin: document.querySelector('.admin')
 };
 
 //Ẩn tất cả page
@@ -41,12 +32,28 @@ function hideAll() {
 function showPage() {
   const key = location.hash.replace("#", "") || "home";
   const subPage = document.querySelector(`#${key}`);
-  const isAdminSubPage = subPage?.closest(".admin");
-  const page = pages[key] || pages.home;
+  const isAdminSubPage = subPage?.closest(".container-admin");
+  const page = pages[key];
 
   hideAll();
+  
+    // Hiển thị page con cụ thể
+    if (subPage && isAdminSubPage) {
+      subPage.classList.remove("hidden","page-active-enter");
+      subPage.classList.add("page-active");
+      requestAnimationFrame(() => {
+        subPage.classList.add("page-active-enter");
+      });
+      if(key === "ds_khachHang"){
+        loadCustomerList();
+        setupCustomerSearch();
+      }
+      else if(key === "thongke"){
+        loadStatistics();
+        seedOrderData();
+      }
+    } else {
     // XỬ LÝ CÁC PAGE THÔNG THƯỜNG
-    document.body.classList.remove("no-header-footer");
     if (!page) {
       console.log("Không tìm thấy page");
       return;
@@ -59,20 +66,8 @@ function showPage() {
     requestAnimationFrame(() => {
       page.classList.add("page-active-enter"); // opacity: 1
     });
-
-    // Gọi hàm khởi tạo của trang profile
-    if (key === "profile") {
-        initProfilePage();
-    }
-    // (THÊM) Gọi hàm khởi tạo của trang chi tiết
-    if (key === "chitiet") {
-        initChiTietPage();
-    }
-
-    if(key == "cartDetailPage"){
-      initCartDetailPage();
-    }
   }
+}
 
 //Quay lại/Tiến tới page
 window.addEventListener("hashchange", () => {
@@ -82,7 +77,14 @@ window.addEventListener("hashchange", () => {
 
 //Load trang
 window.addEventListener("load", () => {
-  const hash = location.hash || "home";
-  console.log("hash hiện tại là ", hash);
+  const isAdminLogged = localStorage.getItem("adminLogged") === "true";
+  if (isAdminLogged) {
+    location.hash = "home";
+  } else {
+    location.hash = "login";
+  }
   showPage();
 });
+
+
+

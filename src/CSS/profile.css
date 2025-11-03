@@ -106,7 +106,7 @@
 /* ========== NÚT ĐĂNG XUẤT ============= */    
    
 .logout-btn {
-  width: 150%;
+  width: 100%;
   background-color: #18b4d9; /* xanh #1bcaf1 nhưng hơi đậm hơn */
   color: white;
   border: none;
@@ -464,9 +464,8 @@ input:invalid + .form-error {
 }
 
 
-/* ================================== */
 /* === MODAL (POPUP) CHUNG === */
-/* ================================== */
+
 
 /* Nền mờ */
 .bank-modal-overlay {

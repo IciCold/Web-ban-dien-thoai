@@ -1,0 +1,217 @@
+
+/* body cho page-regsiter */
+.page-register {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+  color: #333;
+  width: auto;
+}
+
+/*bảng đăng kí*/
+.signin-form {
+  max-width: 600px;
+  max-height: 450px;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  background: rgba(129, 124, 124, 0.2);
+  border-radius: 10px;
+  box-shadow: 0px 10px 30px #0000001a;
+}
+
+/*Căn chỉnh các phần tử trong form*/
+.layout-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-heading {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 40px;
+}
+
+/*input*/
+.input-group {
+  transition: border 0.3s ease;
+  position: relative;
+  margin-bottom: 35px;
+}
+
+.input-group input {
+  padding-left: 10px;
+  border: 0px solid;
+  border-radius: 5px;
+  outline: none;
+  height: 35px;
+  width: 390px;
+}
+
+.input-group label {
+  position: absolute;
+  top: -22px;
+  left: 0px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.input-group input:focus {
+  border-color: #333;
+  box-shadow: 0 0 10px #333;
+}
+
+/*Nút bấm*/
+.button {
+  margin-bottom: 10px;
+}
+
+.button button {
+  background-color: #f5f5f5;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  margin: 0;
+  width: 100px;
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+
+.button:hover button {
+  background-color: var(--main-color);
+  transform: translateY(-3px);
+}
+
+/* Bảng thông báo thành công*/
+.thongbao .style {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.thongbao {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2em;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+/* Loading */
+.loader {
+  color: var(--main-color);
+  font-size: 7px;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  position: relative;
+  text-indent: -9999em;
+  animation: mulShdSpin 1.3s infinite linear;
+  transform: translateZ(0);
+}
+
+@keyframes mulShdSpin {
+
+  0%,
+  100% {
+    box-shadow: 0 -3em 0 0.2em,
+      2em -2em 0 0em, 3em 0 0 -1em,
+      2em 2em 0 -1em, 0 3em 0 -1em,
+      -2em 2em 0 -1em, -3em 0 0 -1em,
+      -2em -2em 0 0;
+  }
+
+  12.5% {
+    box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em,
+      3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em,
+      -2em 2em 0 -1em, -3em 0 0 -1em,
+      -2em -2em 0 -1em;
+  }
+
+  25% {
+    box-shadow: 0 -3em 0 -0.5em,
+      2em -2em 0 0, 3em 0 0 0.2em,
+      2em 2em 0 0, 0 3em 0 -1em,
+      -2em 2em 0 -1em, -3em 0 0 -1em,
+      -2em -2em 0 -1em;
+  }
+
+  37.5% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
+      3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em,
+      -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
+  }
+
+  50% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
+      3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em,
+      -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
+  }
+
+  62.5% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em,
+      3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0,
+      -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
+  }
+
+  75% {
+    box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em,
+      3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em,
+      -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
+  }
+
+  87.5% {
+    box-shadow: 0em -3em 0 0, 2em -2em 0 -1em,
+      3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em,
+      -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
+  }
+}
+
+/* Class list cho báo lỗi input */
+.Ierror {
+  animation: shake 0.4s ease;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+
+  75% {
+    transform: translateX(-5px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}

@@ -24,7 +24,6 @@ function register(email, userName, password) {
     email: email,
     userName: userName,
     password: password,
-    role: "user",
     registrationDate: new Date().toLocaleDateString('vi-VN') // THÊM DÒNG NÀY
   };
   users.push(newUser);
