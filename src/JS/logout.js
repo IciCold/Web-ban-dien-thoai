@@ -108,22 +108,3 @@ if (logout_btn) {
 
 // Gọi hàm hiển thị username khi trang được tải
 window.addEventListener('load', displayUsername);
-
-
-// --- BỔ SUNG: XỬ LÝ ĐĂNG XUẤT CHO ADMIN ---
-const adminLoginButton = document.querySelector(".admin .main .login");
-const adminSpan = adminLoginButton?.querySelector("span");
-
-// Khi load trang, kiểm tra trạng thái đăng nhập
-const isAdminLogged = localStorage.getItem("adminLogged") === "true";
-if (isAdminLogged && adminSpan) {
-  adminSpan.textContent = "admin"; // Hiện là admin nếu đã đăng nhập
-}
-if (adminLoginButton) {
-  adminLoginButton.addEventListener("click", () => {
-      // Đăng xuất
-      adminSpan.textContent = "Đăng nhập";
-      localStorage.removeItem("adminLogged");
-      location.hash = "home";
-  });
-}

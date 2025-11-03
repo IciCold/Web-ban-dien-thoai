@@ -1,24 +1,15 @@
-import "./register.js";
+import "./ds_sanpham.js";
+import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
+import { loadStatistics, seedOrderData } from "./thongke.js";
 import "./login.js";
-import "./Home.js";
-import "./search.js";
-import "./thanhtoan.js";
 import "./logout.js";
-import "./cart.js";
-import "./LocSanPham.js";
-import { initProfilePage } from "./profile.js";
-import { initChiTietPage } from "./chitiet.js"; // (THÊM) Import file chi tiết
-import { initCartDetailPage } from './cart-page.js';
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
-  home: document.querySelector(".Home"),
   login: document.querySelector(".page-login"),
   register: document.querySelector(".page-register"),
-  thanhtoan: document.querySelector(".payment-section"),
-  chitiet: document.querySelector(".product-section"),
-  profile: document.querySelector(".page-profile"),
-  cartDetailPage: document.getElementById("cartDetailPage")
+  adminPages: document.querySelectorAll(".page-section"),
+  admin: document.querySelector(".page-admin"),
 };
 
 //Ẩn tất cả page
@@ -30,7 +21,8 @@ function hideAll() {
         el.classList.add("hidden");
         el.classList.remove("page-active", "page-active-enter");
       });
-    } else if (page) { // THÊM: Kiểm tra page có tồn tại
+    } else if (page) {
+      // THÊM: Kiểm tra page có tồn tại
       page.classList.add("hidden");
       page.classList.remove("page-active", "page-active-enter");
     }
@@ -41,12 +33,37 @@ function hideAll() {
 function showPage() {
   const key = location.hash.replace("#", "") || "home";
   const subPage = document.querySelector(`#${key}`);
-  const isAdminSubPage = subPage?.closest(".admin");
-  const page = pages[key] || pages.home;
+  const isAdminSubPage = subPage?.closest(".container-admin");
+  const page = pages[key];
 
   hideAll();
+
+  if (subPage && isAdminSubPage) {
+    pages.admin.classList.remove("hidden");
+    subPage.classList.remove("hidden", "page-active-enter");
+    subPage.classList.add("page-active");
+    requestAnimationFrame(() => {
+      subPage.classList.add("page-active-enter");
+    });
+
+    // Load dữ liệu khi trang con admin được hiển thị
+    setTimeout(() => {
+      if (subPage.id === "ds_khachHang") {
+        console.log("Đang load danh sách khách hàng...");
+        loadCustomerList();
+        setupCustomerSearch();
+      } 
+      if (subPage.id === "ds_donHang") {
+        // loadOrderList(); // Nếu có
+      }
+      if (subPage.id === "thongKe") {
+        console.log("Loading statistics data...");
+        seedOrderData();
+        loadStatistics();
+      }
+    }, 100);
+  } else {
     // XỬ LÝ CÁC PAGE THÔNG THƯỜNG
-    document.body.classList.remove("no-header-footer");
     if (!page) {
       console.log("Không tìm thấy page");
       return;
@@ -59,20 +76,8 @@ function showPage() {
     requestAnimationFrame(() => {
       page.classList.add("page-active-enter"); // opacity: 1
     });
-
-    // Gọi hàm khởi tạo của trang profile
-    if (key === "profile") {
-        initProfilePage();
-    }
-    // (THÊM) Gọi hàm khởi tạo của trang chi tiết
-    if (key === "chitiet") {
-        initChiTietPage();
-    }
-
-    if(key == "cartDetailPage"){
-      initCartDetailPage();
-    }
   }
+}
 
 //Quay lại/Tiến tới page
 window.addEventListener("hashchange", () => {
@@ -82,7 +87,11 @@ window.addEventListener("hashchange", () => {
 
 //Load trang
 window.addEventListener("load", () => {
-  const hash = location.hash || "home";
-  console.log("hash hiện tại là ", hash);
+  const isAdminLogged = localStorage.getItem("adminLogged") === "true";
+  if (isAdminLogged) {
+    location.hash = "home";
+  } else {
+    location.hash = "login";
+  }
   showPage();
 });

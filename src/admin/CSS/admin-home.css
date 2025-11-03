@@ -104,7 +104,7 @@
 
 
 /* 3. Style riêng cho trang chủ (căn giữa nội dung) */
-#home-admin      {
+#home    {
     height: 100%;
     display: flex;
     align-items: center;
@@ -114,12 +114,12 @@
 }
 
 /* Style cho H1, H2 của trang chủ */
-#home-admin h1 {
+#home h1 {
     font-size: 32px;
     margin-bottom: 10px;
 }
 
-#home-admin  h2 {
+#home  h2 {
     font-size: 20px;
     color: #444;
 }
