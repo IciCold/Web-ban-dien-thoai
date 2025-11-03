@@ -182,7 +182,6 @@ export function displayProducts(list) {
       <img src="${product.img}" alt="${product.name}">
       <div class="product-name">${product.name}</div>
       <div class="product-price">${product.price.toLocaleString()} VND</div>
-      <button class="buy-btn">Mua ngay</button>
     `;
     productsGrid.appendChild(card);
   });
