@@ -87,13 +87,14 @@ let currentPage = 1; // Trang hiện tại
 let currentFilteredList = []; // Danh sách đã lọc
 
 if (logo) {
-  if (location.hash !== "home") {
-    location.hash = "home";
-  } 
+  logo.addEventListener("click", () => {
+    if (location.hash !== "home") {
+      location.hash = "home";
+    }
     logo.addEventListener("click", (e) => {
       location.reload();
     });
-  
+  });
 }
 
 // Hàm reset về trang 1 (để LocSanPham.js gọi)
