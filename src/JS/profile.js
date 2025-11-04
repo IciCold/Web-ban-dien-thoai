@@ -1,14 +1,19 @@
-// (SỬA) Gói toàn bộ code vào một hàm export
+// ===================================
+// --- (MỚI) IMPORT HÀM ĐỌC/GHI ---
+// ===================================
+import { docdulieuLocalStorage, ghidulieuLocalStorage } from './readandwrite.js';
+
+
 export function initProfilePage() {
     
     // ===================================
     // --- (SỬA LỖI) HÀNG RÀO BẢO VỆ ---
     // ===================================
-    // Kiểm tra đăng nhập ngay lập tức khi vào trang profile
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (!currentUser) {
-        // Nếu KHÔNG đăng nhập, lập tức chuyển về trang chủ
-        // và DỪNG thực thi tất cả code của trang profile.
+    // (SỬA) Sử dụng helper để đọc currentUser
+    const currentUser = docdulieuLocalStorage("currentUser"); //
+    
+    // (SỬA) Kiểm tra nếu currentUser là mảng rỗng [] (tức là không tìm thấy)
+    if (Array.isArray(currentUser) && currentUser.length === 0) {
         location.hash = "home";
         return; 
     }
@@ -19,6 +24,7 @@ export function initProfilePage() {
 
     // ===================================
     // --- KHAI BÁO BIẾN ---
+    // (Giữ nguyên như file gốc)
     // ===================================
 
     // --- Sidebar & Views ---
@@ -36,15 +42,11 @@ export function initProfilePage() {
     const btnSelectImage = document.querySelector(".btn-select-image");
     const avatarContainer = document.querySelector(".avatar-upload-container");
     const avatarPlaceholder = document.querySelector(".avatar-placeholder");
-    
-    // Lấy cả thẻ ảnh và icon
     const sidebarAvatar = document.querySelector(".sidebar-avatar-img"); 
     const sidebarAvatarIcon = document.getElementById("sidebar-avatar-icon-default");
-    
-    // (SỬA LỖI) Lấy thêm thẻ span tên ở sidebar
     const sidebarNameSpan = document.querySelector(".profile-sidebar-user .user-Name");
 
-    let pendingAvatarUrl = null; // Biến tạm để giữ ảnh chờ lưu
+    let pendingAvatarUrl = null; 
 
     // --- Trang Ngân Hàng ---
     const bankingEmpty = document.getElementById("banking-empty");
@@ -74,6 +76,7 @@ export function initProfilePage() {
 
     // ===================================
     // --- CÁC HÀM CHUNG ---
+    // (Giữ nguyên như file gốc)
     // ===================================
 
     function showView(viewToShow, activeLink = null) {
@@ -107,64 +110,59 @@ export function initProfilePage() {
     // --- QUY TRÌNH HỒ SƠ (PROFILE) ---
     // ===================================
 
-    // --- 1. Tải dữ liệu Hồ Sơ ---
+    // --- 1. Tải dữ liệu Hồ Sơ (ĐÃ SỬA) ---
     function loadProfileData() {
         try {
-            // (SỬA LỖI) Lấy thông tin TỪ "currentUser"
             // (currentUser đã được khai báo ở guard clause bên trên)
             const loginUsername = currentUser.userName;
             const loginEmail = currentUser.email;
 
-            // (SỬA LỖI) Điền thông tin đăng nhập vào form
+            // Điền thông tin đăng nhập
             if (loginUsername) {
-                // (SỬA LỖI) Dùng id "profile-username"
                 const usernameInput = document.getElementById("profile-username");
                 if (usernameInput) usernameInput.value = loginUsername;
-                
-                // (SỬA LỖI) Cập nhật tên ở sidebar
                 if (sidebarNameSpan) sidebarNameSpan.textContent = loginUsername;
             }
             if (loginEmail) {
-                // (SỬA LỖI) Dùng id "profile-email"
                 const emailInput = document.getElementById("profile-email");
                 if (emailInput) emailInput.value = loginEmail;
             }
 
-            // Lấy các thông tin đã lưu khác (Tên, SĐT,...)
-            const savedName = localStorage.getItem("userFullName");
-            const savedPhone = localStorage.getItem("userPhone");
-            const savedBirthday = localStorage.getItem("userBirthday");
-            const savedGender = localStorage.getItem("userGender");
-            const savedAvatarUrl = localStorage.getItem("userAvatarUrl"); 
-
-            // Điền các thông tin hồ sơ khác (giữ nguyên)
-            if (savedName) document.getElementById("fullname").value = savedName;
-            if (savedPhone) document.getElementById("phone").value = savedPhone;
-            if (savedBirthday) document.getElementById("birthday").value = savedBirthday;
-            if (savedGender) {
-                const genderInput = document.querySelector(`input[name="gender"][value="${savedGender}"]`);
+            // (SỬA) Lấy thông tin TỪ OBJECT CURRENTUSER
+            // Dùng "|| ''" để tránh hiển thị "undefined" nếu user mới đăng ký
+            if (document.getElementById("fullname")) {
+              document.getElementById("fullname").value = currentUser.fullName || '';
+            }
+            if (document.getElementById("phone")) {
+              document.getElementById("phone").value = currentUser.phone || '';
+            }
+            if (document.getElementById("birthday")) {
+              document.getElementById("birthday").value = currentUser.birthday || '';
+            }
+            
+            if (currentUser.gender) {
+                const genderInput = document.querySelector(`input[name="gender"][value="${currentUser.gender}"]`);
                 if (genderInput) genderInput.checked = true;
             }
 
-            // Hiển thị ảnh đại diện đã lưu (nếu có)
-            if (savedAvatarUrl) {
+            // (SỬA) Hiển thị ảnh đại diện (đọc từ currentUser.avatarUrl)
+            if (currentUser.avatarUrl) { 
                 if (avatarPlaceholder) {
-                    avatarPlaceholder.innerHTML = `<img src="${savedAvatarUrl}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+                    avatarPlaceholder.innerHTML = `<img src="${currentUser.avatarUrl}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
                 }
                 if (sidebarAvatar) {
-                    sidebarAvatar.src = savedAvatarUrl;
-                    sidebarAvatar.style.display = 'block'; // Hiện ảnh
+                    sidebarAvatar.src = currentUser.avatarUrl;
+                    sidebarAvatar.style.display = 'block'; 
                 }
                 if (sidebarAvatarIcon) {
-                    sidebarAvatarIcon.style.display = 'none'; // Ẩn icon
+                    sidebarAvatarIcon.style.display = 'none'; 
                 }
             } else {
-                // Không có ảnh, hiển thị icon
                 if (sidebarAvatar) {
-                    sidebarAvatar.style.display = 'none'; // Ẩn ảnh
+                    sidebarAvatar.style.display = 'none'; 
                 }
                 if (sidebarAvatarIcon) {
-                    sidebarAvatarIcon.style.display = 'block'; // Hiện icon
+                    sidebarAvatarIcon.style.display = 'block'; 
                 }
             }
         } catch (error) {
@@ -172,43 +170,71 @@ export function initProfilePage() {
         }
     }
 
-    // --- 2. Xử lý Nút "Lưu" Hồ Sơ ---
+    // --- 2. Xử lý Nút "Lưu" Hồ Sơ (ĐÃ SỬA) ---
     if (profileForm) {
         profileForm.addEventListener("submit", (e) => {
             e.preventDefault(); 
             
-            // Lấy dữ liệu text
+            // 1. Lấy dữ liệu text từ form
             const fullName = document.getElementById("fullname").value;
             const phone = document.getElementById("phone").value;
             const birthday = document.getElementById("birthday").value;
             const gender = document.querySelector('input[name="gender"]:checked').value;
 
-            // Lưu dữ liệu text
-            localStorage.setItem("userFullName", fullName);
-            localStorage.setItem("userPhone", phone);
-            localStorage.setItem("userBirthday", birthday);
-            localStorage.setItem("userGender", gender);
+            // 2. (SỬA) Lấy mảng 'users' bằng helper
+            let users = docdulieuLocalStorage("users"); //
+
+            // 3. Tìm index của user hiện tại
+            const userIndex = users.findIndex(user => user.userName === currentUser.userName);
+
+            // 4. Cập nhật object 'currentUser'
+            currentUser.fullName = fullName;
+            currentUser.phone = phone;
+            currentUser.birthday = birthday;
+            currentUser.gender = gender;
             
-            // Kiểm tra và lưu ảnh đại diện nếu có
+            // 5. Cập nhật user trong mảng 'users'
+            if (userIndex > -1) {
+                users[userIndex].fullName = fullName;
+                users[userIndex].phone = phone;
+                users[userIndex].birthday = birthday;
+                users[userIndex].gender = gender;
+            }
+            
+            // 6. Kiểm tra và lưu ảnh đại diện (nếu có)
             if (pendingAvatarUrl) {
-                localStorage.setItem("userAvatarUrl", pendingAvatarUrl);
+                currentUser.avatarUrl = pendingAvatarUrl; 
+                if (userIndex > -1) {
+                    users[userIndex].avatarUrl = pendingAvatarUrl;
+                }
                 
                 if (sidebarAvatar) {
                     sidebarAvatar.src = pendingAvatarUrl;
-                    sidebarAvatar.style.display = 'block'; // Hiện ảnh
+                    sidebarAvatar.style.display = 'block'; 
                 }
                 if (sidebarAvatarIcon) {
-                    sidebarAvatarIcon.style.display = 'none'; // Ẩn icon
+                    sidebarAvatarIcon.style.display = 'none'; 
                 }
-                
                 pendingAvatarUrl = null;
             }
+            
+            // 7. (SỬA) LƯU CẢ 2 KEY TRỞ LẠI LOCALSTORAGE BẰNG HELPER
+            ghidulieuLocalStorage("currentUser", currentUser); //
+            ghidulieuLocalStorage("users", users); //
+
+            // Xóa các key localStorage cũ (nếu có)
+            localStorage.removeItem("userFullName");
+            localStorage.removeItem("userPhone");
+            localStorage.removeItem("userBirthday");
+            localStorage.removeItem("userGender");
+            localStorage.removeItem("userAvatarUrl");
             
             alert("Đã lưu thông tin hồ sơ thành công!");
         });
     }
 
     // --- 3. Xử lý Nút "Chọn Ảnh" ---
+    // (Giữ nguyên như file gốc)
     let hiddenFileInput;
     if (avatarContainer) {
         hiddenFileInput = document.createElement("input");
@@ -233,7 +259,6 @@ export function initProfilePage() {
                 const reader = new FileReader();
                 reader.onload = (event) => {
                     const imageUrl = event.target.result;
-                    
                     pendingAvatarUrl = imageUrl;
                     if (avatarPlaceholder) {
                         avatarPlaceholder.innerHTML = `<img src="${imageUrl}" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
@@ -246,11 +271,13 @@ export function initProfilePage() {
 
     // ===================================
     // --- QUY TRÌNH NGÂN HÀNG (BANKING) ---
+    // (ĐÃ SỬA)
     // ===================================
 
     // --- 1. Hiển thị danh sách Ngân Hàng ---
     function renderBankingList() {
-        const bankListData = JSON.parse(localStorage.getItem("userBankingList") || "[]");
+        // (SỬA) Dùng helper
+        const bankListData = docdulieuLocalStorage("userBankingList"); //
 
         if (bankListData.length === 0) {
             if (bankingEmpty) bankingEmpty.style.display = "flex";
@@ -260,15 +287,13 @@ export function initProfilePage() {
 
         if (bankingEmpty) bankingEmpty.style.display = "none";
         if (bankingList) bankingList.style.display = "flex";
-        
         bankingList.innerHTML = ""; 
         
         bankListData.forEach(bank => {
             const bankCard = document.createElement("div");
             bankCard.className = "bank-card";
             bankCard.dataset.id = bank.account; 
-
-            const maskedAccount = `**** **** **** ${bank.account.slice(-4)}`;
+            const maskedAccount = `**** **** **** ${bank.account.slice(-3)}`; // Sửa thành -3
             const defaultTag = bank.isDefault ? '<span class="bank-card-default">Mặc định</span>' : '';
 
             bankCard.innerHTML = `
@@ -296,17 +321,16 @@ export function initProfilePage() {
             const bankHolderName = addBankForm.querySelector("#bank-holder-name").value;
             const isDefault = addBankForm.querySelector("#bank-default").checked;
 
-            const bankListData = JSON.parse(localStorage.getItem("userBankingList") || "[]");
+            // (SỬA) Dùng helper
+            const bankListData = docdulieuLocalStorage("userBankingList"); //
 
             if (bankListData.some(bank => bank.account === bankAccount)) {
                 alert("Số tài khoản này đã tồn tại!");
                 return;
             }
-
             if (isDefault) {
                 bankListData.forEach(bank => bank.isDefault = false);
             }
-
             bankListData.push({
                 name: bankName,
                 account: bankAccount,
@@ -314,7 +338,8 @@ export function initProfilePage() {
                 isDefault: isDefault
             });
 
-            localStorage.setItem("userBankingList", JSON.stringify(bankListData));
+            // (SỬA) Dùng helper
+            ghidulieuLocalStorage("userBankingList", bankListData); //
             
             addBankForm.reset();
             cmndForm.reset(); 
@@ -332,16 +357,17 @@ export function initProfilePage() {
                     const card = e.target.closest(".bank-card");
                     const idToDelete = card.dataset.id;
                     
-                    let bankListData = JSON.parse(localStorage.getItem("userBankingList") || "[]");
+                    // (SỬA) Dùng helper
+                    let bankListData = docdulieuLocalStorage("userBankingList"); //
                     const wasDefault = bankListData.find(bank => bank.account === idToDelete)?.isDefault;
-
                     bankListData = bankListData.filter(bank => bank.account !== idToDelete);
 
                     if (wasDefault && bankListData.length > 0) {
                         bankListData[0].isDefault = true;
                     }
 
-                    localStorage.setItem("userBankingList", JSON.stringify(bankListData));
+                    // (SỬA) Dùng helper
+                    ghidulieuLocalStorage("userBankingList", bankListData); //
                     renderBankingList();
                 }
             }
@@ -350,11 +376,13 @@ export function initProfilePage() {
 
     // ===================================
     // --- QUY TRÌNH ĐỊA CHỈ (ADDRESS) ---
+    // (ĐÃ SỬA)
     // ===================================
 
     // --- 1. Hiển thị danh sách Địa Chỉ ---
     function renderAddressList() {
-        const addressListData = JSON.parse(localStorage.getItem("userAddressList") || "[]");
+        // (SỬA) Dùng helper
+        const addressListData = docdulieuLocalStorage("userAddressList"); //
 
         if (addressListData.length === 0) {
             if (addressEmpty) addressEmpty.style.display = "flex";
@@ -364,16 +392,15 @@ export function initProfilePage() {
 
         if (addressEmpty) addressEmpty.style.display = "none";
         if (addressList) addressList.style.display = "flex";
-        
         addressList.innerHTML = ""; 
 
         addressListData.forEach(addr => {
             const addressCard = document.createElement("div");
             addressCard.className = "address-card";
             addressCard.dataset.id = addr.specific;
-
             const defaultTag = addr.isDefault ? '<span class="address-card-default">Mặc định</span>' : '';
 
+            // Bổ sung nội dung HTML đầy đủ vào đây
             addressCard.innerHTML = `
                 <div class="address-card-info">
                     <span class="user-name">${addr.fullName} ${defaultTag}</span>
@@ -393,8 +420,9 @@ export function initProfilePage() {
         addAddressForm.addEventListener("submit", (e) => {
             e.preventDefault();
 
-            const profileFullName = localStorage.getItem("userFullName");
-            const profilePhone = localStorage.getItem("userPhone");
+            // (SỬA) Lấy thông tin từ currentUser thay vì key lẻ
+            const profileFullName = currentUser.fullName;
+            const profilePhone = currentUser.phone;
             
             if (!profileFullName || !profilePhone) {
                 alert("Vui lòng cập nhật Tên và Số điện thoại trong Hồ Sơ của bạn trước khi thêm địa chỉ.");
@@ -404,17 +432,16 @@ export function initProfilePage() {
             const specific = addAddressForm.querySelector("#addr-specific").value;
             const isDefault = addAddressForm.querySelector("#addr-default").checked;
             
-            let addressListData = JSON.parse(localStorage.getItem("userAddressList") || "[]");
+            // (SỬA) Dùng helper
+            let addressListData = docdulieuLocalStorage("userAddressList"); //
 
             if (addressListData.some(addr => addr.specific === specific)) {
                 alert("Địa chỉ này đã tồn tại!");
                 return;
             }
-
             if (isDefault) {
                 addressListData.forEach(addr => addr.isDefault = false);
             }
-
             addressListData.push({
                 fullName: profileFullName,
                 phone: profilePhone,
@@ -422,7 +449,8 @@ export function initProfilePage() {
                 isDefault: isDefault
             });
 
-            localStorage.setItem("userAddressList", JSON.stringify(addressListData));
+            // (SỬA) Dùng helper
+            ghidulieuLocalStorage("userAddressList", addressListData); //
             
             addAddressForm.reset();
             alert("Đã thêm địa chỉ mới thành công!");
@@ -439,16 +467,17 @@ export function initProfilePage() {
                     const card = e.target.closest(".address-card");
                     const idToDelete = card.dataset.id;
                     
-                    let addressListData = JSON.parse(localStorage.getItem("userAddressList") || "[]");
+                    // (SỬA) Dùng helper
+                    let addressListData = docdulieuLocalStorage("userAddressList"); //
                     const wasDefault = addressListData.find(addr => addr.specific === idToDelete)?.isDefault;
-                    
                     addressListData = addressListData.filter(addr => addr.specific !== idToDelete);
 
                     if (wasDefault && addressListData.length > 0) {
                         addressListData[0].isDefault = true;
                     }
 
-                    localStorage.setItem("userAddressList", JSON.stringify(addressListData));
+                    // (SỬA) Dùng helper
+                    ghidulieuLocalStorage("userAddressList", addressListData); //
                     renderAddressList();
                 }
             }
@@ -457,13 +486,13 @@ export function initProfilePage() {
 
     // ===================================
     // --- KHỞI TẠO VÀ SỰ KIỆN KHÁC ---
+    // (Giữ nguyên như file gốc)
     // ===================================
 
     // --- Gắn Sự Kiện Cho Sidebar ---
     if(navProfile) navProfile.addEventListener("click", (e) => { 
         e.preventDefault(); 
         showView(profileView, navProfile);
-        // THÊM: Cập nhật hash nhưng không reload page
         history.replaceState(null, '', '#profile');
     });
     if(navBanking) navBanking.addEventListener("click", (e) => { 
@@ -508,27 +537,19 @@ export function initProfilePage() {
 
     // ===================================
     // --- CHẠY LẦN ĐẦU KHI TẢI TRANG ---
+    // (Giữ nguyên như file gốc)
     // ===================================
     
-    loadProfileData();   // Tải thông tin Hồ Sơ và ảnh đại diện
-    renderBankingList(); // Tải và vẽ danh sách Ngân Hàng
-    renderAddressList(); // Tải và vẽ danh sách Địa Chỉ
+    loadProfileData();   
+    renderBankingList(); 
+    renderAddressList(); 
     
-    // THÊM: Kiểm tra hash để hiển thị đúng tab khi load
     const currentHash = location.hash.replace("#", "");
     if (currentHash === "banking") {
         showView(bankingView, navBanking);
     } else if (currentHash === "address") {
         showView(addressView, navAddress);
     } else {
-        showView(profileView, navProfile); // Mặc định hiển thị Hồ Sơ
+        showView(profileView, navProfile); 
     }
-// (SỬA) Xóa dòng "});" ở đây
-
-
-// ===================================
-// --- (SỬA LỖI) ---
-// ĐÃ XÓA BỎ TOÀN BỘ KHỐI CODE LỖI BÊN DƯỚI.
-// (Khối code bắt đầu bằng "const haveUser = ..." và có dấu "}" thừa)
-// ===================================
-} // (SỬA) Dấu '}' này dùng để đóng hàm 'initProfilePage'
+}
