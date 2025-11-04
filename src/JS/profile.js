@@ -187,7 +187,7 @@ export function initProfilePage() {
             // 3. Tìm index của user hiện tại
             const userIndex = users.findIndex(user => user.userName === currentUser.userName);
 
-            // 4. Cập nhật object 'currentUser'
+            // 4. Cập nhật object 'currentUser' (object tự động tạo key mới khi không có sẵn key)
             currentUser.fullName = fullName;
             currentUser.phone = phone;
             currentUser.birthday = birthday;
@@ -543,13 +543,13 @@ export function initProfilePage() {
     loadProfileData();   
     renderBankingList(); 
     renderAddressList(); 
-    
-    const currentHash = location.hash.replace("#", "");
+    window.addEventListener("hashchange", () => {    const currentHash = location.hash.replace("#", "");
     if (currentHash === "banking") {
         showView(bankingView, navBanking);
     } else if (currentHash === "address") {
         showView(addressView, navAddress);
     } else {
         showView(profileView, navProfile); 
-    }
+    }})
+
 }

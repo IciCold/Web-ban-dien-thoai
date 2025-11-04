@@ -7,7 +7,7 @@ import "./logout.js";
 import "./cart.js";
 import "./LocSanPham.js";
 import { initProfilePage } from "./profile.js";
-import { initChiTietPage } from "./chitiet.js"; // (THÊM) Import file chi tiết
+import { initChiTietPage } from "./chitiet.js";
 import { initCartDetailPage } from './cart-page.js';
 import { initThanhToanPage } from "./thanhtoan.js"; 
 
@@ -25,13 +25,12 @@ const pages = {
 //Ẩn tất cả page
 function hideAll() {
   Object.values(pages).forEach((page) => {
-    // Nếu là NodeList (nhiều phần tử)
     if (page instanceof NodeList) {
       page.forEach((el) => {
         el.classList.add("hidden");
         el.classList.remove("page-active", "page-active-enter");
       });
-    } else if (page) { // THÊM: Kiểm tra page có tồn tại
+    } else if (page) {
       page.classList.add("hidden");
       page.classList.remove("page-active", "page-active-enter");
     }
@@ -40,47 +39,57 @@ function hideAll() {
 
 //Hiện page
 function showPage() {
-  const key = location.hash.replace("#", "") || "home";
-  const subPage = document.querySelector(`#${key}`);
-  const isAdminSubPage = subPage?.closest(".admin");
+  const fullHash = location.hash.replace("#", "") || "home";
+  
+  // Tách key chính và sub-route (nếu có)
+  // "profile", "banking", "address" đều thuộc page profile
+  const key = getMainPageKey(fullHash);
   const page = pages[key] || pages.home;
 
   hideAll();
-    // XỬ LÝ CÁC PAGE THÔNG THƯỜNG
-    document.body.classList.remove("no-header-footer");
-    if (!page) {
-      console.log("Không tìm thấy page");
-      return;
-    }
-    page.classList.remove("hidden", "page-active-enter");
-    // Bắt đầu hiệu ứng fade-in
-    page.classList.add("page-active"); // opacity: 0
-
-    // Chờ 1 frame để trình duyệt áp dụng CSS transition
-    requestAnimationFrame(() => {
-      page.classList.add("page-active-enter"); // opacity: 1
-    });
-
-    // Gọi hàm khởi tạo của trang profile
-    if (key === "profile") {
-        initProfilePage();
-    }
-    // (THÊM) Gọi hàm khởi tạo của trang chi tiết
-    if (key === "chitiet") {
-        initChiTietPage();
-    }
-
-    if(key === "cartDetailPage"){
-      initCartDetailPage();
-    }
-    if(key==="thanhtoan"){
-      initThanhToanPage();
-    }
+  
+  if (!page) {
+    console.log("Không tìm thấy page");
+    return;
   }
+  
+  page.classList.remove("hidden", "page-active-enter");
+  page.classList.add("page-active");
+
+  requestAnimationFrame(() => {
+    page.classList.add("page-active-enter");
+  });
+
+  // Gọi hàm khởi tạo của trang tương ứng
+  if (key === "profile") {
+    initProfilePage();
+  } else if (key === "chitiet") {
+    initChiTietPage();
+  } else if (key === "cartDetailPage") {
+    initCartDetailPage();
+  } else if (key === "thanhtoan") {
+    initThanhToanPage();
+  }
+}
+
+/**
+ * Xác định page chính từ hash
+ * banking, address -> profile
+ * Các hash khác giữ nguyên
+ */
+function getMainPageKey(hash) {
+  // Danh sách sub-routes của profile
+  const profileSubRoutes = ["banking", "address"];
+  
+  if (profileSubRoutes.includes(hash)) {
+    return "profile";
+  }
+  //nếu không phải banking và address thì chả về hash và được sử dụng ở trên
+  return hash || "home";
+}
 
 //Quay lại/Tiến tới page
 window.addEventListener("hashchange", () => {
-  //khi hash thay đổi thì sẽ hiện page tương ứng với nó
   showPage();
 });
 
