@@ -119,7 +119,7 @@ function renderProductDetails(product) {
     if (color === product.mau_sac) button.classList.add("active");
     colorButtonContainer.appendChild(button);
   });
-
+  
   addVariantListeners();
 }
 
