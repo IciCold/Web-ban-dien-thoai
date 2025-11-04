@@ -24,7 +24,9 @@ function register(email, userName, password) {
     email: email,
     userName: userName,
     password: password,
-    registrationDate: new Date().toLocaleDateString('vi-VN') // THÊM DÒNG NÀY
+    registrationDate: new Date().toLocaleDateString('vi-VN'), // THÊM DÒNG NÀY
+    bankingList: [],
+    addressList: []
   };
   users.push(newUser);
   //lưu lại vào localStorage
