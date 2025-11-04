@@ -135,7 +135,7 @@ function saveOrderAndCheckout() {
   // 3. Tạo đối tượng đơn hàng
   const newOrder = {
       id: 'ORD_' + Date.now(),
-      customer: currentUser.userName,
+      customer: currentUser.fullName,
       customerEmail: currentUser.email,
       products: currentPaymentData.items.map(item => ({ 
           name: item.name,
