@@ -1,55 +1,46 @@
 // File: JS/cart-page.js
 
 // Import các hàm hỗ trợ đã export từ cart.js
-// (Chúng ta sẽ dùng lại các hàm này để đọc/lưu giỏ hàng)
 import {
   getUserCart,
   saveUserCart,
   clearUserCart,
   formatVND,
   isUserLoggedIn,
-  getCurrentUsername // Lấy thêm thông tin user
+  getCurrentUsername 
 } from './cart.js';
+// Import các hàm đọc/ghi từ readandwrite.js
+import { docdulieuLocalStorage, ghidulieuLocalStorage } from './readandwrite.js';
 
 /**
  * Hàm khởi tạo (do router gọi): "Vẽ" (render) toàn bộ trang chi tiết giỏ hàng.
- * Đây là hàm chính của file này.
+ * (Hàm này giữ nguyên)
  */
 export function initCartDetailPage() {
-  // 1. Lấy các phần tử HTML của trang chi tiết
+  // ... (Toàn bộ code từ dòng 20 đến 101 giữ nguyên) ...
   const listContainer = document.getElementById('cart-detail-list');
   const footer = document.getElementById('cart-detail-footer');
   const emptyMsg = document.getElementById('cart-detail-empty');
   const totalAmountEl = document.getElementById('cart-grand-total-amount');
 
-  // 2. Thoát nếu không tìm thấy (ví dụ: đang ở trang chủ)
-  // Điều này đảm bảo code không chạy lỗi khi bạn ở trang khác
   if (!listContainer) return; 
 
-  // 3. Lấy giỏ hàng của user hiện tại
   const cart = getUserCart();
   
-  // 4. Xóa nội dung cũ để chuẩn bị "vẽ" lại
   listContainer.innerHTML = '';
-  let grandTotal = 0; // Đặt tổng tiền về 0
+  let grandTotal = 0; 
 
-  // 5. Kiểm tra giỏ hàng rỗng
   if (cart.length === 0) {
-    // Nếu rỗng: Ẩn footer, hiện thông báo "giỏ hàng trống"
     footer.style.display = 'none';
     emptyMsg.style.display = 'block';
   } else {
-    // Nếu có hàng: Hiện footer, ẩn thông báo "giỏ hàng trống"
     footer.style.display = 'flex';
     emptyMsg.style.display = 'none';
 
-    // 6. Lặp qua từng sản phẩm trong giỏ hàng
     cart.forEach(item => {
-      // Vì giá đã là SỐ, ta có thể tính toán trực tiếp
       const itemTotal = item.price * item.quantity;
-      grandTotal += itemTotal; // Cộng dồn vào tổng tiền
+      grandTotal += itemTotal; 
 
-      // Tạo 1 hàng HTML cho sản phẩm
       const itemHTML = `
         <div class="cart-detail-item" data-id="${item.id}">
           <div class="item-product-info">
@@ -68,32 +59,27 @@ export function initCartDetailPage() {
           </div>
         </div>
       `;
-      // Thêm hàng HTML vào danh sách
       listContainer.innerHTML += itemHTML;
     });
 
-    // 7. Cập nhật tổng tiền cuối cùng
     totalAmountEl.textContent = formatVND(grandTotal);
-
-    // 8. Gắn sự kiện (chức năng "click") cho các nút vừa tạo
     attachCartDetailListeners();
   }
 }
 
 /**
  * Gắn sự kiện cho các nút "+", "-", "Xóa", "Mua ngay" trên trang chi tiết.
+ * (Hàm này giữ nguyên)
  */
 function attachCartDetailListeners() {
-  // Nút tăng/giảm số lượng
+  // ... (Toàn bộ code từ dòng 107 đến 136 giữ nguyên) ...
   document.querySelectorAll('.qty-change-btn').forEach(button => {
-    // Chống gắn sự kiện trùng lặp (kỹ thuật clone/replace)
     button.replaceWith(button.cloneNode(true)); 
   });
   document.querySelectorAll('.qty-change-btn').forEach(button => {
     button.addEventListener('click', handleQuantityChange);
   });
 
-  // Nút xóa
   document.querySelectorAll('.item-delete-btn').forEach(button => {
     button.replaceWith(button.cloneNode(true));
   });
@@ -101,7 +87,6 @@ function attachCartDetailListeners() {
     button.addEventListener('click', handleDeleteItem);
   });
 
-  // Nút Mua Ngay (dưới cùng)
   const checkoutBtn = document.getElementById('cart-checkout-all-btn');
   if (checkoutBtn) {
     checkoutBtn.replaceWith(checkoutBtn.cloneNode(true));
@@ -111,54 +96,54 @@ function attachCartDetailListeners() {
 
 /**
  * Xử lý khi nhấn nút "+" hoặc "-"
+ * (Hàm này giữ nguyên)
  */
 function handleQuantityChange(event) {
+  // ... (Toàn bộ code từ dòng 142 đến 165 giữ nguyên) ...
   const id = event.target.dataset.id;
   const action = event.target.dataset.action;
   
   let cart = getUserCart();
   const itemIndex = cart.findIndex(item => item.id === id);
-  if (itemIndex === -1) return; // Không tìm thấy sản phẩm
+  if (itemIndex === -1) return; 
 
   if (action === 'increase') {
     cart[itemIndex].quantity++;
   } else if (action === 'decrease') {
     cart[itemIndex].quantity--;
     if (cart[itemIndex].quantity === 0) {
-      // Nếu giảm về 0, tự động xóa
       cart.splice(itemIndex, 1);
     }
   }
 
-  saveUserCart(cart); // Lưu giỏ hàng mới
-  initCartDetailPage(); // "Vẽ" lại trang chi tiết
+  saveUserCart(cart); 
+  initCartDetailPage(); 
   
-  // Bắn tín hiệu cho popup (cart.js) biết để cập nhật
   window.dispatchEvent(new Event('cartUpdated'));
 }
 
 /**
  * Xử lý khi nhấn nút "Xóa"
+ * (Hàm này giữ nguyên)
  */
 function handleDeleteItem(event) {
+  // ... (Toàn bộ code từ dòng 171 đến 188 giữ nguyên) ...
   const id = event.target.dataset.id;
   if (!confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')) {
-    return; // User nhấn "Cancel"
+    return; 
   }
 
   let cart = getUserCart();
-  // Tạo giỏ hàng mới không chứa sản phẩm có id này
   const newCart = cart.filter(item => item.id !== id);
 
-  saveUserCart(newCart); // Lưu giỏ hàng mới
-  initCartDetailPage(); // "Vẽ" lại trang chi tiết
+  saveUserCart(newCart); 
+  initCartDetailPage(); 
 
-  // Bắn tín hiệu cho popup (cart.js) biết để cập nhật
   window.dispatchEvent(new Event('cartUpdated'));
 }
 
 /**
- * Xử lý khi nhấn nút "Mua Ngay"
+ * Xử lý khi nhấn nút "Mua Ngay" (ĐÃ CẬP NHẬT)
  */
 function handleCheckout() {
   const cart = getUserCart();
@@ -167,44 +152,32 @@ function handleCheckout() {
     return;
   }
 
-  // Lấy thông tin user
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (!isUserLoggedIn() || !currentUser) {
-      alert("Lỗi: Không tìm thấy thông tin người dùng.");
+  // 1. Kiểm tra đăng nhập
+  const currentUser = docdulieuLocalStorage("currentUser"); // Dùng helper
+  if (!isUserLoggedIn() || Array.isArray(currentUser)) {
+      alert("Bạn cần đăng nhập để thanh toán.");
       location.hash = 'login';
       return;
   }
 
-  // Tạo đơn hàng từ giỏ hàng
-  const newOrder = {
-    id: 'ORD_' + Date.now(),
-    customer: currentUser.userName,
-    customerEmail: currentUser.email,
-    products: cart.map(item => ({
-      name: item.name,
-      price: item.price, // Giá đã là SỐ
-      quantity: item.quantity,
-      image: item.image
-    })),
-    total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-    status: 'pending', // Trạng thái ban đầu: "Chưa giao"
-    date: new Date().toISOString(),
-    paymentMethod: 'Cart Checkout'
+  // 2. Tính tổng tiền
+  const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+  // 3. Tạo đối tượng data để gửi qua trang thanh toán
+  const paymentData = {
+    items: cart, 
+    total: total,
+    type: 'cart' 
   };
 
-  // Lưu đơn hàng
-  const orders = JSON.parse(localStorage.getItem('orders')) || [];
-  orders.push(newOrder);
-  localStorage.setItem('orders', JSON.stringify(orders));
+  // 4. Lưu vào localStorage (dùng làm cầu nối)
+  ghidulieuLocalStorage('paymentData', paymentData); // Dùng helper
 
-  // Xóa giỏ hàng
-  clearUserCart();
+  // 5. Chuyển sang trang thanh toán
+  location.hash = 'thanhtoan';
   
-  
-  // Cập nhật lại giao diện (cả popup và trang chi tiết)
-  initCartDetailPage(); // "Vẽ" lại trang (sẽ thấy giỏ hàng trống)
-  window.dispatchEvent(new Event('cartUpdated')); // Báo cho popup biết
-  
-  // Chuyển về trang chủ
-    location.hash = 'thanhtoan';
+  /* * XÓA BỎ PHẦN TẠO ĐƠN HÀNG TẠI ĐÂY
+   * (Phần này đã được chuyển qua cart-page.js ở logic cũ,
+   * nay chuyển qua thanhtoan.js)
+  */
 }

@@ -9,6 +9,7 @@ import "./LocSanPham.js";
 import { initProfilePage } from "./profile.js";
 import { initChiTietPage } from "./chitiet.js"; // (THÊM) Import file chi tiết
 import { initCartDetailPage } from './cart-page.js';
+import { initThanhToanPage } from "./thanhtoan.js"; 
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
@@ -69,8 +70,11 @@ function showPage() {
         initChiTietPage();
     }
 
-    if(key == "cartDetailPage"){
+    if(key === "cartDetailPage"){
       initCartDetailPage();
+    }
+    if(key==="thanhtoan"){
+      initThanhToanPage();
     }
   }
 

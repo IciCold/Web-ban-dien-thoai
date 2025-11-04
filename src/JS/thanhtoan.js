@@ -1,482 +1,272 @@
-const paymentSection = document.getElementById('paymentSection');
+// ===============================================
+// File: thanhtoan.js (ĐÃ CẤU TRÚC LẠI HOÀN TOÀN)
+// ===============================================
 
-const productPriceElement = document.querySelector('.product-price'); 
-const totalAmountSpan = document.querySelector('.total-amount');     
+// --- Import các hàm cần thiết ---
+import { clearUserCart } from './cart.js'; 
+import { docdulieuLocalStorage, ghidulieuLocalStorage } from './readandwrite.js';
 
-const colorOptionsContainer = document.getElementById('colorButton');
-const ramOptionsContainer = document.getElementById('ramButton');
-const quantityControl = document.querySelector('.quantity-control');
-const paymentMethodsContainer = document.querySelector('.payment-methods');
+// --- Biến toàn cục để lưu trữ dữ liệu thanh toán ---
+let currentPaymentData = null;
+
+// --- Lấy các phần tử DOM chính ---
+// (Phải lấy lại bên trong hàm init vì DOM có thể chưa sẵn sàng)
+let itemListContainer = null;
+let totalAmountSpan = null;
+let finalBuyButton = null;
+let addressInput = null;
+let paymentMethodsContainer = null;
+let cardInfoBox = null;
+let cardNameInput = null;
+let cardNumberInput = null;
+
+/**
+ * HÀM KHỞI TẠO TRANG THANH TOÁN (Hàm mới)
+ * Được gọi bởi router.js khi hash là #thanhtoan
+ */
+export function initThanhToanPage() {
+  console.log("Khởi tạo trang thanh toán...");
+  
+  // Lấy DOM Elements (lấy tại đây để đảm bảo chúng tồn tại)
+  itemListContainer = document.getElementById('payment-item-list');
+  totalAmountSpan = document.querySelector('.payment-form .total-amount');
+  finalBuyButton = document.querySelector('.buy-now-button-large');
+  addressInput = document.getElementById('delivery-address');
+  paymentMethodsContainer = document.querySelector('.payment-methods');
+  cardInfoBox = document.querySelector('.info');
+  cardNameInput = document.getElementById('card-name');
+  cardNumberInput = document.getElementById('card-number');
+
+  // 1. Lấy dữ liệu từ localStorage
+  const data = docdulieuLocalStorage('paymentData'); // Dùng helper
+  
+  // 2. Kiểm tra dữ liệu
+  // (Nếu data là [] (do hàm docdulieu) hoặc không có items)
+  if (!data || Array.isArray(data) || !data.items || data.items.length === 0) {
+    alert("Lỗi: Không tìm thấy dữ liệu thanh toán. Quay về trang chủ.");
+    location.hash = 'home';
+    return;
+  }
+  
+  // 3. Xóa ngay lập tức để tránh lỗi khi tải lại trang
+  ghidulieuLocalStorage('paymentData', []); // Ghi mảng rỗng
+  
+  // 4. Parse data và lưu vào biến toàn cục
+  currentPaymentData = data;
+  
+  // 5. "Vẽ" lại giao diện (Render)
+  if (!itemListContainer || !totalAmountSpan) {
+    console.error("Không tìm thấy phần tử DOM của trang thanh toán.");
+    return;
+  }
+
+  // 5a. Xóa item cũ (nếu có)
+  itemListContainer.innerHTML = '';
+
+  // 5b. Thêm item mới
+  currentPaymentData.items.forEach(item => {
+    const itemHTML = `
+      <p class="order-item">
+        ${item.quantity} x ${item.name} 
+        (<span>${formatToVND(item.price)}</span>)
+      </p>
+    `;
+    itemListContainer.innerHTML += itemHTML;
+  });
+
+  // 5c. Cập nhật tổng tiền
+  totalAmountSpan.textContent = formatToVND(currentPaymentData.total);
+
+  // 6. Tự động điền thông tin và gắn sự kiện
+  autoFillUserInfo();
+  setupPaymentMethodToggle();
+  setupBuyNowButton(); // Gắn sự kiện nút Mua Ngay
+}
+
+/**
+ * Gắn sự kiện cho nút Mua Ngay
+ */
+function setupBuyNowButton() {
+  if (finalBuyButton) {
+    // Dùng replaceWith để xóa các listener cũ (nếu có) và gắn listener mới
+    const newButton = finalBuyButton.cloneNode(true);
+    finalBuyButton.parentNode.replaceChild(newButton, finalBuyButton);
+    
+    newButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        saveOrderAndCheckout();
+    });
+  }
+}
+
+
+/**
+ * HÀM LƯU ĐƠN HÀNG (Sửa lại)
+ * Được gọi khi nhấn nút Mua Ngay
+ */
+function saveOrderAndCheckout() {
+  const currentUser = getCurrentUser(); // Dùng helper đã sửa
+  if (!currentUser) {
+    alert('Vui lòng đăng nhập để mua hàng');
+    location.hash = 'login';
+    return;
+  }
+  
+  // 1. Kiểm tra dữ liệu thanh toán
+  if (!currentPaymentData || !currentPaymentData.items || currentPaymentData.items.length === 0) {
+       alert('Lỗi: Không có sản phẩm nào để thanh toán.');
+       return;
+  }
+
+  // 2. Lấy thông tin từ Form
+  const selectedPaymentBtn = document.querySelector('.payment-button.active');
+  if (!selectedPaymentBtn) {
+      alert('Vui lòng chọn phương thức thanh toán!');
+      return;
+  }
+  const selectedPayment = selectedPaymentBtn.textContent.trim();
+  const deliveryAddress = addressInput.value.trim();
+
+  if (!deliveryAddress) {
+      alert('Vui lòng nhập địa chỉ giao hàng!');
+      addressInput.focus();
+      return;
+  }
+  
+  // 3. Tạo đối tượng đơn hàng
+  const newOrder = {
+      id: 'ORD_' + Date.now(),
+      customer: currentUser.userName,
+      customerEmail: currentUser.email,
+      products: currentPaymentData.items.map(item => ({ 
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.image || '' 
+      })),
+      total: currentPaymentData.total,
+      status: 'pending', 
+      date: new Date().toISOString(),
+      paymentMethod: selectedPayment,
+      deliveryAddress: deliveryAddress
+  };
+
+  // 4. Lưu đơn hàng vào localStorage
+  const orders = docdulieuLocalStorage('orders'); // Dùng helper
+  orders.push(newOrder);
+  ghidulieuLocalStorage('orders', orders); // Dùng helper
+
+  // 5. Xử lý sau khi thanh toán
+  
+  // 5a. Nếu là mua từ giỏ hàng, thì XÓA giỏ hàng
+  if (currentPaymentData.type === 'cart') {
+      clearUserCart(); // <-- Gọi hàm đã import (và đã được sửa)
+      window.dispatchEvent(new Event('cartUpdated')); 
+  }
+
+  // 6. Thông báo và chuyển trang
+  alert(`✅ THANH TOÁN THÀNH CÔNG!\n
+📦 Mã đơn hàng: ${newOrder.id}
+💰 Tổng tiền: ${formatToVND(newOrder.total)}
+🏠 Địa chỉ giao: ${newOrder.deliveryAddress}\n
+Cảm ơn bạn đã mua hàng!`);
+  
+  currentPaymentData = null;
+  location.hash = 'home';
+}
+
+// ===============================================
+// CÁC HÀM TIỆN ÍCH (Đã cập nhật)
+// ===============================================
 
 function formatToVND(number) {
-    return number.toLocaleString('vi-VN') + ' VND';
+  if (typeof number !== 'number') number = 0;
+  return number.toLocaleString('vi-VN') + ' VND';
 }
 
-function parseVNDPrice(priceText) {
-    if (!priceText) return 0;
-    const numericString = priceText.replace(' VND', '').replace(/\./g, '').trim();
-    return parseInt(numericString) || 0;
-}
-
-const BASE_PRICE = parseVNDPrice(productPriceElement ? productPriceElement.textContent : '0 VND');
-
-function updateTotalPrice() {
-    if (quantityControl && totalAmountSpan) {
-        const quantityInput = quantityControl.querySelector('.qty-input');
-        const quantity = parseInt(quantityInput.value) || 1;
-        const newTotal = BASE_PRICE * quantity;
-        totalAmountSpan.textContent = formatToVND(newTotal);
-    }
-}
-
-function handleOptionSelection(container, buttonClass) {
-    return function(event) {
-        const clickedButton = event.target;
-        if (!clickedButton.classList.contains(buttonClass)) {
-            return; 
-        }
-        
-        const currentActive = container.querySelector(`.${buttonClass}.active`);
-        if (currentActive) {
-            currentActive.classList.remove('active');
-        }
-        
-        clickedButton.classList.add('active');
-    };
-}
-
-// Thêm sự kiện chỉ khi elements tồn tại
-if (ramOptionsContainer) {
-    ramOptionsContainer.addEventListener('click', handleOptionSelection(ramOptionsContainer, 'option-button'));
-}
-if (colorOptionsContainer) {
-    colorOptionsContainer.addEventListener('click', handleOptionSelection(colorOptionsContainer, 'color-option'));
-}
-if (paymentMethodsContainer) {
-    paymentMethodsContainer.addEventListener('click', handleOptionSelection(paymentMethodsContainer, 'payment-button'));
-}
-
-// Thêm kiểm tra tồn tại cho quantity control
-if (quantityControl) {
-    const decrementButton = quantityControl.querySelector('.qty-button:first-child'); 
-    const incrementButton = quantityControl.querySelector('.qty-button:last-child');  
-    const quantityInput = quantityControl.querySelector('.qty-input');                 
-    const MIN_VALUE = parseInt(quantityInput?.getAttribute('min')) || 1;
-
-    function incrementQuantity() {
-        if (!quantityInput) return;
-        let currentValue = parseInt(quantityInput.value) || 1;
-        quantityInput.value = currentValue + 1;
-        updateTotalPrice();
-    }
-
-    function decrementQuantity() {
-        if (!quantityInput) return;
-        let currentValue = parseInt(quantityInput.value) || 1;
-        if (currentValue > MIN_VALUE) {
-            quantityInput.value = currentValue - 1;
-            updateTotalPrice(); 
-        }
-    }
-
-    if (decrementButton) {
-        decrementButton.addEventListener('click', decrementQuantity);
-    }
-    if (incrementButton) {
-        incrementButton.addEventListener('click', incrementQuantity);
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const setDefaults = (container, buttonClass) => {
-        if (!container) return;
-        const firstButton = container.querySelector(`.${buttonClass}:first-child`);
-        if (firstButton && !container.querySelector(`.${buttonClass}.active`)) {
-            firstButton.classList.add('active');
-        }
-    };
-
-    if (ramOptionsContainer) setDefaults(ramOptionsContainer, 'option-button');
-    if (colorOptionsContainer) setDefaults(colorOptionsContainer, 'color-option');
-    if (paymentMethodsContainer) setDefaults(paymentMethodsContainer, 'payment-button');
-    updateTotalPrice();
-});
-
-// ==================== CÁC HÀM QUAN TRỌNG CHO HỆ THỐNG ====================
-
-// Hàm lấy username hiện tại
-function getCurrentUsername() {
-    try {
-        const user = JSON.parse(localStorage.getItem("currentUser"));
-        return user ? user.userName : null;
-    } catch (error) {
-        console.error('Lỗi khi lấy thông tin user:', error);
-        return null;
-    }
-}
-
-// Hàm lấy thông tin user hiện tại
 function getCurrentUser() {
     try {
-        const user = localStorage.getItem("currentUser");
-        return user ? JSON.parse(user) : null;
+        const user = docdulieuLocalStorage("currentUser"); // Dùng helper
+        // Nếu không tìm thấy, helper trả về [], ta trả về null
+        if (Array.isArray(user) && user.length === 0) {
+            return null; 
+        }
+        return user; // Trả về object user
     } catch (error) {
         console.error('Lỗi khi lấy thông tin user:', error);
         return null;
     }
 }
 
-// Hàm lưu đơn hàng - ĐÃ SỬA QUAN TRỌNG
-function saveOrder() {
-    const currentUser = getCurrentUser();
-    if (!currentUser) {
-        alert('Vui lòng đăng nhập để mua hàng');
-        location.hash = 'login';
-        return null;
-    }
+// Hàm gộp lại logic tự động điền thông tin
+function autoFillUserInfo() {
+  const currentUser = getCurrentUser();
+  if (!currentUser) return;
 
-    try {
-        // Lấy thông tin sản phẩm từ trang thanh toán
-        const productName = document.querySelector('.product-title')?.textContent?.trim() || 'Sản phẩm không xác định';
-        const productPrice = parseVNDPrice(document.querySelector('.product-price')?.textContent || '0 VND');
-        const quantity = parseInt(document.querySelector('.qty-input')?.value || 1);
-        
-        // Lấy thông tin tùy chọn
-        const selectedColor = document.querySelector('.color-option.active')?.style?.backgroundColor || 'Mặc định';
-        const selectedRAM = document.querySelector('.option-button.active')?.textContent || '128GB';
-        const selectedPayment = document.querySelector('.payment-button.active')?.textContent || 'Cash';
-        const deliveryAddress = document.getElementById('delivery-address')?.value || 'Chưa có địa chỉ';
-        
-        // Tạo đơn hàng mới
-        const newOrder = {
-            id: 'ORD_' + Date.now(),
-            customer: currentUser.userName,
-            customerEmail: currentUser.email,
-            products: [
-                {
-                    name: productName,
-                    price: productPrice,
-                    quantity: quantity,
-                    color: selectedColor,
-                    ram: selectedRAM
-                }
-            ],
-            total: productPrice * quantity,
-            status: 'completed',
-            date: new Date().toISOString(),
-            paymentMethod: selectedPayment,
-            deliveryAddress: deliveryAddress
-        };
-
-        // Lấy danh sách đơn hàng cũ và thêm đơn hàng mới
-        const orders = JSON.parse(localStorage.getItem('orders')) || [];
-        orders.push(newOrder);
-        localStorage.setItem('orders', JSON.stringify(orders));
-
-        console.log('Đã lưu đơn hàng:', newOrder);
-        return newOrder;
-        
-    } catch (error) {
-        console.error('Lỗi khi lưu đơn hàng:', error);
-        alert('Có lỗi xảy ra khi lưu đơn hàng. Vui lòng thử lại.');
-        return null;
-    }
-}
-
-// Hàm xóa giỏ hàng sau khi thanh toán
-function clearUserCart() {
-    try {
-        const username = getCurrentUsername();
-        if (username) {
-            const cartKey = 'cart_' + username;
-            localStorage.removeItem(cartKey);
-            console.log('Đã xóa giỏ hàng của user:', username);
-            
-            // Cập nhật UI giỏ hàng nếu có
-            const cartEmptyMsg = document.getElementById('cart-empty-msg');
-            const cartItemsList = document.getElementById('cart-items-list');
-            if (cartEmptyMsg && cartItemsList) {
-                cartItemsList.innerHTML = '';
-                cartEmptyMsg.style.display = 'block';
-            }
-        }
-    } catch (error) {
-        console.error('Lỗi khi xóa giỏ hàng:', error);
-    }
-}
-
-// Hàm kiểm tra và tạo dữ liệu mẫu nếu cần
-function initializeOrderData() {
-    try {
-        if (!localStorage.getItem('orders')) {
-            const sampleOrders = [
-                {
-                    id: 'ORD_SAMPLE_001',
-                    customer: 'Nguyễn Văn A',
-                    customerEmail: 'nguyenvana@example.com',
-                    products: [
-                        { 
-                            name: 'iPhone 15', 
-                            price: 25000000, 
-                            quantity: 1, 
-                            color: 'rgb(255, 0, 0)', 
-                            ram: '128GB' 
-                        }
-                    ],
-                    total: 25000000,
-                    status: 'completed',
-                    date: new Date('2024-01-15').toISOString(),
-                    paymentMethod: 'Cash',
-                    deliveryAddress: 'Hà Nội',
-                    isSample: true
-                }
-            ];
-            localStorage.setItem('orders', JSON.stringify(sampleOrders));
-            console.log('Đã tạo dữ liệu đơn hàng mẫu!');
-        }
-    } catch (error) {
-        console.error('Lỗi khi khởi tạo dữ liệu đơn hàng:', error);
-    }
-}
-
-// Khởi tạo dữ liệu khi trang thanh toán được load
-if (paymentSection) {
-    initializeOrderData();
-}
-
-// ==================== SỰ KIỆN NÚT MUA NGAY - ĐÃ CẢI THIỆN ====================
-
-const finalBuyButton = document.querySelector('.buy-now-button-large');
-if (finalBuyButton) {
-    finalBuyButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        // Kiểm tra đăng nhập
-        const currentUser = getCurrentUser();
-        if (!currentUser) {
-            alert('Vui lòng đăng nhập để mua hàng');
-            location.hash = 'login';
-            return;
-        }
-
-        // Kiểm tra phương thức thanh toán
-        const selectedPayment = document.querySelector('.payment-button.active');
-        if (!selectedPayment) {
-            alert('Vui lòng chọn phương thức thanh toán!');
-            return;
-        }
-
-        // Kiểm tra địa chỉ giao hàng
-        const deliveryAddress = document.getElementById('delivery-address');
-        if (!deliveryAddress || !deliveryAddress.value.trim()) {
-            alert('Vui lòng nhập địa chỉ giao hàng!');
-            if (deliveryAddress) deliveryAddress.focus();
-            return;
-        }
-
-        // Kiểm tra số lượng
-        const quantityInput = document.querySelector('.qty-input');
-        const quantity = parseInt(quantityInput?.value || 1);
-        if (quantity < 1) {
-            alert('Số lượng sản phẩm không hợp lệ!');
-            return;
-        }
-
-        // Lưu đơn hàng
-        const order = saveOrder();
-        
-        if (order) {
-            const finalPrice = totalAmountSpan ? totalAmountSpan.textContent : 'Tổng cộng';
-            
-            // Thông báo chi tiết hơn
-            alert(`✅ THANH TOÁN THÀNH CÔNG!\n
-📦 Mã đơn hàng: ${order.id}
-💰 Tổng tiền: ${finalPrice}
-💳 Phương thức: ${order.paymentMethod}
-🏠 Địa chỉ giao: ${order.deliveryAddress}
-📧 Email xác nhận: ${order.customerEmail}\n
-Cảm ơn bạn đã mua hàng! Đơn hàng sẽ được xử lý trong 24h.`);
-            
-            // Xóa giỏ hàng sau khi thanh toán
-            clearUserCart();
-            
-            // Chuyển về trang chủ sau 2 giây
-            setTimeout(() => {
-                location.hash = 'home';
-            }, 2000);
-        }
-    });
-}
-
-// ==================== HÀM HỖ TRỢ CHO THỐNG KÊ ====================
-
-// Hàm lấy tổng số đơn hàng (dùng cho thống kê)
-function getTotalOrders() {
-    try {
-        const orders = JSON.parse(localStorage.getItem('orders')) || [];
-        return orders.filter(order => !order.isSample).length;
-    } catch (error) {
-        console.error('Lỗi khi đếm đơn hàng:', error);
-        return 0;
-    }
-}
-
-// Hàm lấy tổng doanh thu (dùng cho thống kê)
-function getTotalRevenue() {
-    try {
-        const orders = JSON.parse(localStorage.getItem('orders')) || [];
-        return orders
-            .filter(order => !order.isSample && order.status === 'completed')
-            .reduce((total, order) => total + order.total, 0);
-    } catch (error) {
-        console.error('Lỗi khi tính doanh thu:', error);
-        return 0;
-    }
-}
-
-// Hàm lấy đơn hàng theo khách hàng
-function getOrdersByCustomer(username) {
-    try {
-        const orders = JSON.parse(localStorage.getItem('orders')) || [];
-        return orders.filter(order => 
-            order.customer === username && !order.isSample
-        );
-    } catch (error) {
-        console.error('Lỗi khi lấy đơn hàng theo khách hàng:', error);
-        return [];
-    }
-}
-
-// Xuất các hàm để sử dụng trong file khác
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        saveOrder,
-        getCurrentUser,
-        getTotalOrders,
-        getTotalRevenue,
-        getOrdersByCustomer
-    };
-}   
-
-// Thêm code mới cho xử lý payment
-document.addEventListener('DOMContentLoaded', function() {
-    const paymentContainer = document.querySelector('.payment-methods');
-    const cardDetailsGroup = document.querySelector('.info');
-    
-    if (paymentContainer && cardDetailsGroup) {
-        // Handler cho việc click payment button
-        paymentContainer.addEventListener('click', function(e) {
-            const clickedButton = e.target.closest('.payment-button');
-            if (!clickedButton) return;
-
-            // Remove active class from all buttons
-            const allButtons = paymentContainer.querySelectorAll('.payment-button');
-            allButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // Add active class to clicked button
-            clickedButton.classList.add('active');
-
-            // Show/hide card details based on payment method
-            if (clickedButton.classList.contains('cash')) {
-                cardDetailsGroup.style.display = 'none';
-            } else {
-                cardDetailsGroup.style.display = 'block';
-            }
-        });
-
-        // Set default payment method (cash)
-        const defaultButton = paymentContainer.querySelector('.payment-button.cash');
-        if (defaultButton) {
-            defaultButton.click();
-        }
-    }
-});
-document.addEventListener('DOMContentLoaded', function() {
-    const currentUser = getCurrentUser();
-    
-    // Các trường cần điền tự động
-    const addressInput = document.getElementById('delivery-address');
-    const cardNameInput = document.getElementById('card-name');
-    const cardNumberInput = document.getElementById('card-number');
-    
-    if (currentUser) {
-        // Tự động điền địa chỉ nếu có
-        if (addressInput && currentUser.address) {
-            addressInput.value = currentUser.address;
-        }
-
-        // Tự động điền tên chủ thẻ
-        if (cardNameInput && currentUser.cardName) {
-            cardNameInput.value = currentUser.cardName;
-        }
-
-        // Tự động điền số tài khoản
-        if (cardNumberInput && currentUser.cardNumber) {
-            cardNumberInput.value = currentUser.cardNumber;
-        }
-    }
-});
-document.addEventListener("DOMContentLoaded", function () {
-  // --- Lấy dữ liệu từ localStorage ---
-  const userFullName = localStorage.getItem("userFullName");
-  const userPhone = localStorage.getItem("userPhone");
-
-  // --- Parse JSON nếu có ---
-  let users = [];
   try {
-    users = usersData ? JSON.parse(usersData) : [];
-  } catch (e) {
-    console.error("Lỗi đọc users từ localStorage:", e);
-  }
+    // Dùng helper
+    const userAddressList = docdulieuLocalStorage("userAddressList");
+    const userBankingList = docdulieuLocalStorage("userBankingList");
 
-  // --- Gộp dữ liệu khách hàng ---
-  const userInfo = {
-    name: userFullName || "Không rõ tên",
-    phone: userPhone || "Không rõ số điện thoại",
-  };
-  const bank = JSON.parse(localStorage.getItem("userBankingList"))[0].account;
-
-  // --- Tự động điền địa chỉ giao hàng ---
-  const addressInput = document.getElementById("delivery-address");
-  if (addressInput) {
-    const specific = JSON.parse(localStorage.getItem("userAddressList"))[0].specific;
-    addressInput.value = specific;
-  }
-  // --- Khi chọn phương thức thanh toán ---
-  const paymentButtons = document.querySelectorAll(".payment-button");
-  const cardInfoBox = document.querySelector(".info");
-  const cardNameInput = document.getElementById("card-name");
-  const cardNumberInput = document.getElementById("card-number");
-
-  paymentButtons.forEach((btn) => {
-    btn.addEventListener("click", function () {
-      paymentButtons.forEach((b) => b.classList.remove("active"));
-      this.classList.add("active");
-
-      if (this.classList.contains("visa")) {
-        // Hiện khung nhập thẻ
-        cardInfoBox.style.display = "block";
-
-        // Tự động điền thông tin chủ thẻ
-        if (cardNameInput) cardNameInput.value = userInfo.name;
-        if (cardNumberInput)
-          cardNumberInput.value = bank; // Ví dụ thẻ Visa test
-      }else{
-        if(this.classList.contains("momo")){
-            // Hiện khung nhập thẻ
-            cardInfoBox.style.display = "block";
-
-            if (cardNameInput) cardNameInput.value = userInfo.name;
-            if (cardNumberInput)
-            cardNumberInput.value = userPhone; // Ví dụ thẻ Visa test
-        }else {
-        // Ẩn khung nhập thẻ khi chọn phương thức khác
-        cardInfoBox.style.display = "none";
-        if (cardNameInput) cardNameInput.value = "";
-        if (cardNumberInput) cardNumberInput.value = "";
-        }
+    // 1. Điền địa chỉ
+    if (addressInput && userAddressList.length > 0) {
+      const defaultAddr = userAddressList.find(addr => addr.isDefault) || userAddressList[0];
+      if (defaultAddr) {
+        addressInput.value = defaultAddr.specific;
       }
-       
+    }
+    
+    // 2. Điền thông tin thẻ
+    if (cardNameInput) {
+        cardNameInput.value = currentUser.fullName || currentUser.userName || "";
+    }
+    
+  } catch (e) {
+    console.error("Lỗi khi tự động điền thông tin thanh toán:", e);
+  }
+}
+
+// Hàm gộp logic xử lý PTTT
+function setupPaymentMethodToggle() {
+  if (!paymentMethodsContainer || !cardInfoBox) return;
+  
+  const currentUser = getCurrentUser();
+  const userBankingList = docdulieuLocalStorage("userBankingList"); // Dùng helper
+  
+  paymentMethodsContainer.querySelectorAll('.payment-button').forEach(btn => {
+    // Xóa listener cũ (nếu có) bằng cách clone
+    const newBtn = btn.cloneNode(true);
+    btn.parentNode.replaceChild(newBtn, btn);
+
+    // Gắn listener
+    newBtn.addEventListener('click', function () {
+        paymentMethodsContainer.querySelectorAll('.payment-button').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        if (this.classList.contains('visa')) {
+            cardInfoBox.style.display = 'block';
+            if (cardNameInput && currentUser) cardNameInput.value = currentUser.fullName || '';
+            if (cardNumberInput && userBankingList.length > 0) {
+                const defaultBank = userBankingList.find(b => b.isDefault) || userBankingList[0];
+                if(defaultBank) cardNumberInput.value = defaultBank.account;
+            }
+        } else if (this.classList.contains('momo')) {
+            cardInfoBox.style.display = 'block';
+            if (cardNameInput && currentUser) cardNameInput.value = currentUser.fullName || '';
+            if (cardNumberInput && currentUser) cardNumberInput.value = currentUser.phone || '';
+        } else {
+            // (Cash)
+            cardInfoBox.style.display = 'none';
+        }
     });
   });
-});
+  
+  // Set default là cash
+  const cashButton = paymentMethodsContainer.querySelector('.payment-button.cash');
+  if(cashButton) {
+      // Chỉ click nếu chưa có nút nào active
+      if (!paymentMethodsContainer.querySelector('.payment-button.active')) {
+          cashButton.click(); 
+      }
+  }
+}
