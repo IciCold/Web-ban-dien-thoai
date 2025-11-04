@@ -68,8 +68,7 @@ export function initThanhToanPage() {
     const itemHTML = `
       <p class="order-item">
         ${item.quantity} x ${item.name} 
-        (<span>${formatToVND(item.price)}</span>)
-      </p>
+        </p>
     `;
     itemListContainer.innerHTML += itemHTML;
   });
