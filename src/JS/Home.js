@@ -78,7 +78,7 @@ startSlideShow();
 // PHẦN LOGIC SẢN PHẨM VỚI PHÂN TRANG
 // ===================================================
 
-let allProducts = [];
+let dataProducts = [];
 const productsGrid = document.getElementById("productsGrid");
 const logo = document.querySelector(".logo");
 
@@ -105,7 +105,7 @@ export function returnHome(){
     if (heading) heading.innerHTML = "Sản phẩm nổi bật";
 
     resetToFirstPage();
-    displayProducts(allProducts);
+    displayProducts(dataProducts);
     });
     
   }
@@ -118,23 +118,14 @@ export function resetToFirstPage() {
 
 export async function loadProducts() {
   try {
-    // 1️⃣ Đọc dữ liệu JSON (nếu chưa có thì lưu)
-    const jsonProducts = await docJSONvaLuuLocalStorage("jsonData", "../asset/data/dienthoai.json");
+    
 
     // 2️⃣ Đọc dữ liệu người dùng từ localStorage
-    const localProducts = docdulieuLocalStorage("datalist");
+    dataProducts = await docJSONvaLuuLocalStorage("dataProducts", "../asset/data/dienthoai.json");
 
     // 3️⃣ Gộp dữ liệu (tránh trùng id)
-    const allData = [...localProducts];
-    const localIds = new Set(localProducts.map(p => p.id));
-    //luu y gop du lieu khi su dung admin
-
-    jsonProducts.forEach(sp => {
-      const adminId = sp.id.toString().startsWith("S") ? sp.id : "S" + String(sp.id).padStart(3, "0");
-      if (!localIds.has(adminId)) {
-        allData.push({ ...sp, id: adminId });
-      }
-    });
+    
+    
 
     /* 4️⃣ Chuẩn hóa dữ liệu
     allProducts = allData.map(item => {
@@ -163,9 +154,8 @@ export async function loadProducts() {
 
     // 5️⃣ Hiển thị ban đầu
     
-    ghidulieuLocalStorage("allProducts",allData);
-    allProducts = docdulieuLocalStorage("allProducts");
-    displayProducts(allProducts);
+    
+    displayProducts(dataProducts);
 
   } catch (error) {
     console.error("Không thể tải sản phẩm:", error);
@@ -324,7 +314,11 @@ function calculatePagesToShow(current, total) {
 }
 
 // ======= KHỞI TẠO =======
-if(allProducts.length === 0) loadProducts();
+if(dataProducts.length === 0) loadProducts();
+else{
+  dataProducts = docdulieuLocalStorage("dataProducts");
+  displayProducts(dataProducts);
+}
 returnHome();
 
 

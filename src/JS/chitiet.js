@@ -2,7 +2,7 @@ import { docdulieuLocalStorage } from "./readandwrite.js";
 // ===================================
 // KHAI BÁO BIẾN CHO TRANG CHI TIẾT
 // ===================================
-let allProductsData = [];
+let ProductsData = [];
 let currentProductGroup = [];
 
 // Lấy các phần tử DOM
@@ -31,11 +31,11 @@ export async function initChiTietPage() {
   }
 
   // 2️⃣ Đọc dữ liệu có sẵn trong localStorage
-  const localProducts = docdulieuLocalStorage("allProducts");
+  const Products = docdulieuLocalStorage("dataProducts");
   //const jsonProducts = docdulieuLocalStorage("jsonProducts"); // nếu có
   //const allData = [...localProducts, ...jsonProducts];
 
-  if (localProducts.length === 0) {
+  if (Products.length === 0) {
     productSection.innerHTML = "<h1>Không có dữ liệu sản phẩm.</h1>";
     return;
   }
@@ -57,7 +57,7 @@ export async function initChiTietPage() {
   }));*/
 
   // 4️⃣ Tìm sản phẩm đang được chọn
-  const selectedProduct = localProducts.find(p => p.id === selectedId);
+  const selectedProduct = Products.find(p => p.id === selectedId);
   if (!selectedProduct) {
     console.error("Không tìm thấy sản phẩm với ID:", selectedId);
     location.hash = "home";
@@ -66,7 +66,7 @@ export async function initChiTietPage() {
 
   // 5️⃣ Lấy nhóm biến thể
   currentProductGroup = selectedProduct.group_id
-    ? allProductsData.filter(p => p.group_id === selectedProduct.group_id)
+    ? dataProductsData.filter(p => p.group_id === selectedProduct.group_id)
     : [selectedProduct];
 
   // 6️⃣ Hiển thị thông tin

@@ -13,7 +13,7 @@ import { docdulieuLocalStorage } from "./readandwrite.js";
 const searchInput = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-btn");
 const logo = document.querySelector(".logo");
-let data = docdulieuLocalStorage("allProducts");
+let data = docdulieuLocalStorage("dataProducts");
 
 // 3. Hàm xử lý tìm kiếm (đã được làm lại hoàn toàn)
 function handleSearch() {
@@ -43,7 +43,7 @@ function handleSearch() {
     if(heading) heading.innerHTML = "Kết quả tìm kiếm";
   }
 
-  // 4. Lọc sản phẩm từ 'allProducts' đã nhập từ Home.js
+  // 4. Lọc sản phẩm từ 'dataProducts' đã nhập từ Home.js
   const result = data.filter((p) =>
     p.ten.toLowerCase().includes(keyword)
   );

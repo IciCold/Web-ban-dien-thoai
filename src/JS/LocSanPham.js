@@ -127,7 +127,7 @@ function updateDisplay() {
   resetToFirstPage();
 
 
-  let filtered = docdulieuLocalStorage("allProducts");
+  let filtered = docdulieuLocalStorage("dataProducts");
   
   // Lọc theo hãng (ngoài popup)
   // Chỉ lọc nếu *không* có lọc hãng nào trong popup được chọn
