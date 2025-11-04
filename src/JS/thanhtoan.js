@@ -203,9 +203,7 @@ function autoFillUserInfo() {
   if (!currentUser) return;
 
   try {
-    // Dùng helper
-    const userAddressList = docdulieuLocalStorage("userAddressList");
-    const userBankingList = docdulieuLocalStorage("userBankingList");
+    const userAddressList = currentUser.addressList || [];
 
     // 1. Điền địa chỉ
     if (addressInput && userAddressList.length > 0) {
@@ -230,7 +228,7 @@ function setupPaymentMethodToggle() {
   if (!paymentMethodsContainer || !cardInfoBox) return;
   
   const currentUser = getCurrentUser();
-  const userBankingList = docdulieuLocalStorage("userBankingList"); // Dùng helper
+  const userBankingList = (currentUser && currentUser.bankingList) ? currentUser.bankingList : [];
   
   paymentMethodsContainer.querySelectorAll('.payment-button').forEach(btn => {
     // Xóa listener cũ (nếu có) bằng cách clone
