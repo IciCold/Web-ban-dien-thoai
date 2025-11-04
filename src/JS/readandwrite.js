@@ -1,4 +1,4 @@
-export function docdulieuLocalStorage(tenmang) {
+export function docdulieuLocalStorage(tenmang) { //(string key trong localStorage)
   try {
     const saved = localStorage.getItem(tenmang);
     return saved ? JSON.parse(saved) : [];
@@ -8,7 +8,7 @@ export function docdulieuLocalStorage(tenmang) {
   }
 }
 
-export function ghidulieuLocalStorage(tenmang, datamang) {
+export function ghidulieuLocalStorage(tenmang, datamang) { //(string, mang data)
   try {
     localStorage.setItem(tenmang, JSON.stringify(datamang));
     console.log(`Dữ liệu '${tenmang}' đã được lưu.`);
@@ -18,7 +18,7 @@ export function ghidulieuLocalStorage(tenmang, datamang) {
 }
 //ham doc và ghi dulieu localStorage su dung cho các file code khác
 
-export async function docJSONvaLuuLocalStorage(tenmang, duongdanJSON) {
+export async function docJSONvaLuuLocalStorage(tenmang, duongdanJSON) { //(string,string)
   try {
     // 1️⃣ Kiểm tra xem localStorage đã có dữ liệu chưa
     const saved = localStorage.getItem(tenmang);

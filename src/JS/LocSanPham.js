@@ -1,5 +1,6 @@
 // Import hàm resetToFirstPage thay vì resetVisibleProducts
-import { allProducts, displayProducts, resetToFirstPage } from "./Home.js";
+import { displayProducts, resetToFirstPage } from "./Home.js";
+import { docdulieuLocalStorage } from "./readandwrite.js";
 
 //  BIẾN TOÀN CỤC
 // ========================
@@ -126,12 +127,12 @@ function updateDisplay() {
   resetToFirstPage();
 
 
-  let filtered = [...allProducts];
+  let filtered = docdulieuLocalStorage("allProducts");
   
   // Lọc theo hãng (ngoài popup)
   // Chỉ lọc nếu *không* có lọc hãng nào trong popup được chọn
   if (currentBrand !== "all" && selectedBrands.length === 0) {
-    filtered = filtered.filter(p => p.brand === currentBrand);
+    filtered = filtered.filter(p => p.brand.toLowerCase() === currentBrand.toLowerCase());
   }
 
   // Lọc theo hãng trong popup (đa chọn)
@@ -144,7 +145,7 @@ function updateDisplay() {
 
   // Lọc theo giá trong popup
   filtered = filtered.filter(
-    p => p.price >= selectedPrice.min && p.price <= selectedPrice.max
+    p => p.gia >= selectedPrice.min && p.gia <= selectedPrice.max
   );
 
   // Hiển thị số lượng kết quả tìm được (tùy chọn)
@@ -153,4 +154,5 @@ function updateDisplay() {
   // Gọi hàm hiển thị của Home.js với phân trang
   displayProducts(filtered);
   console.log(filtered);
+  document.querySelector(".products-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }

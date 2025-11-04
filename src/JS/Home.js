@@ -1,4 +1,4 @@
-import { docJSONvaLuuLocalStorage, docdulieuLocalStorage } from "./readandwrite.js";
+import { docJSONvaLuuLocalStorage, docdulieuLocalStorage, ghidulieuLocalStorage } from "./readandwrite.js";
 // Carousel Logic
 const carousel = document.getElementById("carousel");
 const prevBtn = document.getElementById("prevBtn");
@@ -87,15 +87,28 @@ const PRODUCTS_PER_PAGE = 16; // Số sản phẩm mỗi trang
 let currentPage = 1; // Trang hiện tại
 let currentFilteredList = []; // Danh sách đã lọc
 
-if (logo) {
-  logo.addEventListener("click", () => {
-    if (location.hash !== "home") {
-      location.hash = "home";
-    }
+export function returnHome(){
+  if (logo) {
     logo.addEventListener("click", (e) => {
-      location.reload();
+      if (location.hash !== "home") {
+        location.hash = "home";
+      }
+    
+    const carousel = document.querySelector(".carousel-container");
+    if (carousel) carousel.style.display = "block";
+
+    const filterbar = document.querySelector(".brand-filter");
+    if (filterbar) filterbar.style.display = "flex";
+
+    // Reset heading
+    const heading = document.querySelector(".products-section h2");
+    if (heading) heading.innerHTML = "Sản phẩm nổi bật";
+
+    resetToFirstPage();
+    displayProducts(allProducts);
     });
-  });
+    
+  }
 }
 
 // Hàm reset về trang 1 (để LocSanPham.js gọi)
@@ -114,6 +127,7 @@ export async function loadProducts() {
     // 3️⃣ Gộp dữ liệu (tránh trùng id)
     const allData = [...localProducts];
     const localIds = new Set(localProducts.map(p => p.id));
+    //luu y gop du lieu khi su dung admin
 
     jsonProducts.forEach(sp => {
       const adminId = sp.id.toString().startsWith("S") ? sp.id : "S" + String(sp.id).padStart(3, "0");
@@ -122,20 +136,20 @@ export async function loadProducts() {
       }
     });
 
-    // 4️⃣ Chuẩn hóa dữ liệu
+    /* 4️⃣ Chuẩn hóa dữ liệu
     allProducts = allData.map(item => {
       let brand = item.brand || item.thuonghieu;
       if (item.loai === "Tablet") brand = "ipad";
       return {
         ...item,
         id: item.id,
-        name: item.ten || item.tensp,
-        price: item.gia,
-        img: item.src || item.anh,
+        //name: item.ten || item.tensp,
+        //price: item.gia,
+        //img: item.src || item.anh,
         src: item.src || item.anh,
         brand: brand ? brand.toLowerCase() : "khác",
         ten: item.ten || item.tensp,
-        src: item.src || item.anh,
+        //src: item.src || item.anh,
         bo_nho: item.bo_nho || item.memory,
         mau_sac: item.mau_sac || item.color,
         dung_luong_pin: item.dung_luong_pin || item.battery,
@@ -145,9 +159,12 @@ export async function loadProducts() {
         camera: item.camera,
         group_id: item.group_id
       };
-    });
+    });*/
 
     // 5️⃣ Hiển thị ban đầu
+    
+    ghidulieuLocalStorage("allProducts",allData);
+    allProducts = docdulieuLocalStorage("allProducts");
     displayProducts(allProducts);
 
   } catch (error) {
@@ -192,8 +209,7 @@ export function displayProducts(list) {
   // 6. Hiển thị phân trang
   renderPagination(totalPages);
   
-  // 7. Cuộn lên đầu danh sách sản phẩm
-  document.querySelector(".products-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  
 }
 
 // ======= TẠO GIAO DIỆN PHÂN TRANG =======
@@ -308,7 +324,8 @@ function calculatePagesToShow(current, total) {
 }
 
 // ======= KHỞI TẠO =======
-loadProducts();
+if(allProducts.length === 0) loadProducts();
+returnHome();
 
 
 // ===================================================
@@ -369,7 +386,7 @@ function actionsBuy(){
 }
   
 // Export
-export { allProducts, productsGrid };
+export { productsGrid };
 
 
 
