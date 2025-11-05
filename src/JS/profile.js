@@ -176,7 +176,9 @@ function renderBankingList() {
         bankCard.dataset.id = bank.account;
         const maskedAccount = `**** **** **** ${bank.account.slice(-4)}`;
         const defaultTag = bank.isDefault ? '<span class="bank-card-default">Mặc định</span>' : '';
-
+        const setDefaultBtn = !bank.isDefault 
+        ? '<button type="button" class="btn-link btn-set-default-bank">Đặt làm mặc định</button>' 
+        : '';
         bankCard.innerHTML = `
             <div class="bank-card-info">
                 <span class="bank-name">${bank.name} ${defaultTag}</span>
@@ -184,7 +186,7 @@ function renderBankingList() {
                 <span class="bank-number">${maskedAccount}</span>
             </div>
             <div class="bank-card-actions">
-                <button type="button" class="btn-link btn-delete-bank">Xóa</button>
+                ${setDefaultBtn}<button type="button" class="btn-link btn-delete-bank">Xóa</button>
             </div>
         `;
         bankingList.appendChild(bankCard);
@@ -213,7 +215,9 @@ function renderAddressList() {
         addressCard.className = "address-card";
         addressCard.dataset.id = addr.specific;
         const defaultTag = addr.isDefault ? '<span class="address-card-default">Mặc định</span>' : '';
-
+        const setDefaultBtn = !addr.isDefault
+        ? '<button type="button" class="btn-link btn-set-default-address">Đặt làm mặc định</button>'
+        : '';
         addressCard.innerHTML = `
             <div class="address-card-info">
                 <span class="user-name">${addr.fullName} ${defaultTag}</span>
@@ -221,7 +225,7 @@ function renderAddressList() {
                 <span class="user-address">Địa chỉ: ${addr.specific}</span>
             </div>
             <div class="address-card-actions">
-                <button type="button" class="btn-link btn-delete-address">Xóa</button>
+                ${setDefaultBtn}<button type="button" class="btn-link btn-delete-address">Xóa</button>
             </div>
         `;
         addressList.appendChild(addressCard);
@@ -416,6 +420,32 @@ if (bankingList) {
                 renderBankingList();
             }
         }
+        if (e.target.classList.contains("btn-set-default-bank")) {
+            let currentUser = docdulieuLocalStorage("currentUser");
+            let users = docdulieuLocalStorage("users");
+            const userIndex = users.findIndex(u => u.userName === currentUser.userName);
+            const card = e.target.closest(".bank-card");
+            const idToSetDefault = card.dataset.id;
+
+            let bankListData = currentUser.bankingList || [];
+
+            // 1. Bỏ tất cả mặc định
+            bankListData.forEach(bank => bank.isDefault = false);
+            
+            // 2. Đặt mặc định cho cái được chọn
+            const targetBank = bankListData.find(bank => bank.account === idToSetDefault);
+            if (targetBank) {
+                targetBank.isDefault = true;
+            }
+
+            // 3. Lưu lại
+            if (userIndex > -1) users[userIndex] = currentUser;
+            ghidulieuLocalStorage("currentUser", currentUser);
+            ghidulieuLocalStorage("users", users);
+
+            // 4. Vẽ lại
+            renderBankingList();
+        }
     });
 }
 
@@ -491,6 +521,33 @@ if (addressList) {
                 ghidulieuLocalStorage("users", users);
                 renderAddressList();
             }
+        }
+        // --- (MỚI) Xử lý "Đặt làm Mặc định" ---
+        if (e.target.classList.contains("btn-set-default-address")) {
+            let currentUser = docdulieuLocalStorage("currentUser");
+            let users = docdulieuLocalStorage("users");
+            const userIndex = users.findIndex(u => u.userName === currentUser.userName);
+            const card = e.target.closest(".address-card");
+            const idToSetDefault = card.dataset.id; // dataset.id đang lưu "specific"
+
+            let addressListData = currentUser.addressList || [];
+
+            // 1. Bỏ tất cả mặc định
+            addressListData.forEach(addr => addr.isDefault = false);
+            
+            // 2. Đặt mặc định cho cái được chọn
+            const targetAddress = addressListData.find(addr => addr.specific === idToSetDefault);
+            if (targetAddress) {
+                targetAddress.isDefault = true;
+            }
+
+            // 3. Lưu lại
+            if (userIndex > -1) users[userIndex] = currentUser;
+            ghidulieuLocalStorage("currentUser", currentUser);
+            ghidulieuLocalStorage("users", users);
+
+            // 4. Vẽ lại
+            renderAddressList();
         }
     });
 }
