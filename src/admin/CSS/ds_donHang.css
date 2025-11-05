@@ -6,13 +6,13 @@
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     margin: 20px auto;
-    width: 1240px;    
-    height: 570px;   
+    width: 1240px;
+    height: 570px;
 }
 
 /* --- Phần trái: Bảng danh sách đơn hàng --- */
 #dh-left {
-    width: 66%;      
+    width: 66%;
     height: 100%;
     border-radius: 10px;
     padding: 20px;
@@ -31,12 +31,12 @@
 
 /* Bảng đơn hàng */
 .dh-table-container {
-    background-color: #ffffff;  
+    background-color: #ffffff;
     border-radius: 10px;
     padding: 15px;
     flex: 1;
     overflow-x: auto;
-    box-shadow: none; 
+    box-shadow: none;
 }
 
 .dh-table {
@@ -46,78 +46,96 @@
 }
 
 /* Các thẻ tiêu đề và các ô trong bảng */
-.dh-table th, .dh-table td {
+.dh-table th,
+.dh-table td {
     border: 1px solid #ddd;
     padding: 10px;
-    font-size: 14px; 
-    color: #333;    
+    font-size: 14px;
+    color: #333;
 }
 
 /* Định dạng tiêu đề của bảng */
 .dh-table th {
     color: white;
-    background-color: #4e73df; 
+    background-color: #4e73df;
 }
 
 /* Định dạng ảnh trong bảng */
 .dh-table td img {
-    width: 50px;  
+    width: 50px;
     height: 50px;
     border-radius: 5px;
 }
 
-/* Nút thao tác (Xóa và Chi tiết) */
-.dh-del, .dh-edit {
-    padding: 6px 10px;
-    border: none;
-    border-radius: 5px;
-    color: #fff;
-    cursor: pointer;
+/* Cụm chứa các nút */
+.dh-actions {
+  display: flex;
+  flex-direction: column;   /* xếp dọc */
+  align-items: center;      /* căn giữa theo chiều ngang */
+  gap: 6px;                 /* khoảng cách giữa các nút */
 }
 
-/* Màu nền của nút Xóa */
-.dh-del {
-    background-color: #dc3545;
+/* Nút thao tác chung */
+.dh-del,
+.dh-edit,
+.dh-update {
+  width: 60px;              /* chiều rộng cố định cho đều */
+  padding: 6px 0;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
 }
 
-/* Màu nền của nút Chi tiết */
+/* Màu từng nút */
 .dh-edit {
-    background-color: #007bff;
+  background-color: #007bff;
 }
-
-/* Hiệu ứng khi di chuột vào nút Xóa */
-.dh-del:hover {
-    background-color: #c82333;
-}
-
-/* Hiệu ứng khi di chuột vào nút Chi tiết */
 .dh-edit:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
+
+.dh-update {
+  background-color: #ffc107;
+  color: #333;
+}
+.dh-update:hover {
+  background-color: #e0a800;
+}
+
+.dh-del {
+  background-color: #dc3545;
+}
+.dh-del:hover {
+  background-color: #c82333;
+}
+
 
 /* --- Phần phải: Tìm kiếm đơn hàng --- */
 #dh-right {
-    width: 30%;     
+    width: 30%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; 
-    gap: 20px; 
-    flex-shrink: 0; 
+    justify-content: flex-start;
+    gap: 20px;
+    flex-shrink: 0;
 }
 
 /* Ô tìm kiếm */
 .dh-search-box {
     border-radius: 10px;
     padding: 15px;
-    width: 100%; 
-    box-shadow: none; 
+    width: 100%;
+    box-shadow: none;
     color: white;
 }
 
 /* Tiêu đề của ô tìm kiếm */
 .dh-subtitle {
-    color: #4e4e4e; 
+    color: #4e4e4e;
     text-align: center;
     margin-bottom: 15px;
     font-size: 18px;
@@ -131,21 +149,17 @@
 }
 
 /* Các ô nhập liệu */
-.dh-search-form select {
+.dh-search-form select,
+.dh-search-form input {
     padding: 12px;
     border-radius: 5px;
     border: 1px solid #ccc;
     outline: none;
     font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
 }
-.dh-search-form input{
-    padding: 12px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    outline: none;
-    font-size: 16px;
-    width: 345px;
-}
+
 /* Nút tìm kiếm */
 .dh-search-form button {
     background-color: #4e73df;
@@ -155,10 +169,10 @@
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
-    width: 100%;  
+    width: 100%;
 }
 
 /* Hiệu ứng khi di chuột vào nút */
 .dh-search-form button:hover {
-    background-color: #375aeb; 
+    background-color: #375aeb;
 }

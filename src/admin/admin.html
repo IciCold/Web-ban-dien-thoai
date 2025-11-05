@@ -224,13 +224,21 @@
             </div>
             <div id="dh-right">
               <div class="dh-search-box">
-                <h2 class="dh-subtitle">Tìm kiếm đơn hàng</h2>
-                <form class="dh-search-form"> <input type="text" placeholder="Tên sản phẩm"> <input type="date"
-                    placeholder="Ngày Từ"> <input type="date" placeholder="Ngày Đến"> <select>
-                    <option value="">Trạng thái</option>
-                    <option value="pending">Chưa giao</option>
+                <h2 class="dh-subtitle">Tìm kiếm đơn hàng</h2 >
+                <form class="dh-search-form">
+                  <input type="text" placeholder="Tìm theo tên khách hàng..." />
+                  <input type="date" placeholder="Từ ngày" />
+                  <input type="date" placeholder="Đến ngày" />
+                  <select>
+                    <option value="" id = 'blank'>— Chọn trạng thái —</option>
+                    <option value="pending">Chờ xử lý</option>
+                    <option value="shipping">Đang giao</option>
                     <option value="delivered">Đã giao</option>
-                  </select> <button type="submit">Tìm</button> </form>
+                  </select>
+                  <button type="submit">Tìm</button>
+                  <button type="button" id="resetFilter">Reset bộ lọc</button>
+                </form>
+
               </div>
             </div>
           </div>

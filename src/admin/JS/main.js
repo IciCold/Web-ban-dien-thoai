@@ -3,6 +3,7 @@ import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
 import { loadStatistics, seedOrderData } from "./thongke.js";
 import "./login.js";
 import "./logout.js";
+import "./ds_donhang.js";
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
