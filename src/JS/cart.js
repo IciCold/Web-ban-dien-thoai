@@ -2,6 +2,7 @@
 // PHẦN 1: CÁC HÀM TIỆN ÍCH (LOGIC CỐT LÕI)
 // (ĐÃ CẬP NHẬT ĐỂ DÙNG READANDWRITE.JS)
 // ======================================================
+import { showalert } from './alert.js';
 import { docdulieuLocalStorage, ghidulieuLocalStorage } from './readandwrite.js';
 
 /**
@@ -193,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cartIcon.addEventListener('click', (event) => {
       event.stopPropagation(); 
       if (!isUserLoggedIn()) {
-        alert('Bạn cần đăng nhập để xem giỏ hàng.');
+        showalert("Bạn cần đăng nhập để xem giỏ hàng.");
         location.hash = '#login';
         return;
       }

@@ -3,6 +3,7 @@
 // ===============================================
 
 // --- Import các hàm cần thiết ---
+import { showalert } from './alert.js';
 import { clearUserCart } from './cart.js'; 
 import { docdulieuLocalStorage, ghidulieuLocalStorage } from './readandwrite.js';
 
@@ -43,7 +44,7 @@ export function initThanhToanPage() {
   // 2. Kiểm tra dữ liệu
   // (Nếu data là [] (do hàm docdulieu) hoặc không có items)
   if (!data || Array.isArray(data) || !data.items || data.items.length === 0) {
-    alert("Lỗi: Không tìm thấy dữ liệu thanh toán. Quay về trang chủ.");
+    showalert("Lỗi: Không tìm thấy dữ liệu thanh toán. Quay về trang chủ.","error");
     location.hash = 'home';
     return;
   }
@@ -106,28 +107,28 @@ function setupBuyNowButton() {
 function saveOrderAndCheckout() {
   const currentUser = getCurrentUser(); // Dùng helper đã sửa
   if (!currentUser) {
-    alert('Vui lòng đăng nhập để mua hàng');
+    showalert("Vui lòng đăng nhập để mua hàng","warning");
     location.hash = 'login';
     return;
   }
   
   // 1. Kiểm tra dữ liệu thanh toán
   if (!currentPaymentData || !currentPaymentData.items || currentPaymentData.items.length === 0) {
-       alert('Lỗi: Không có sản phẩm nào để thanh toán.');
+       showalert("Lỗi: Không có sản phẩm nào để thanh toán.","error");
        return;
   }
 
   // 2. Lấy thông tin từ Form
   const selectedPaymentBtn = document.querySelector('.payment-button.active');
   if (!selectedPaymentBtn) {
-      alert('Vui lòng chọn phương thức thanh toán!');
+      showalert("Vui lòng chọn phương thức thanh toán!","warning");
       return;
   }
   const selectedPayment = selectedPaymentBtn.textContent.trim();
   const deliveryAddress = addressInput.value.trim();
 
   if (!deliveryAddress) {
-      alert('Vui lòng nhập địa chỉ giao hàng!');
+      showalert("Vui lòng nhập địa chỉ giao hàng!","warning");
       addressInput.focus();
       return;
   }
@@ -164,11 +165,11 @@ function saveOrderAndCheckout() {
   }
 
   // 6. Thông báo và chuyển trang
-  alert(`✅ THANH TOÁN THÀNH CÔNG!\n
+ showalert(`🎉 THANH TOÁN THÀNH CÔNG!\n
 📦 Mã đơn hàng: ${newOrder.id}
 💰 Tổng tiền: ${formatToVND(newOrder.total)}
 🏠 Địa chỉ giao: ${newOrder.deliveryAddress}\n
-Cảm ơn bạn đã mua hàng!`);
+Cảm ơn bạn đã mua hàng!`,"success")
   
   currentPaymentData = null;
   location.hash = 'home';

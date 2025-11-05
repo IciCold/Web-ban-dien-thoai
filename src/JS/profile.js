@@ -2,7 +2,7 @@
 // --- IMPORT HÀM ĐỌC/GHI ---
 // ===================================
 import { docdulieuLocalStorage, ghidulieuLocalStorage } from './readandwrite.js';
-
+import {showalert} from "./alert.js";
 // ===================================
 // --- KHAI BÁO BIẾN DOM (Global) ---
 // (Tất cả các biến được đưa ra ngoài để chỉ được khai báo 1 lần)
@@ -277,8 +277,8 @@ if (profileForm) {
 
         ghidulieuLocalStorage("currentUser", currentUser);
         ghidulieuLocalStorage("users", users);
-
-        alert("Đã lưu thông tin hồ sơ thành công!"); // Sẽ chỉ nhảy ra 1 LẦN
+        
+        showalert("✅ Đã lưu thông tin hồ sơ thành công!","success");// Sẽ chỉ nhảy ra 1 LẦN
         if (sidebarNameSpan) sidebarNameSpan.textContent = currentUser.fullName || currentUser.userName;
     });
 }
@@ -301,7 +301,7 @@ if (avatarContainer && !hiddenFileInput) {
         const file = e.target.files[0];
         if (file) {
             if (file.size > 1 * 1024 * 1024) {
-                alert("Dung lượng file quá lớn! Vui lòng chọn file dưới 1 MB.");
+                showalert("Dung lượng file quá lớn! Vui lòng chọn file dưới 1 MB.", "warning")
                 return;
             }
             const reader = new FileReader();
@@ -366,7 +366,7 @@ if (addBankForm) {
         const bankListData = currentUser.bankingList;
 
         if (bankListData.some(bank => bank.account === bankAccount)) {
-            alert("Số tài khoản này đã tồn tại!");
+            showalert("Số tài khoản này đã tồn tại!", "warning");
             return;
         }
         if (isDefault) {
@@ -385,7 +385,7 @@ if (addBankForm) {
 
         addBankForm.reset();
         cmndForm.reset();
-        alert("Đã thêm tài khoản ngân hàng thành công!");
+        showalert("✅ Đã thêm tài khoảng thành công!","success");
         closeModal();
         renderBankingList();
     });
@@ -431,7 +431,7 @@ if (addAddressForm) {
         const profilePhone = currentUser.phone;
 
         if (!profileFullName || !profilePhone) {
-            alert("Vui lòng cập nhật Tên và Số điện thoại trong Hồ Sơ của bạn trước khi thêm địa chỉ.");
+            showalert("Vui lòng cập nhật Tên và Số điện thoại trong Hồ Sơ của bạn trước khi thêm địa chỉ.", "warning")
             showView(profileView, navProfile);
             return;
         }
@@ -443,7 +443,7 @@ if (addAddressForm) {
         let addressListData = currentUser.addressList;
 
         if (addressListData.some(addr => addr.specific.toLowerCase() === specific.toLowerCase())) {
-            alert("Địa chỉ này đã tồn tại!");
+            showalert("Địa chỉ này đã tồn tại!","warning");
             return;
         }
         if (isDefault) {
@@ -461,7 +461,7 @@ if (addAddressForm) {
         ghidulieuLocalStorage("users", users);
 
         addAddressForm.reset();
-        alert("Đã thêm địa chỉ mới thành công!");
+        showalert("Đã thêm địa chỉ mới thành công!","success")
         closeModal();
         renderAddressList();
     });

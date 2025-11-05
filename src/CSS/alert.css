@@ -1,0 +1,35 @@
+/*================THÔNG BÁO THÔNG THƯỜNG=====================*/
+
+#alert-normal {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+/* Kiểu của toast */
+.alert {
+  font-weight:500;
+  letter-spacing: 1px;
+  background-color: #333;
+  color: white;
+  padding: 14px 18px;
+  margin-top: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.5s ease;
+}
+
+/* Khi hiện */
+.alert.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+/* Loại thông báo */
+.alert.success { background-color:#1ccd09 ; }
+.alert.error { background-color: #dc3545; }
+.alert.info { background-color: #2489f5; }
+.alert.warning { background-color: #f7bb05; color: #333; }
+

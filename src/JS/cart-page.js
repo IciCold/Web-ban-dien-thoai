@@ -1,6 +1,7 @@
 // File: JS/cart-page.js
 
 // Import các hàm hỗ trợ đã export từ cart.js
+import { showalert } from './alert.js';
 import {
   getUserCart,
   saveUserCart,
@@ -148,14 +149,14 @@ function handleDeleteItem(event) {
 function handleCheckout() {
   const cart = getUserCart();
   if (cart.length === 0) {
-    alert('Giỏ hàng của bạn đang trống!');
+    showalert("Giỏ hàng của bạn đang trống!");
     return;
   }
 
   // 1. Kiểm tra đăng nhập
   const currentUser = docdulieuLocalStorage("currentUser"); // Dùng helper
   if (!isUserLoggedIn() || Array.isArray(currentUser)) {
-      alert("Bạn cần đăng nhập để thanh toán.");
+      showalert("Bạn cần đăng nhập để thanh toán.","warning");
       location.hash = 'login';
       return;
   }

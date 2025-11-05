@@ -6,6 +6,7 @@ import "./thanhtoan.js";
 import "./logout.js";
 import "./cart.js";
 import "./LocSanPham.js";
+import "./alert.js";
 import { initProfilePage } from "./profile.js";
 import { initChiTietPage } from "./chitiet.js";
 import { initCartDetailPage } from './cart-page.js';
