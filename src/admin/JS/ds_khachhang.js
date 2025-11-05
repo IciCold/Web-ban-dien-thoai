@@ -15,6 +15,9 @@ export function loadCustomerList() {
 
     // Thêm dữ liệu mới
     users.forEach((user, index) => {
+        const locked = user.locked === true;
+        const lockIcon = locked ? '<i class="fa-solid fa-lock"></i>' : '<i class="fa-solid fa-lock-open"></i>';
+        const lockTitle = locked ? 'Mở khóa tài khoản' : 'Khóa tài khoản';
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${user.userName || 'N/A'}</td>
@@ -22,25 +25,25 @@ export function loadCustomerList() {
             <td>******</td> <!-- Không hiển thị mật khẩu thật -->
             <td>${user.registrationDate || new Date().toLocaleDateString('vi-VN')}</td>
             <td>
-                <button class="kh-del" data-index="${index}">X</button>
+                <button class="kh-lock" data-index="${index}" title="${lockTitle}">${lockIcon}</button>
                 <button class="kh-edit" data-index="${index}">Sửa</button>
             </td>
         `;
         tableBody.appendChild(row);
     });
 
-    // Gắn sự kiện xóa
-    attachDeleteEvents();
+    // Gắn sự kiện khóa/mở khóa
+    attachLockEvents();
     // Gắn sự kiện sửa
     attachEditEvents();
 }
 
-function attachDeleteEvents() {
-    const deleteButtons = document.querySelectorAll('.kh-del');
-    deleteButtons.forEach(button => {
+function attachLockEvents() {
+    const lockButtons = document.querySelectorAll('.kh-lock');
+    lockButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const index = this.getAttribute('data-index');
-            deleteCustomer(index);
+            const index = parseInt(this.getAttribute('data-index'), 10);
+            toggleLock(index);
         });
     });
 }
@@ -55,21 +58,27 @@ function attachEditEvents() {
     });
 }
 
-function deleteCustomer(index) {
-    if (!confirm('Bạn có chắc muốn xóa khách hàng này?')) return;
-
+function toggleLock(index) {
     const users = JSON.parse(localStorage.getItem('users')) || [];
-    users.splice(index, 1);
+    const user = users[index];
+    if (!user) return;
+
+    const currentlyLocked = user.locked === true;
+    const confirmMsg = currentlyLocked ? 'Bạn có chắc muốn mở khóa tài khoản này?' : 'Bạn có chắc muốn khóa tài khoản này? (Tài khoản sẽ bị vô hiệu hóa nhưng không bị xóa)';
+    if (!confirm(confirmMsg)) return;
+
+    user.locked = !currentlyLocked;
     localStorage.setItem('users', JSON.stringify(users));
     
     // Reload danh sách
     loadCustomerList();
-    alert('Đã xóa khách hàng thành công!');
+    alert(currentlyLocked ? 'Đã mở khóa tài khoản.' : 'Đã khóa tài khoản.');
 }
 
 function editCustomer(index) {
     const users = JSON.parse(localStorage.getItem('users')) || [];
     const user = users[index];
+    if (!user) return;
 
     // Hiển thị form chỉnh sửa (có thể dùng modal)
     const newName = prompt('Tên mới:', user.userName);
@@ -109,15 +118,18 @@ function searchCustomers(name, username) {
 
     // Filter users
     const filteredUsers = users.filter(user => {
-        const matchName = !name || user.userName.toLowerCase().includes(name.toLowerCase());
-        const matchUsername = !username || user.userName.toLowerCase().includes(username.toLowerCase());
+        const matchName = !name || (user.userName && user.userName.toLowerCase().includes(name.toLowerCase()));
+        const matchUsername = !username || (user.userName && user.userName.toLowerCase().includes(username.toLowerCase()));
         return matchName && matchUsername;
     });
 
     // Hiển thị kết quả
     tableBody.innerHTML = '';
-    filteredUsers.forEach((user, index) => {
+    filteredUsers.forEach((user) => {
         const originalIndex = users.findIndex(u => u.userName === user.userName);
+        const locked = user.locked === true;
+        const lockIcon = locked ? '<i class="fa-solid fa-lock"></i>' : '<i class="fa-solid fa-lock-open"></i>';
+        const lockTitle = locked ? 'Mở khóa tài khoản' : 'Khóa tài khoản';
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${user.userName}</td>
@@ -125,7 +137,7 @@ function searchCustomers(name, username) {
             <td>******</td>
             <td>${user.registrationDate || 'N/A'}</td>
             <td>
-                <button class="kh-del" data-index="${originalIndex}">X</button>
+                <button class="kh-lock" data-index="${originalIndex}" title="${lockTitle}">${lockIcon}</button>
                 <button class="kh-edit" data-index="${originalIndex}">Sửa</button>
             </td>
         `;
@@ -133,6 +145,6 @@ function searchCustomers(name, username) {
     });
 
     // Re-attach events
-    attachDeleteEvents();
+    attachLockEvents();
     attachEditEvents();
 }
