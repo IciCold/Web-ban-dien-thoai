@@ -49,7 +49,6 @@
     border-radius: 50%; /* Đảm bảo ảnh luôn tròn */
 }
 
-
 .user-info {
     display: flex;
     flex-direction: column;
@@ -149,9 +148,7 @@
     min-height: 500px;
 }
 /* Class chung cho các view (Hồ sơ, Ngân hàng, Địa chỉ) */
-.profile-page-view {
-    /* Không cần style, chỉ để JS tìm và ẩn/hiện */
-}
+
 .profile-main-content h2 {
     font-size: 20px;
     font-weight: 500;
@@ -310,7 +307,7 @@
     color: var(--main-color);
 }
 
-/* --- Header của trang Bank/Địa chỉ --- */
+/* --- Header của trang Bank --- */
 .banking-header {
     display: flex;
     justify-content: space-between;
@@ -322,7 +319,7 @@
     margin: 0; 
 }
 
-/* Trạng thái rỗng (khi chưa có bank/địa chỉ) */
+/* Trạng thái rỗng (khi chưa có bank) */
 .banking-empty-state {
     display: flex; 
     flex-direction: column;
@@ -495,52 +492,75 @@ input:invalid + .form-error {
 
 
 /* ================================== */
-/* === BỔ SUNG: TRANG ĐỊA CHỈ === */
+/* ===  TRANG ĐỊA CHỈ === */ 
 /* ================================== */
 
-/* Danh sách địa chỉ (dùng chung style .banking-list-container) */
+/* (MỚI) Style cho Header (Copy từ .banking-header) */
+.address-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px; 
+    gap:20px;
+}
+.address-header h2 {
+    margin: 0; 
+}
+
+/*  Style cho Trạng thái rỗng  */
+.address-empty-state {
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 0;
+    gap: 15px;
+}
+.address-empty-state p {
+    color: #555;
+}
+
+/* Danh sách địa chỉ */
 .address-list-container {
     display: none; 
     flex-direction: column;
     gap: 15px;
     margin-top: 20px;
-    gap:20px;
 }
 
-/* Thẻ địa chỉ */
+/* Thẻ địa chỉ  */
 .address-card {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start; /* Để nút xóa căn đúng */
+    align-items: center; 
     padding: 20px;
     border: 1px solid #e0e0e0;
     border-radius: 4px;
 }
 
+/*  thẻ address */
 .address-card-info {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding-right: 15px; /* Khoảng cách với nút xóa */
+    gap: 5px; /* [SỬA] Đổi từ 8px thành 5px */
+    /* Xóa 'padding-right' */
 }
 
-.address-card-info .user-name {
+.address-card-info .address-name {
     font-weight: bold;
     font-size: 16px;
     display: flex;
     align-items: center;
 }
-.address-card-info .user-phone,
-.address-card-info .user-address {
+
+.address-card-info .address-phone,
+.address-card-info .address-details {
     font-size: 14px;
     color: #333;
-    line-height: 1.4;
 }
 
 .address-card-actions {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
     gap: 10px;
 }
 .address-card-actions .btn-link {
@@ -548,7 +568,8 @@ input:invalid + .form-error {
     text-transform: none;
     padding: 5px;
 }
-/* Tag "Mặc định" cho địa chỉ */
+
+/* Tag "Mặc định"  */
 .address-card-default {
     background-color: #f0f0f0;
     color: #555;
@@ -558,7 +579,6 @@ input:invalid + .form-error {
     margin-left: 10px;
     font-weight: normal;
 }
-
 
 /* ===================== RESPONSIVE (Cho điện thoại) ===================== */
 @media (max-width: 768px) {
@@ -595,7 +615,7 @@ input:invalid + .form-error {
     .form-actions {
         justify-content: center;
     }
-    .banking-header {
+    .banking-header,.address-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;

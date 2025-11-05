@@ -220,9 +220,9 @@ function renderAddressList() {
         : '';
         addressCard.innerHTML = `
             <div class="address-card-info">
-                <span class="user-name">${addr.fullName} ${defaultTag}</span>
-                <span class="user-phone">SĐT: ${addr.phone}</span>
-                <span class="user-address">Địa chỉ: ${addr.specific}</span>
+                <span class="address-name">${addr.fullName} ${defaultTag}</span>
+                <span class="address-phone">SĐT: ${addr.phone}</span>
+                <span class="address-details">Địa chỉ: ${addr.specific}</span>
             </div>
             <div class="address-card-actions">
                 ${setDefaultBtn}<button type="button" class="btn-link btn-delete-address">Xóa</button>
