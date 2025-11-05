@@ -31,18 +31,23 @@ function updateTable(data) {
   data.forEach((donhang, index) => {
     const row = document.createElement("tr");
 
-    // Định dạng trạng thái để hiển thị
-    let statusText = donhang.status;
-    if (statusText === "pending") statusText = "Chờ xử lý";
-    else if (statusText === "shipping") statusText = "Đang giao";
-    else if (statusText === "delivered") statusText = "Đã giao";
+    // Định dạng trạng thái hiển thị và tạo select option
+    const statusOptions = `
+      <option value="pending" ${donhang.status === "pending" ? "selected" : ""}>Chờ xử lý</option>
+      <option value="shipping" ${donhang.status === "shipping" ? "selected" : ""}>Đang giao</option>
+      <option value="delivered" ${donhang.status === "delivered" ? "selected" : ""}>Đã giao</option>
+    `;
 
     row.innerHTML = `
       <td>${new Date(donhang.date).toLocaleDateString("vi-VN")}</td>
       <td>${donhang.customer}</td>
       <td>${donhang.total.toLocaleString("vi-VN")}₫</td>
       <td>${donhang.deliveryAddress}</td>
-      <td>${statusText}</td>
+      <td>
+        <select class="dh-status-select" data-index="${index}">
+          ${statusOptions}
+        </select>
+      </td>
       <td>
         <div class="dh-actions">
           <button class="dh-edit" data-index="${index}">Chi tiết</button>
@@ -58,14 +63,35 @@ function updateTable(data) {
 }
 
 // =======================
-// Thêm sự kiện các nút
+// Thêm sự kiện các nút + xử lý đổi trạng thái
 // =======================
 function addRowEvents() {
   const btnDelete = document.querySelectorAll(".dh-del");
   const btnDetail = document.querySelectorAll(".dh-edit");
   const btnUpdate = document.querySelectorAll(".dh-update");
+  const selects = document.querySelectorAll(".dh-status-select");
 
-  // XÓA
+  // ====== XỬ LÝ ĐỔI TRẠNG THÁI NGAY TRONG BẢNG ======
+  selects.forEach((select) => {
+    select.addEventListener("change", () => {
+      const index = select.dataset.index;
+      const newStatus = select.value;
+
+      dsdonhang[index].status = newStatus;
+      ghidulieuLocalStorage("orders", dsdonhang);
+
+      let text =
+        newStatus === "pending"
+          ? "Chờ xử lý"
+          : newStatus === "shipping"
+          ? "Đang giao"
+          : "Đã giao";
+
+      alert(`✅ Cập nhật trạng thái thành "${text}" thành công!`);
+    });
+  });
+
+  // ====== XÓA ======
   btnDelete.forEach((btn) => {
     btn.addEventListener("click", () => {
       const index = btn.dataset.index;
@@ -77,13 +103,12 @@ function addRowEvents() {
     });
   });
 
-  // CHI TIẾT
+  // ====== CHI TIẾT ======
   btnDetail.forEach((btn) => {
     btn.addEventListener("click", () => {
       const index = btn.dataset.index;
       const dh = dsdonhang[index];
 
-      // Xử lý danh sách sản phẩm
       let productList = "";
       if (dh.products && Array.isArray(dh.products) && dh.products.length > 0) {
         productList = dh.products
@@ -98,13 +123,13 @@ function addRowEvents() {
         productList = "(Không có sản phẩm)";
       }
 
-      // Định dạng trạng thái hiển thị
-      let statusText = dh.status;
-      if (statusText === "pending") statusText = "Chờ xử lý";
-      else if (statusText === "shipping") statusText = "Đang giao";
-      else if (statusText === "delivered") statusText = "Đã giao";
+      let statusText =
+        dh.status === "pending"
+          ? "Chờ xử lý"
+          : dh.status === "shipping"
+          ? "Đang giao"
+          : "Đã giao";
 
-      // Hiển thị chi tiết
       alert(
         `🧾 Chi tiết đơn hàng\n` +
           `───────────────────────────────\n` +
@@ -122,7 +147,7 @@ function addRowEvents() {
     });
   });
 
-  // SỬA
+  // ====== SỬA (ngoại trừ trạng thái) ======
   btnUpdate.forEach((btn) => {
     btn.addEventListener("click", () => {
       const index = btn.dataset.index;
@@ -146,16 +171,6 @@ function addRowEvents() {
       );
       if (newAddress === null) return;
 
-      const newStatusText = prompt(
-        "Chọn trạng thái mới (Chờ xử lý / Đang giao / Đã giao, bỏ trống để giữ nguyên):",
-        dh.status === "pending"
-          ? "Chờ xử lý"
-          : dh.status === "shipping"
-          ? "Đang giao"
-          : "Đã giao"
-      );
-      if (newStatusText === null) return;
-
       const updatedOrder = { ...dh };
 
       if (newCustomer.trim() !== "") updatedOrder.customer = newCustomer.trim();
@@ -163,16 +178,6 @@ function addRowEvents() {
         updatedOrder.date = new Date(newDateInput).toISOString();
       if (newAddress.trim() !== "")
         updatedOrder.deliveryAddress = newAddress.trim();
-
-      if (newStatusText.trim() !== "") {
-        if (newStatusText === "Chờ xử lý") updatedOrder.status = "pending";
-        else if (newStatusText === "Đang giao") updatedOrder.status = "shipping";
-        else if (newStatusText === "Đã giao") updatedOrder.status = "delivered";
-        else {
-          alert("⚠️ Trạng thái không hợp lệ! Chỉ nhập: Chờ xử lý, Đang giao hoặc Đã giao.");
-          return;
-        }
-      }
 
       dsdonhang[index] = updatedOrder;
       ghidulieuLocalStorage("orders", dsdonhang);
@@ -183,8 +188,8 @@ function addRowEvents() {
   });
 }
 
-// =======================
-// TÌM KIẾM
+
+
 // =======================
 // TÌM KIẾM
 formSearch.addEventListener("submit", (e) => {
