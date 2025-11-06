@@ -236,8 +236,6 @@ function renderAddressList() {
 
 // --- 4. Hiển thị Lịch Sử Mua Hàng ---
 function renderHistoryList() {
-    let historyDisplayed = 0; // số lượng đơn hàng đã hiển thị
-    const HISTORY_BATCH_SIZE = 6; // số đơn mỗi lần
     const currentUser = docdulieuLocalStorage("currentUser");
     if (!currentUser || (Array.isArray(currentUser) && currentUser.length === 0)) return;
 
