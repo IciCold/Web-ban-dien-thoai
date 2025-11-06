@@ -146,7 +146,7 @@
     padding: 25px 30px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     min-height: 500px;
-}
+}address-view
 /* Class chung cho các view (Hồ sơ, Ngân hàng, Địa chỉ) */
 
 .profile-main-content h2 {
@@ -579,6 +579,421 @@ input:invalid + .form-error {
     margin-left: 10px;
     font-weight: normal;
 }
+/* ================================== */
+/* ===  TRANG LỊCH SỬ MUA HÀNG === */ 
+/* ================================== */
+
+/* Header */
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    gap: 20px;
+}
+.history-header h2 {
+    margin: 0;
+}
+
+/* Trạng thái rỗng */
+.history-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 0;
+    gap: 15px;
+}
+.history-empty-state p {
+    color: #555;
+    font-size: 16px;
+}
+
+/* Container danh sách */
+.history-list-container {
+    display: none;
+    margin-top: 20px;
+}
+
+/* Wrapper cho table responsive */
+.history-table-wrapper {
+    overflow-x: auto;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+}
+
+/* Bảng lịch sử */
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    min-width: 800px; /* Đảm bảo không bị vỡ layout */
+}
+
+.history-table thead {
+    background-color: #f5f5f5;
+}
+
+.history-table th {
+    padding: 15px 10px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+    white-space: nowrap;
+}
+
+.history-table td {
+    padding: 15px 10px;
+    font-size: 14px;
+    color: #555;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+}
+
+.history-table tbody tr {
+    transition: background-color 0.2s;
+}
+
+.history-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Cột STT */
+.history-table td:first-child {
+    text-align: center;
+    font-weight: 600;
+    color: #888;
+}
+
+/* Danh sách sản phẩm */
+.history-product-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.history-product-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.history-product-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
+}
+
+.history-product-name {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.4;
+}
+
+/* Cột số lượng */
+.history-quantity {
+    text-align: center;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Cột giá trị */
+.history-total {
+    font-weight: 600;
+    color: var(--main-color);
+    white-space: nowrap;
+}
+
+/* Cột ngày mua */
+.history-date {
+    font-size: 13px;
+    color: #666;
+    white-space: nowrap;
+}
+
+/* Badge trạng thái */
+.history-status-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-shipping {
+    background-color: #cfe2ff;
+    color: #084298;
+}
+
+.status-delivered {
+    background-color: #d1e7dd;
+    color: #0f5132;
+}
+
+.status-cancelled {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+/* Nút xem chi tiết */
+.btn-view-detail {
+    padding: 6px 15px;
+    background-color: #fff;
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn-view-detail:hover {
+    background-color: var(--main-color);
+    color: #fff;
+}
+
+/* ===== MODAL CHI TIẾT ĐỠN HÀNG ===== */
+
+.history-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.history-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    padding: 25px 30px;
+    width: 90%;
+    max-width: 700px;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 1001;
+}
+
+.history-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.history-modal-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.history-modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #999;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    transition: color 0.2s;
+}
+
+.history-modal-close:hover {
+    color: #333;
+}
+
+.history-modal-body {
+    margin-top: 20px;
+}
+
+/* Chi tiết đơn hàng */
+.order-detail-section {
+    margin-bottom: 25px;
+}
+
+.order-detail-section h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #333;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 8px;
+}
+
+.order-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.order-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.order-info-label {
+    font-size: 13px;
+    color: #888;
+    font-weight: 500;
+}
+
+.order-info-value {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Danh sách sản phẩm trong modal */
+.modal-product-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-product-item {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #fafafa;
+}
+
+.modal-product-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.modal-product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.modal-product-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.modal-product-price {
+    font-size: 14px;
+    color: #666;
+}
+
+.modal-product-quantity {
+    font-size: 14px;
+    color: #888;
+}
+
+/* Tổng tiền trong modal */
+.order-total-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.order-total-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.order-total-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--main-color);
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+    .history-table {
+        font-size: 13px;
+    }
+
+    .history-table th,
+    .history-table td {
+        padding: 10px 8px;
+    }
+
+    .history-product-img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .history-modal {
+        width: 95%;
+        padding: 20px;
+        max-height: 90vh;
+    }
+
+    .order-info-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .modal-product-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .modal-product-img {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .history-table th,
+    .history-table td {
+        font-size: 12px;
+        padding: 8px 5px;
+    }
+
+    .btn-view-detail {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    .history-status-badge {
+        font-size: 11px;
+        padding: 4px 8px;
+    }
+}
+
+
+
 
 /* ===================== RESPONSIVE (Cho điện thoại) ===================== */
 @media (max-width: 768px) {

@@ -12,11 +12,13 @@ import {showalert} from "./alert.js";
 const navProfile = document.getElementById("nav-profile-link");
 const navBanking = document.getElementById("nav-banking-link");
 const navAddress = document.getElementById("nav-address-link");
+const navHistory = document.getElementById("nav-history-link");
 const profileView = document.getElementById("profile-view");
 const bankingView = document.getElementById("banking-view");
 const addressView = document.getElementById("address-view");
-const allViews = [profileView, bankingView, addressView];
-const allNavLinks = [navProfile, navBanking, navAddress];
+const histotyView = document.getElementById("history-view");
+const allViews = [profileView, bankingView, addressView, histotyView];
+const allNavLinks = [navProfile, navBanking, navAddress,navHistory];
 
 // --- Trang Hồ Sơ ---
 const profileForm = document.querySelector(".input-user");
@@ -232,6 +234,251 @@ function renderAddressList() {
     });
 }
 
+// --- 4. Hiển thị Lịch Sử Mua Hàng ---
+function renderHistoryList() {
+    let historyDisplayed = 0; // số lượng đơn hàng đã hiển thị
+    const HISTORY_BATCH_SIZE = 6; // số đơn mỗi lần
+    const currentUser = docdulieuLocalStorage("currentUser");
+    if (!currentUser || (Array.isArray(currentUser) && currentUser.length === 0)) return;
+
+    const historyEmpty = document.getElementById("history-empty");
+    const historyList = document.getElementById("history-list");
+    const historyTableBody = document.getElementById("history-table-body");
+
+    // Lấy tất cả đơn hàng từ localStorage
+    let allOrders = docdulieuLocalStorage("orders") || [];
+    
+    // Lọc đơn hàng của user hiện tại
+    const userOrders = allOrders.filter(order => 
+        order.customerEmail === currentUser.email
+    );
+
+    // Kiểm tra nếu không có đơn hàng
+    if (userOrders.length === 0) {
+        if (historyEmpty) historyEmpty.style.display = "flex";
+        if (historyList) historyList.style.display = "none";
+        return;
+    }
+
+    // Hiển thị danh sách
+    if (historyEmpty) historyEmpty.style.display = "none";
+    if (historyList) historyList.style.display = "block";
+    if (historyTableBody) historyTableBody.innerHTML = "";
+
+    // Sắp xếp theo ngày mới nhất
+    userOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // Render từng đơn hàng
+    userOrders.forEach((order, index) => {
+        const row = document.createElement("tr");
+        
+        // STT
+        const sttCell = document.createElement("td");
+        sttCell.textContent = index + 1;
+        row.appendChild(sttCell);
+
+        // Mã đơn
+        const codeCell = document.createElement("td");
+        codeCell.textContent = order.id;
+        codeCell.style.fontWeight = "600";
+        codeCell.style.color = "#333";
+        row.appendChild(codeCell);
+
+        // Danh sách sản phẩm
+        const productsCell = document.createElement("td");
+        const productList = document.createElement("div");
+        productList.className = "history-product-list";
+        
+        order.products.forEach((product, idx) => {
+            if (idx < 2) { // Chỉ hiển thị 2 sản phẩm đầu
+                const productItem = document.createElement("div");
+                productItem.className = "history-product-item";
+                
+                // Hình ảnh sản phẩm
+                if (product.image) {
+                    const img = document.createElement("img");
+                    img.src = product.image;
+                    img.alt = product.name;
+                    img.className = "history-product-img";
+                    productItem.appendChild(img);
+                }
+                
+                // Tên sản phẩm
+                const nameSpan = document.createElement("span");
+                nameSpan.className = "history-product-name";
+                nameSpan.textContent = product.name;
+                productItem.appendChild(nameSpan);
+                
+                productList.appendChild(productItem);
+            }
+        });
+        
+        // Nếu có nhiều hơn 2 sản phẩm
+        if (order.products.length > 2) {
+            const moreSpan = document.createElement("span");
+            moreSpan.style.fontSize = "12px";
+            moreSpan.style.color = "#888";
+            moreSpan.textContent = `+${order.products.length - 2} sản phẩm khác...`;
+            productList.appendChild(moreSpan);
+        }
+        
+        productsCell.appendChild(productList);
+        row.appendChild(productsCell);
+
+        // Tổng số lượng
+        const quantityCell = document.createElement("td");
+        quantityCell.className = "history-quantity";
+        const totalQuantity = order.products.reduce((sum, p) => sum + p.quantity, 0);
+        quantityCell.textContent = totalQuantity;
+        row.appendChild(quantityCell);
+
+        // Giá trị đơn hàng
+        const totalCell = document.createElement("td");
+        totalCell.className = "history-total";
+        totalCell.textContent = formatToVND(order.total);
+        row.appendChild(totalCell);
+
+        // Ngày mua
+        const dateCell = document.createElement("td");
+        dateCell.className = "history-date";
+        dateCell.textContent = formatDate(order.date);
+        row.appendChild(dateCell);
+
+        // Trạng thái
+        const statusCell = document.createElement("td");
+        const statusBadge = document.createElement("span");
+        statusBadge.className = `history-status-badge status-${order.status}`;
+        statusBadge.textContent = getStatusText(order.status);
+        statusCell.appendChild(statusBadge);
+        row.appendChild(statusCell);
+
+        // Nút xem chi tiết
+        const actionCell = document.createElement("td");
+        const viewBtn = document.createElement("button");
+        viewBtn.className = "btn-view-detail";
+        viewBtn.textContent = "Xem chi tiết";
+        viewBtn.onclick = () => showOrderDetail(order);
+        actionCell.appendChild(viewBtn);
+        row.appendChild(actionCell);
+
+        historyTableBody.appendChild(row);
+    });
+
+}
+
+// Hàm hiển thị chi tiết đơn hàng
+function showOrderDetail(order) {
+    const modalOverlay = document.getElementById("history-modal-overlay");
+    const modal = document.getElementById("history-detail-modal");
+    const modalBody = document.getElementById("history-modal-body");
+
+    if (!modalOverlay || !modal || !modalBody) return;
+
+    // Xây dựng nội dung modal
+    modalBody.innerHTML = `
+        <div class="order-detail-section">
+            <h4>Thông Tin Đơn Hàng</h4>
+            <div class="order-info-grid">
+                <div class="order-info-item">
+                    <span class="order-info-label">Mã đơn hàng:</span>
+                    <span class="order-info-value">${order.id}</span>
+                </div>
+                <div class="order-info-item">
+                    <span class="order-info-label">Ngày đặt:</span>
+                    <span class="order-info-value">${formatDate(order.date)}</span>
+                </div>
+                <div class="order-info-item">
+                    <span class="order-info-label">Trạng thái:</span>
+                    <span class="order-info-value">
+                        <span class="history-status-badge status-${order.status}">
+                            ${getStatusText(order.status)}
+                        </span>
+                    </span>
+                </div>
+                <div class="order-info-item">
+                    <span class="order-info-label">Phương thức thanh toán:</span>
+                    <span class="order-info-value">${order.paymentMethod || 'N/A'}</span>
+                </div>
+            </div>
+            <div class="order-info-item" style="margin-top: 15px;">
+                <span class="order-info-label">Địa chỉ giao hàng:</span>
+                <span class="order-info-value">${order.deliveryAddress || 'N/A'}</span>
+            </div>
+        </div>
+
+        <div class="order-detail-section">
+            <h4>Sản Phẩm</h4>
+            <div class="modal-product-list">
+                ${order.products.map(product => `
+                    <div class="modal-product-item">
+                        ${product.image ? `<img src="${product.image}" alt="${product.name}" class="modal-product-img">` : ''}
+                        <div class="modal-product-info">
+                            <div class="modal-product-name">${product.name}</div>
+                            <div class="modal-product-price">Đơn giá: ${formatToVND(product.price)}</div>
+                            <div class="modal-product-quantity">Số lượng: ${product.quantity}</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="order-total-box">
+                <span class="order-total-label">Tổng cộng:</span>
+                <span class="order-total-value">${formatToVND(order.total)}</span>
+            </div>
+        </div>
+    `;
+
+    // Hiển thị modal
+    modalOverlay.classList.remove("hidden-view");
+    modal.classList.remove("hidden-view");
+}
+
+// Đóng modal chi tiết
+function closeHistoryModal() {
+    const modalOverlay = document.getElementById("history-modal-overlay");
+    const modal = document.getElementById("history-detail-modal");
+    
+    if (modalOverlay) modalOverlay.classList.add("hidden-view");
+    if (modal) modal.classList.add("hidden-view");
+}
+
+// Gắn sự kiện đóng modal
+const historyModalClose = document.getElementById("history-modal-close");
+const historyModalOverlay = document.getElementById("history-modal-overlay");
+
+if (historyModalClose) {
+    historyModalClose.addEventListener("click", closeHistoryModal);
+}
+if (historyModalOverlay) {
+    historyModalOverlay.addEventListener("click", closeHistoryModal);
+}
+
+// Hàm format ngày tháng
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+}
+
+// Hàm format giá tiền
+function formatToVND(number) {
+    if (typeof number !== 'number') number = 0;
+    return number.toLocaleString('vi-VN') + '₫';
+}
+
+// Hàm lấy text trạng thái
+function getStatusText(status) {
+    const statusMap = {
+        'pending': 'Chờ xử lý',
+        'shipping': 'Đang giao',
+        'delivered': 'Đã giao',
+        'cancelled': 'Đã hủy'
+    };
+    return statusMap[status] || 'Không xác định';
+}
 // ===================================
 // --- (MỚI) TẤT CẢ EVENT LISTENERS (Global) ---
 // (Các trình nghe sự kiện được gắn 1 LẦN DUY NHẤT khi script tải)
@@ -248,6 +495,9 @@ window.addEventListener("hashchange", () => {
         showView(addressView, navAddress);
     } else if (currentHash === "profile") {
         showView(profileView, navProfile);
+    }
+    else if(currentHash === "history"){
+        showView(histotyView, navHistory);
     }
 });
 
@@ -569,14 +819,17 @@ export function initProfilePage() {
     loadProfileData();
     renderBankingList();
     renderAddressList();
-
+    renderHistoryList();
     // 3. Hiển thị đúng tab
     const initialHash = location.hash.replace("#", "");
     if (initialHash === "banking") {
-        showView(bankingView, navBanking);
+      showView(bankingView, navBanking);
     } else if (initialHash === "address") {
-        showView(addressView, navAddress);
+      showView(addressView, navAddress);
+    } else if (initialHash === "history") {
+      showView(histotyView, navHistory);
     } else {
-        showView(profileView, navProfile);
+      showView(profileView, navProfile);
     }
+   
 }

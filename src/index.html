@@ -185,7 +185,7 @@
 
           <div class="products-grid" id="productsGrid">
             <!-- Sản phẩm sẽ được thêm bằng JavaScript -->
-            </div>
+          </div>
         </section>
       </div>
     </section>
@@ -200,43 +200,43 @@
           </div>
 
           <div class="specs-box">
-            </div>
+          </div>
         </div>
-        
+
         <div class="product-options">
           <div class="product-title">
-            </div>
+          </div>
           <div class="product-price">
-            </div>
+          </div>
 
           <div class="option-group">
             <span class="option-label">Bộ nhớ:</span>
             <div class="option-buttons" id="ramButton">
-              </div>
+            </div>
           </div>
 
           <div class="option-group">
             <span class="option-label">Màu:</span>
             <div class="option-buttons" id="colorButton">
-              </div>
+            </div>
           </div>
 
-            <div class="option-group">
-              <span class="option-label">Số lượng:</span>
-              <div class="quantity-control">
-                <button class="qty-button">-</button>
-                <input type="number" class="qty-input" value="1" min="1" readonly>
-                <button class="qty-button">+</button>
-              </div>
+          <div class="option-group">
+            <span class="option-label">Số lượng:</span>
+            <div class="quantity-control">
+              <button class="qty-button">-</button>
+              <input type="number" class="qty-input" value="1" min="1" readonly>
+              <button class="qty-button">+</button>
             </div>
+          </div>
 
-            <div class="action-buttons">
-              <button class="buy-now-button" id="toggleButton">Mua ngay</button>
-              <button class="add-to-cart-button">Thêm vào giỏ hàng</button>
-            </div>
+          <div class="action-buttons">
+            <button class="buy-now-button" id="toggleButton">Mua ngay</button>
+            <button class="add-to-cart-button">Thêm vào giỏ hàng</button>
           </div>
         </div>
-      </div> 
+      </div>
+      </div>
     </section>
 
 
@@ -249,9 +249,9 @@
 
           <div class="order-summary">
             <h2 class="order-title">Đơn hàng của bạn:</h2>
-            
+
             <div id="payment-item-list">
-              </div>
+            </div>
 
             <div class="total-box">
               <span class="total-label">Thành tiền:</span>
@@ -271,13 +271,13 @@
                   src="../asset/Images/mini-app_design-guideline_branding-guide-2-2.webp" alt="Momo"
                   class="momo-logo">Momo</button>
             </div>
-            <div class="info" style="display:none"> 
-              <label for="card-name" class="info-label" >Tên người chủ thẻ</label>
+            <div class="info" style="display:none">
+              <label for="card-name" class="info-label">Tên người chủ thẻ</label>
               <input type="text" id="card-name" class="text-input" placeholder="Tên người chủ thẻ">
-              <label for="card-number" class="info-label" >Số thẻ</label>
+              <label for="card-number" class="info-label">Số thẻ</label>
               <input type="text" id="card-number" class="text-input" placeholder="Số thẻ">
             </div>
-            
+
 
             <button class="buy-now-button-large">Mua ngay</button>
           </div>
@@ -331,7 +331,7 @@
           <label class="label" for="fname"> Tên đăng nhập</label>
           <input class="register-Ip" name="username" type="text" id="fname" placeholder="Nhập tên đăng nhập">
           <!--buộc người dùng nhập vào thì mới cho gửi form-->
-          </div>
+        </div>
 
         <!--Email-->
         <div class="input-group">
@@ -392,14 +392,13 @@
               <li class="active"><a href="#profile" id="nav-profile-link">Hồ Sơ</a></li>
               <li><a href="#banking" id="nav-banking-link">Ngân Hàng</a></li>
               <li><a href="#address" id="nav-address-link">Địa Chỉ</a></li>
-               <li> <a href="#history" id="nav-history-link">Lịch sử mua hàng</a></li>
+              <li><a href="#history" id="nav-history-link">Lịch sử mua hàng</a></li>
               <li> <button class="logout-btn">Đăng xuất</button> </li>
-             
             </ul>
           </ul>
-        </aside>                                                                
+        </aside>
         <main class="profile-main-content">
-
+          <!--THÔNG TIN NGƯỜI DÙNG-->
           <div class="profile-page-view" id="profile-view">
             <h2>Hồ Sơ Của Tôi</h2>
             <p>Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
@@ -450,6 +449,7 @@
             </div>
           </div>
 
+          <!--NGÂN HÀNG-->
           <div class="profile-page-view hidden-view" id="banking-view">
             <div class="banking-header">
               <h2>Tài Khoản Ngân Hàng Của Tôi</h2>
@@ -465,6 +465,7 @@
             </div>
           </div>
 
+          <!--ĐỊA CHỈ-->
           <div class="profile-page-view hidden-view" id="address-view">
             <div class="address-header">
               <h2>Địa Chỉ Của Tôi</h2>
@@ -479,6 +480,61 @@
             <div class="address-list-container" id="address-list">
             </div>
           </div>
+
+          <!--LỊCH SỬ MUA HÀNG-->
+          <div class="profile-page-view hidden-view" id="history-view">
+            <div class="history-header">
+              <h2>Lịch Sử Mua Hàng</h2>
+            </div>
+            <hr>
+
+            <!-- Trạng thái rỗng -->
+            <div class="history-empty-state" id="history-empty">
+              <i class="fa-solid fa-receipt" style="font-size: 60px; color: #ccc;"></i>
+              <p>Bạn chưa có đơn hàng nào.</p>
+              <a href="#home" class="btn-orange">Mua sắm ngay</a>
+            </div>
+
+            <!-- Danh sách đơn hàng -->
+            <div class="history-list-container" id="history-list">
+              <!-- Bảng lịch sử -->
+              <div class="history-table-wrapper">
+                <table class="history-table">
+                  <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Mã đơn</th>
+                      <th>Sản phẩm</th>
+                      <th>Số lượng</th>
+                      <th>Giá trị</th>
+                      <th>Ngày mua</th>
+                      <th>Trạng thái</th>
+                      <th>Chi tiết</th>
+                    </tr>
+                  </thead>
+                  <tbody id="history-table-body">
+                    <!-- Dữ liệu sẽ được render bằng JS -->
+                  </tbody>
+                </table>
+          
+
+              </div>
+            </div>
+
+            <!-- Modal Chi Tiết Đơn Hàng -->
+            <div class="history-modal-overlay hidden-view" id="history-modal-overlay"></div>
+            <div class="history-modal hidden-view" id="history-detail-modal">
+              <div class="history-modal-header">
+                <h3>Chi Tiết Đơn Hàng</h3>
+                <button class="history-modal-close" id="history-modal-close">&times;</button>
+              </div>
+              <hr>
+              <div class="history-modal-body" id="history-modal-body">
+                <!-- Nội dung chi tiết đơn hàng -->
+              </div>
+            </div>
+          </div>
+
 
         </main>
       </section>
@@ -577,7 +633,7 @@
         </div>
 
         <div class="cart-detail-list" id="cart-detail-list">
-          </div>
+        </div>
 
         <div class="cart-detail-empty" id="cart-detail-empty" style="display: none;">
           <p>Giỏ hàng của bạn đang trống.</p>
@@ -609,8 +665,7 @@
   <!--=============ALERT===============-->
   <div id="alert-normal"></div>
   <div id="confirm"></div>
-  
-</body>
 
+</body>
 
 </html>
