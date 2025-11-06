@@ -13,6 +13,15 @@ const pages = {
   admin: document.querySelector(".page-admin"),
 };
 
+const adminSpan = document.querySelector(".textUser");
+//Hàm hiển thị tên admin-ẩn tên admin
+function displayUsername() {
+  if (adminSpan) adminSpan.textContent = "admin";
+}
+function hideUsername() {
+  if (adminSpan) adminSpan.textContent = "";
+}
+
 //Ẩn tất cả page
 function hideAll() {
   Object.values(pages).forEach((page) => {
@@ -23,7 +32,6 @@ function hideAll() {
         el.classList.remove("page-active", "page-active-enter");
       });
     } else if (page) {
-      // THÊM: Kiểm tra page có tồn tại
       page.classList.add("hidden");
       page.classList.remove("page-active", "page-active-enter");
     }
@@ -32,51 +40,66 @@ function hideAll() {
 
 //Hiện page
 function showPage() {
-  const key = location.hash.replace("#", "") || "home";
+  const isAdminLogged = localStorage.getItem("adminLogged") === "true"; //lấy trạng thái đăng nhập của admin
+  const key = location.hash.replace("#", "") || (isAdminLogged ? "home" : "login"); // nếu đã đăng nhập thì quay về home, không thì quay lại login
   const subPage = document.querySelector(`#${key}`);
   const isAdminSubPage = subPage?.closest(".container-admin");
   const page = pages[key];
 
   hideAll();
+  hideUsername(); //ẩn tên admin trước
 
-  if (subPage && isAdminSubPage) {
-    pages.admin.classList.remove("hidden");
-    subPage.classList.remove("hidden", "page-active-enter");
-    subPage.classList.add("page-active");
-    requestAnimationFrame(() => {
-      subPage.classList.add("page-active-enter");
-    });
+  if (isAdminSubPage) {
+    if (isAdminLogged) {
+      // TRƯỜNG HỢP 1: ĐÃ ĐĂNG NHẬP
+      pages.admin.classList.remove("hidden");
+      subPage.classList.remove("hidden", "page-active-enter");
+      subPage.classList.add("page-active");
+      requestAnimationFrame(() => {
+        subPage.classList.add("page-active-enter");
+      });
 
-    // Load dữ liệu khi trang con admin được hiển thị
-    setTimeout(() => {
-      if (subPage.id === "ds_khachHang") {
-        console.log("Đang load danh sách khách hàng...");
-        loadCustomerList();
-        setupCustomerSearch();
-      } 
-      if (subPage.id === "ds_donHang") {
-        // loadOrderList(); // Nếu có
-      }
-      if (subPage.id === "thongKe") {
-        console.log("Loading statistics data...");
-        seedOrderData();
-        loadStatistics();
-      }
-    }, 100);
-  } else {
-    // XỬ LÝ CÁC PAGE THÔNG THƯỜNG
-    if (!page) {
-      console.log("Không tìm thấy page");
-      return;
+      displayUsername(); //Hiển thị tên user khi đã an toàn
+
+      // Load dữ liệu khi trang con admin được hiển thị
+      setTimeout(() => {
+        if (subPage.id === "ds_khachHang") {
+          console.log("Đang load danh sách khách hàng...");
+          loadCustomerList();
+          setupCustomerSearch();
+        }
+        if (subPage.id === "ds_donHang") {
+          // loadOrderList(); // Nếu có
+        }
+        if (subPage.id === "thongKe") {
+          console.log("Loading statistics data...");
+          seedOrderData();
+          loadStatistics();
+        }
+      }, 100);
+    } else {
+      //TRƯỜNG HỢP 2: CHƯA ĐĂNG NHẬP
+      // -> Đẩy về trang login
+      location.hash = "login";
     }
+  } else if (page) {
+    
+    // Nếu ĐÃ đăng nhập mà còn vào trang login -> đẩy về home
+    if (key === 'login' && isAdminLogged) {
+      location.hash = "home";
+      return; // Dừng lại, để hashchange xử lý
+    }
+    
+    // Bình thường: Hiển thị trang login
     page.classList.remove("hidden", "page-active-enter");
-    // Bắt đầu hiệu ứng fade-in
-    page.classList.add("page-active"); // opacity: 0
-
-    // Chờ 1 frame để trình duyệt áp dụng CSS transition
+    page.classList.add("page-active"); 
     requestAnimationFrame(() => {
-      page.classList.add("page-active-enter"); // opacity: 1
+      page.classList.add("page-active-enter"); 
     });
+  } else {
+    // Không tìm thấy trang (hash linh tinh)
+    // Đẩy về trang mặc định
+    location.hash = isAdminLogged ? "home" : "login";
   }
 }
 
@@ -88,11 +111,5 @@ window.addEventListener("hashchange", () => {
 
 //Load trang
 window.addEventListener("load", () => {
-  const isAdminLogged = localStorage.getItem("adminLogged") === "true";
-  if (isAdminLogged) {
-    location.hash = "home";
-  } else {
-    location.hash = "login";
-  }
   showPage();
 });

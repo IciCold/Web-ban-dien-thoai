@@ -4,7 +4,6 @@ const usernameInput = document.getElementById("username");
 const passwordInput = document.getElementById("password");
 const warningUser = document.querySelector(".warning-user");
 const warningPassword = document.querySelector(".warning-incorrect-password");
-const adminSpan = document.querySelector(".textUser");
 
 loginForm.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -53,22 +52,5 @@ loginForm.addEventListener("submit", function (e) {
   else {
     localStorage.setItem("adminLogged", "true");
     location.hash = "home";
-  }
-});
-
-// Kiểm tra và hiển thị tên người dùng khi tải trang
-function displayUsername() {
-  if (adminSpan) {
-    adminSpan.textContent = "admin";
-  }
-}
-// Gọi hàm hiển thị username khi trang được tải
-window.addEventListener("hashchange", displayUsername);
-
-// Khi tải lại trang, kiểm tra xem admin có đang đăng nhập không
-window.addEventListener("load", () => {
-  const isAdminLogged = localStorage.getItem("adminLogged");
-  if (isAdminLogged === "true" && adminSpan) {
-    adminSpan.textContent = "admin";
   }
 });
