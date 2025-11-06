@@ -317,54 +317,8 @@ function getDefaultStats() {
     };
 }
 
-// Tạo dữ liệu mẫu cho đơn hàng (chạy một lần)
 export function seedOrderData() {
     if (localStorage.getItem('orders')) return;
-    
-    const sampleOrders = [
-        {
-            id: 'ORD001',
-            customer: 'Nguyễn Văn A',
-            customerEmail: 'nguyenvana@example.com',
-            products: [
-                { name: 'iPhone 15', price: 25000000, quantity: 1 },
-                { name: 'AirPods', price: 5000000, quantity: 1 }
-            ],
-            total: 30000000,
-            status: 'completed',
-            date: new Date('2024-01-15').toISOString(),
-            paymentMethod: 'Cash',
-            isSample: true
-        },
-        {
-            id: 'ORD002', 
-            customer: 'Trần Thị B',
-            customerEmail: 'tranthib@example.com',
-            products: [
-                { name: 'Samsung Galaxy S23', price: 18000000, quantity: 2 }
-            ],
-            total: 36000000,
-            status: 'pending',
-            date: new Date('2024-01-20').toISOString(),
-            paymentMethod: 'Visa',
-            isSample: true
-        },
-        {
-            id: 'ORD003',
-            customer: 'Lê Văn C',
-            customerEmail: 'levanc@example.com',
-            products: [
-                { name: 'Xiaomi 13T', price: 12000000, quantity: 1 },
-                { name: 'iPad Air', price: 15000000, quantity: 1 }
-            ],
-            total: 27000000,
-            status: 'completed',
-            date: new Date('2024-02-01').toISOString(),
-            paymentMethod: 'Momo',
-            isSample: true
-        }
-    ];
-    
     localStorage.setItem('orders', JSON.stringify(sampleOrders));
     console.log('Đã tạo dữ liệu đơn hàng mẫu!');
 }

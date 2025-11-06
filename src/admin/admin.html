@@ -112,6 +112,9 @@
           <a href="#thongKe" class="icon-btn" title="Thống kê">
             <i class="fa-solid fa-chart-bar"></i>
           </a>
+          <a href="#ds_nhapHang" class="icon-btn" title="Quản lý nhập hàng">
+            <i class="fa-solid fa-boxes-packing"></i>
+          </a>
         </div>
       </div>
 
@@ -162,8 +165,6 @@
                    <input id = "tensp" type="text" placeholder="Tên sản phẩm"> 
                    <input type="text" id = "brand" placeholder="Thương hiệu"> 
                    <input id = "price" type="text" placeholder="Giá">
-                   
-                   <input id="quantity" type="number" placeholder="Số lượng">
                    <input id="size" type="text" placeholder="Kích thước">
                    <input id="type" type="text" placeholder="Loại">
                    <input id = "color" type = "text" placeholder ="Màu">
@@ -202,22 +203,6 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>2021-10-01</td>
-                      <td>Nguyễn Văn A</td>
-                      <td>1,500,000 VND</td>
-                      <td>Hà Nội</td>
-                      <td>Đã giao</td>
-                      <td> <button class="dh-del">X</button> <button class="dh-edit">Chi tiết</button> </td>
-                    </tr>
-                    <tr>
-                      <td>2021-10-05</td>
-                      <td>Trần Thị B</td>
-                      <td>500,000 VND</td>
-                      <td>Hồ Chí Minh</td>
-                      <td>Chưa giao</td>
-                      <td> <button class="dh-del">X</button> <button class="dh-edit">Chi tiết</button> </td>
-                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -260,6 +245,7 @@
                     </tr>
                   </thead>
                   <tbody>
+                     
                   </tbody>
                 </table>
               </div>
@@ -292,7 +278,7 @@
                   <tbody>
                     <tr>
                       <td colspan="5" style="text-align: center; padding: 20px; color: #666;">
-                        Đang tải dữ liệu thống kê...
+                      Chưa có đơn hàng
                       </td>
                     </tr>
                   </tbody>
@@ -329,11 +315,71 @@
               <div class="stats-result">
                 <!-- Kết quả thống kê sẽ được hiển thị ở đây -->
                 <h3 class="stats-subtitle">📈 Tổng Quan Hệ Thống</h3>
-                <p><strong>Đang tải dữ liệu...</strong></p>
+                <p><strong>Chưa có thống kê</strong></p>
               </div>
             </div>
           </div>
         </section>
+        <!-- Nhập hàng -->
+        <section id="ds_nhapHang" class="page-section">
+          <div id="nh-wrapper">
+            <div id="nh-left">
+              <h1 class="nh-title">Danh sách Phiếu Nhập Hàng</h1>
+              <div class="nh-actions">
+                <button id="btnTaoPhieuMoi">Tạo Phiếu Nhập Mới</button>
+                <input type="text" id="nh-search" placeholder="Tìm theo ID phiếu...">
+              </div>
+              <div class="nh-table-container"></div>
+            </div>
+
+    <div id="nh-right">
+      <h2 class="nh-subtitle">Chi Tiết Phiếu Nhập</h2>
+      <form id="nh-form-chitiet">
+        <div class="input-group">
+          <label for="nh-id">ID Phiếu:</label>
+          <input type="text" id="nh-id" disabled>
+        </div>
+        <div class="input-group">
+          <label for="nh-ngayNhap">Ngày nhập:</label>
+          <input type="text" id="nh-ngayNhap" disabled>
+        </div>
+        <div class="input-group">
+          <label for="nh-trangThai">Trạng thái:</label>
+          <input type="text" id="nh-trangThai" disabled>
+        </div>
+
+        <fieldset id="nh-add-sp-fieldset">
+          <legend>Thêm sản phẩm vào phiếu</legend>
+          <div class="input-group">
+            <label for="nh-sp-select">Chọn sản phẩm:</label>
+            <select id="nh-sp-select">
+              <option value="">-- Đang tải sản phẩm --</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="nh-sp-soluong">Số lượng nhập:</label>
+            <input type="number" id="nh-sp-soluong" min="1" value="">
+          </div>
+          <div class="input-group">
+            <label for="nh-sp-gianhap">Giá nhập (VNĐ):</label>
+            <input type="number" id="nh-sp-gianhap" min="0">
+          </div>
+          <button type="button" id="btnThemSPVaoPhieu">Thêm SP</button>
+        </fieldset>
+
+        <h3>Sản phẩm trong phiếu</h3>
+        <div id="nh-chitiet-table-container">
+          </div>
+        <p><strong>Tổng tiền nhập: <span id="nh-tongTien">0</span> VNĐ</strong></p>
+
+        <div id="nh-form-actions">
+          <button type="button" id="btnHoanThanhPhieu" class="btn-success">Hoàn Thành Phiếu</button>
+          <button type="button" id="btnXoaPhieu" class="btn-danger">Xóa Phiếu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
       </div>
     </section>
 </body>

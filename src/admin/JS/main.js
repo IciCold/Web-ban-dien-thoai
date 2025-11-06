@@ -1,4 +1,5 @@
 import "./ds_sanpham.js";
+import "./nhaphang.js";
 import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
 import { loadStatistics, seedOrderData } from "./thongke.js";
 import "./login.js";

@@ -14,7 +14,6 @@ const themsanpham = document.getElementById("themsanphambtn");
 const tenspinp = document.getElementById("tensp");
 const thuonghieuinp = document.getElementById("brand");
 const giainp = document.getElementById("price");
-const soluonginp = document.getElementById("quantity");
 const kichthuocinp = document.getElementById("size");
 const loaiinp = document.getElementById("type");
 const image = document.getElementById("revenue1");
@@ -54,7 +53,6 @@ themsanpham.addEventListener("click", function (e) {
   const ten = tenspinp.value.trim();
   const brand = thuonghieuinp.value.trim();
   const gia = parseInt(giainp.value) || 0;
-  const so_luong = parseInt(soluonginp.value) || 0;
   const kich_thuoc = kichthuocinp.value.trim();
   const loai = loaiinp.value.trim();
   const anhFile = image.files[0];
@@ -69,18 +67,18 @@ themsanpham.addEventListener("click", function (e) {
     reader.onload = function (e) {
       const base64 = e.target.result;
       preview.src = base64;
-      saveProduct({ten, brand, gia, so_luong, kich_thuoc, loai, base64});
+      saveProduct({ten, brand, gia, kich_thuoc, loai, base64});
     };
     reader.readAsDataURL(anhFile);
   } else {
-    saveProduct({ten, brand, gia, so_luong, kich_thuoc, loai, base64: currentEditingId ? null : ""});
+    saveProduct({ten, brand, gia, kich_thuoc, loai, base64: currentEditingId ? null : ""});
   }
 });
 
 // ==============================
 //  HÀM SAVE PRODUCT
 // ==============================
-function saveProduct({ten, brand, gia, so_luong, mau_sac = "", camera = "", cpu = "", bo_nho = "", ram = "", dung_luong_pin = "", kich_thuoc = "", loai = "", base64 = ""}) {
+function saveProduct({ten, brand, gia, mau_sac = "", camera = "", cpu = "", bo_nho = "", ram = "", dung_luong_pin = "", kich_thuoc = "", loai = "", base64 = ""}) {
   mau_sac = document.getElementById("color").value.trim() || mau_sac;
   camera = document.getElementById("camera").value.trim() || camera;
   cpu = document.getElementById("cpu").value.trim() || cpu;
@@ -98,7 +96,7 @@ function saveProduct({ten, brand, gia, so_luong, mau_sac = "", camera = "", cpu 
     }
 
     if (productToUpdate) {
-      Object.assign(productToUpdate, {ten, brand, gia, so_luong, mau_sac, kich_thuoc, bo_nho, ram, cpu, camera, dung_luong_pin, loai});
+      Object.assign(productToUpdate, {ten, brand, gia, mau_sac, kich_thuoc, bo_nho, ram, cpu, camera, dung_luong_pin, loai});
       if (base64) productToUpdate.src = base64;
     }
     currentEditingId = null;
@@ -111,13 +109,13 @@ function saveProduct({ten, brand, gia, so_luong, mau_sac = "", camera = "", cpu 
 
     id++;
     const newId = "S" + String(id).padStart(3, "0");
-    datalist.push({id: newId, src: base64 || "", ten, brand, gia, so_luong, mau_sac, kich_thuoc, bo_nho, ram, cpu, camera, dung_luong_pin, loai});
+    datalist.push({id: newId, src: base64 || "", ten, brand, gia, so_luong: 0, mau_sac, kich_thuoc, bo_nho, ram, cpu, camera, dung_luong_pin, loai});
   }
 
   ghidulieuLocalStorage("dataProducts", datalist);
 
   // Reset form
-  ["tensp","brand","price","quantity","color","camera","cpu","memory","ram","battery","size","type"].forEach(id => document.getElementById(id).value = "");
+  ["tensp","brand","price","color","camera","cpu","memory","ram","battery","size","type"].forEach(id => document.getElementById(id).value = "");
   image.value = "";
   preview.src = "";
   themsanpham.textContent = "Thêm";
@@ -145,7 +143,7 @@ function updateBang() {
     <th>Tên sản phẩm</th>
     <th>Thương hiệu</th>
     <th>Giá</th>
-    
+    <th>Số lượng</th>
     <th>Hành động</th>
   `;
   table.appendChild(headerRow);
@@ -158,7 +156,7 @@ function updateBang() {
       <td>${item.ten}</td>
       <td>${item.brand}</td>
       <td>${item.gia.toLocaleString("vi-VN")}₫</td>
-      
+      <td>${item.so_luong || 0}</td>
       <td>
         <button class="sp-edit">Sửa</button>
         <button class="sp-del">X</button>
@@ -172,7 +170,6 @@ function updateBang() {
       tenspinp.value = item.ten;
       thuonghieuinp.value = item.brand;
       giainp.value = item.gia;
-      soluonginp.value = item.so_luong || 0;
       document.getElementById("color").value = item.mau_sac || "";
       document.getElementById("size").value = item.kich_thuoc || "";
       document.getElementById("memory").value = item.bo_nho || "";
@@ -265,7 +262,7 @@ function displayFilteredTable(filteredList) {
     <th>Tên sản phẩm</th>
     <th>Thương hiệu</th>
     <th>Giá</th>
-    
+    <th>Số lượng</th>
     <th>Hành động</th>
   `;
   table.appendChild(headerRow);
@@ -278,7 +275,7 @@ function displayFilteredTable(filteredList) {
       <td>${item.ten}</td>
       <td>${item.brand}</td>
       <td>${item.gia.toLocaleString("vi-VN")}₫</td>
-      
+      <td>${item.so_luong || 0}</td>
       <td>
         <button class="sp-edit">Sửa</button>
         <button class="sp-del">X</button>
@@ -291,7 +288,6 @@ function displayFilteredTable(filteredList) {
       tenspinp.value = item.ten;
       thuonghieuinp.value = item.brand;
       giainp.value = item.gia;
-      soluonginp.value = item.so_luong || 0;
       document.getElementById("color").value = item.mau_sac || "";
       document.getElementById("size").value = item.kich_thuoc || "";
       document.getElementById("memory").value = item.bo_nho || "";
