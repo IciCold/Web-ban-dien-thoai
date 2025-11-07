@@ -316,6 +316,12 @@ function handleHoanThanhPhieu() {
       const spIndex = dataProducts.findIndex(sp => sp.id === item.idSP);
       if (spIndex !== -1) {
         dataProducts[spIndex].so_luong = (dataProducts[spIndex].so_luong || 0) + item.soLuong;
+        dataProducts[spIndex].gia = item.giaNhap; // Gán giá nhập làm GIÁ VỐN (sp.gia)
+
+    // Nếu sản phẩm chưa có giá bán, tạm gán giá bán = giá vốn
+    if (!dataProducts[spIndex].giaBan) {
+       dataProducts[spIndex].giaBan = item.giaNhap;
+    }
       }
     });
     

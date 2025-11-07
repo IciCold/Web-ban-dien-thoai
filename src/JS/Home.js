@@ -188,7 +188,7 @@ export function displayProducts(list) {
     card.innerHTML = `
       <img src="${product.src}" alt="${product.ten}">
       <div class="product-name">${product.ten}</div>
-      <div class="product-price">${product.gia.toLocaleString()} VND</div>
+      <div class="product-price">${product.giaBan.toLocaleString()} VND</div>
     `;
     productsGrid.appendChild(card);
   });

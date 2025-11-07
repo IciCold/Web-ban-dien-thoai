@@ -52,12 +52,11 @@ themsanpham.addEventListener("click", function (e) {
   e.preventDefault();
   const ten = tenspinp.value.trim();
   const brand = thuonghieuinp.value.trim();
-  const gia = parseInt(giainp.value) || 0;
   const kich_thuoc = kichthuocinp.value.trim();
   const loai = loaiinp.value.trim();
   const anhFile = image.files[0];
 
-  if (!ten || !brand || gia <= 0) {
+  if (!ten || !brand) {
     alert("Vui lòng nhập đầy đủ thông tin hợp lệ!");
     return;
   }
@@ -67,18 +66,18 @@ themsanpham.addEventListener("click", function (e) {
     reader.onload = function (e) {
       const base64 = e.target.result;
       preview.src = base64;
-      saveProduct({ten, brand, gia, kich_thuoc, loai, base64});
+      saveProduct({ten, brand, kich_thuoc, loai, base64});
     };
     reader.readAsDataURL(anhFile);
   } else {
-    saveProduct({ten, brand, gia, kich_thuoc, loai, base64: currentEditingId ? null : ""});
+    saveProduct({ten, brand, kich_thuoc, loai, base64: currentEditingId ? null : ""});
   }
 });
 
 // ==============================
 //  HÀM SAVE PRODUCT
 // ==============================
-function saveProduct({ten, brand, gia, mau_sac = "", camera = "", cpu = "", bo_nho = "", ram = "", dung_luong_pin = "", kich_thuoc = "", loai = "", base64 = ""}) {
+function saveProduct({ten, brand, mau_sac = "", camera = "", cpu = "", bo_nho = "", ram = "", dung_luong_pin = "", kich_thuoc = "", loai = "", base64 = ""}) {
   mau_sac = document.getElementById("color").value.trim() || mau_sac;
   camera = document.getElementById("camera").value.trim() || camera;
   cpu = document.getElementById("cpu").value.trim() || cpu;
@@ -96,7 +95,9 @@ function saveProduct({ten, brand, gia, mau_sac = "", camera = "", cpu = "", bo_n
     }
 
     if (productToUpdate) {
-      Object.assign(productToUpdate, {ten, brand, gia, mau_sac, kich_thuoc, bo_nho, ram, cpu, camera, dung_luong_pin, loai});
+      const oldGia = productToUpdate.gia; 
+      const oldGiaBan = productToUpdate.giaBan;
+      Object.assign(productToUpdate, {ten, brand, gia:oldGia,giaBan:oldGiaBan, mau_sac, kich_thuoc, bo_nho, ram, cpu, camera, dung_luong_pin, loai});
       if (base64) productToUpdate.src = base64;
     }
     currentEditingId = null;
@@ -109,13 +110,13 @@ function saveProduct({ten, brand, gia, mau_sac = "", camera = "", cpu = "", bo_n
 
     id++;
     const newId = "S" + String(id).padStart(3, "0");
-    datalist.push({id: newId, src: base64 || "", ten, brand, gia, so_luong: 0, mau_sac, kich_thuoc, bo_nho, ram, cpu, camera, dung_luong_pin, loai});
+    datalist.push({id: newId, src: base64 || "", ten, brand, gia:0, so_luong: 0, mau_sac, kich_thuoc, bo_nho, ram, cpu, camera, dung_luong_pin, loai});
   }
 
   ghidulieuLocalStorage("dataProducts", datalist);
 
   // Reset form
-  ["tensp","brand","price","color","camera","cpu","memory","ram","battery","size","type"].forEach(id => document.getElementById(id).value = "");
+  ["tensp","brand","color","camera","cpu","memory","ram","battery","size","type"].forEach(id => document.getElementById(id).value = "");
   image.value = "";
   preview.src = "";
   themsanpham.textContent = "Thêm";
