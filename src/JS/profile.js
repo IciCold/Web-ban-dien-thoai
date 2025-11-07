@@ -901,6 +901,7 @@ if (addressList) {
     }
   });
 }
+
 // --- Listener Cập nhật mật khẩu" ---
 function effect(element, status) {
   if (status) {
@@ -919,7 +920,7 @@ const Npassword = document.getElementById("Npassword");
 const Cpassword = document.getElementById("Cpassword");
 const changepw = document.querySelector(".change-user");
 const Opassword = document.querySelector("#Opassword");
-let usersIndex = users.findIndex(u => u.email === currentUser.email);
+let usersIndex = users.findIndex((u) => u.email === currentUser.email);
 changepw.addEventListener("submit", () => {
   //Kiểm tra mật khẩu cũ
   if (Opassword.value === "") {
@@ -946,9 +947,7 @@ changepw.addEventListener("submit", () => {
       showalert("✅ Đã thay đổi mật khẩu thành công!", "success");
     }
   }
-})
-
-
+});
 
 // ===================================
 // --- (MỚI) HÀM KHỞI TẠO CHÍNH ---
