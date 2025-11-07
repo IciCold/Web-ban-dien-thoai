@@ -903,6 +903,7 @@ if (addressList) {
 }
 
 // --- Listener Cập nhật mật khẩu" ---
+//hàm kích hoạt hiệu ứng
 function effect(element, status) {
   if (status) {
     element.style.border = "1px solid red";
@@ -914,14 +915,29 @@ function effect(element, status) {
     element.style.border = "";
   }
 }
-let currentUser = docdulieuLocalStorage("currentUser");
-let users = docdulieuLocalStorage("users");
+
 const Npassword = document.getElementById("Npassword");
 const Cpassword = document.getElementById("Cpassword");
 const changepw = document.querySelector(".change-user");
-const Opassword = document.querySelector("#Opassword");
-let usersIndex = users.findIndex((u) => u.email === currentUser.email);
-changepw.addEventListener("submit", () => {
+const Opassword = document.getElementById("Opassword");
+let usersIndex = -1;
+
+changepw.addEventListener("submit", (e) => {
+e.preventDefault(); //ngăn form tự reload
+  let currentUser = docdulieuLocalStorage("currentUser");
+  let users = docdulieuLocalStorage("users");
+  //Lấy index từ người dùng hiện tại trong mảng users
+  if (currentUser && currentUser.email) {
+    usersIndex = users.findIndex((u) => u.email === currentUser.email); 
+  }
+ 
+  if (usersIndex === -1) {
+    showalert("Có lỗi xảy ra, vui lòng đăng nhập lại", "error");
+    setTimeout(() => {
+      location.hash = "login";
+    }, 1500);
+    return;
+  }
   //Kiểm tra mật khẩu cũ
   if (Opassword.value === "") {
     showalert("Không được bỏ trống mật khẩu", "warning");
@@ -932,19 +948,24 @@ changepw.addEventListener("submit", () => {
   } else {
     effect(Opassword, false);
     //Kiểm tra mật khẩu mới và xác nhận mật khẩu mới
-    if (Npassword.value !== Cpassword.value) {
-      effect(Npassword, true);
-      effect(Cpassword, true);
-      showalert("Mật khẩu không khớp", "warning");
+    if (Npassword.value !== "" && Cpassword.value !== "") {
+      if (Npassword.value !== Cpassword.value) {
+        effect(Npassword, true);
+        effect(Cpassword, true);
+        showalert("Mật khẩu không khớp", "warning");
+      } else {
+        currentUser.password = Npassword.value;
+        users[usersIndex].password = Npassword.value;
+        ghidulieuLocalStorage("users", users);
+        effect(Npassword, false);
+        effect(Cpassword, false);
+        Opassword.value = "";
+        Npassword.value = "";
+        Cpassword.value = "";
+        showalert("✅ Đã thay đổi mật khẩu thành công!", "success");
+      }
     } else {
-      users[usersIndex].password = Npassword.value;
-      ghidulieuLocalStorage("users", users);
-      effect(Npassword, false);
-      effect(Cpassword, false);
-      Opassword.value = "";
-      Npassword.value = "";
-      Cpassword.value = "";
-      showalert("✅ Đã thay đổi mật khẩu thành công!", "success");
+      showalert("Không được bỏ trống mật khẩu", "warning");
     }
   }
 });
