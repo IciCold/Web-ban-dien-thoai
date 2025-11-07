@@ -67,28 +67,32 @@ function renderProductDetails(product) {
   productImage.src = product.src;
   productImage.alt = product.ten;
 
-  // --- CẬP NHẬT (Khuyến nghị) ---
-  // Hiển thị luôn thông tin bộ nhớ và màu sắc (vì giờ chúng cố định)
-  specsBox.innerHTML = `
-    <p><strong>CPU:</strong> ${product.cpu || 'N/A'}</p>
-    <p><strong>RAM:</strong> ${product.ram || 'N/A'}</p>
-    <p><strong>Bộ nhớ:</strong> ${product.bo_nho || 'N/A'}</p>
-    <p><strong>Màu sắc:</strong> ${product.mau_sac || 'N/A'}</p>
-    <p><strong>Camera:</strong> ${product.camera || 'N/A'}</p>
-    <p><strong>Dung lượng pin:</strong> ${product.dung_luong_pin || 'N/A'}</p>
-  `;
-
   productPrice.textContent = `${product.gia?.toLocaleString() || "N/A"} VND`;
 
   const memoryValueEl = document.getElementById("product-memory-value");
   const colorValueEl = document.getElementById("product-color-value");
-
+  const cpuValueEl = document.getElementById("product-cpu-value");
+  const ramValueEl = document.getElementById("product-ram-value");
+  const cameraValueEl = document.getElementById("product-camera-value");
+  const pinValueEl = document.getElementById("product-pin-value");
   // Gán giá trị cho chúng
   if (memoryValueEl) {
     memoryValueEl.textContent = product.bo_nho || 'N/A';
   }
   if (colorValueEl) {
     colorValueEl.textContent = product.mau_sac || 'N/A';
+  }
+  if (cpuValueEl) {
+    cpuValueEl.textContent = product.cpu || 'N/A';
+  }
+  if (ramValueEl) {
+    ramValueEl.textContent = product.ram || 'N/A';
+  }
+  if (cameraValueEl) {
+    cameraValueEl.textContent = product.camera || 'N/A';
+  }
+  if (pinValueEl) {
+    pinValueEl.textContent = product.dung_luong_pin || 'N/A';
   }
 }
 
