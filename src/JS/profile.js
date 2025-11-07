@@ -942,7 +942,7 @@ e.preventDefault(); //ngăn form tự reload
   if (Opassword.value === "") {
     showalert("Không được bỏ trống mật khẩu", "warning");
     effect(Opassword, true);
-  } else if (Opassword.value !== currentUser.password) {
+  } else if (Opassword.value !== users[usersIndex].password) {
     showalert("Mật khẩu không đúng", "warning");
     effect(Opassword, true);
   } else {
