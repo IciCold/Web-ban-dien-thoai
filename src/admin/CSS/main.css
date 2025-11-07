@@ -62,22 +62,3 @@ body {
     color: white;
 }
 
-/* Style cho nút khóa */
-.kh-lock {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-/* Style cho nút mở khóa */
-.kh-lock[title*="Mở khóa"] {
-    background-color: #ff4444;
-}
-
-/* Hover effect */
-.kh-lock:hover {
-    opacity: 0.8;
-}
