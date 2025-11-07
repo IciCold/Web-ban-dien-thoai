@@ -66,61 +66,22 @@
 
 .option-group {
     margin-bottom: 20px;
-}
-
-.option-label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-.option-buttons button {
-    background-color: var(--color-light-gray);
-    color: var(--color-text);
-    border: none;
-    padding: 8px 15px;
-    margin-right: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.2s;
-}
-
-.option-buttons button:hover {
-    background-color: #fff;
-}
-
-.option-buttons .active {
-    background-color: var(--color-primary);
-    color: white;
-}
-
-.color-options {
-    display: flex;
-    gap: 15px;
-}
-
-.color-option {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: border-color 0.2s;
-}
-
-.color-option.active {
-    border-color: white;
-    border-width: 4px; /* Làm cho đường viền nổi bật hơn */
-}
-
-.color-option.red { background-color: red; }
-.color-option.yellow { background-color: yellow; }
-.color-option.green { background-color: green; }
-
-.quantity-control {
     display: flex;
     align-items: center;
 }
 
+.option-label {
+    font-weight: bold;
+}
+.quantity-control {
+    display: flex;
+    align-items: center;
+}
+.option-value {
+  margin-left: 10px;  /* Tạo khoảng cách với nhãn */
+  font-size: 16px;
+  font-weight: 500;   /* Trọng lượng chữ vừa phải */
+}
 .qty-button {
     background-color: var(--color-light-gray);
     color: var(--color-text);

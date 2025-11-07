@@ -1,10 +1,9 @@
 import { docdulieuLocalStorage, ghidulieuLocalStorage } from "./readandwrite.js";
-import { parseVNDPrice } from "./cart.js"; // Thêm dòng này
+import { parseVNDPrice } from "./cart.js";
 // ===================================
 // KHAI BÁO BIẾN CHO TRANG CHI TIẾT
 // ===================================
-let ProductsData = [];
-let currentProductGroup = [];
+let ProductsData = []; // --- XÓA Biến currentProductGroup ---
 
 // Lấy các phần tử DOM
 const productSection = document.getElementById("productSection");
@@ -12,8 +11,8 @@ const productTitle = productSection.querySelector(".product-title");
 const productPrice = productSection.querySelector(".product-price");
 const productImage = productSection.querySelector(".product-image");
 const specsBox = productSection.querySelector(".specs-box");
-const ramButtonContainer = productSection.querySelector("#ramButton");
-const colorButtonContainer = productSection.querySelector("#colorButton");
+// --- XÓA Biến ramButtonContainer ---
+// --- XÓA Biến colorButtonContainer ---
 const buyNowBtn = productSection.querySelector(".buy-now-button");
 const addToCartBtn = productSection.querySelector(".add-to-cart-button");
 
@@ -33,29 +32,13 @@ export async function initChiTietPage() {
 
   // 2️⃣ Đọc dữ liệu có sẵn trong localStorage
   const Products = docdulieuLocalStorage("dataProducts");
-  //const jsonProducts = docdulieuLocalStorage("jsonProducts"); // nếu có
-  //const allData = [...localProducts, ...jsonProducts];
 
   if (Products.length === 0) {
     productSection.innerHTML = "<h1>Không có dữ liệu sản phẩm.</h1>";
     return;
   }
 
-  /* 3️⃣ Chuẩn hóa dữ liệu
-  allProductsData = allData.map(item => ({
-    ...item,
-    id: item.id,
-    ten: item.ten || item.tensp,
-    src: item.src || item.anh,
-    gia: item.gia,
-    cpu: item.cpu,
-    camera: item.camera,
-    ram: item.ram,
-    dung_luong_pin: item.dung_luong_pin || item.battery,
-    bo_nho: item.bo_nho || item.memory,
-    mau_sac: item.mau_sac || item.color,
-    group_id: item.group_id
-  }));*/
+  /* 3️⃣ Chuẩn hóa dữ liệu (Nếu cần) */
 
   // 4️⃣ Tìm sản phẩm đang được chọn
   const selectedProduct = Products.find(p => p.id === selectedId);
@@ -65,15 +48,12 @@ export async function initChiTietPage() {
     return;
   }
 
-  // 5️⃣ Lấy nhóm biến thể
-  currentProductGroup = selectedProduct.group_id
-    ? dataProductsData.filter(p => p.group_id === selectedProduct.group_id)
-    : [selectedProduct];
+  // --- XÓA Bước 5 (Lấy nhóm biến thể) vì không còn cần thiết ---
 
   // 6️⃣ Hiển thị thông tin
   renderProductDetails(selectedProduct);
   
-  // 7️⃣ KÍCH HOẠT NÚT SỐ LƯỢNG (THÊM DÒNG NÀY)
+  // 7️⃣ KÍCH HOẠT NÚT SỐ LƯỢNG
   setupQuantityControls(); 
 }
 
@@ -87,88 +67,33 @@ function renderProductDetails(product) {
   productImage.src = product.src;
   productImage.alt = product.ten;
 
+  // --- CẬP NHẬT (Khuyến nghị) ---
+  // Hiển thị luôn thông tin bộ nhớ và màu sắc (vì giờ chúng cố định)
   specsBox.innerHTML = `
     <p><strong>CPU:</strong> ${product.cpu || 'N/A'}</p>
     <p><strong>RAM:</strong> ${product.ram || 'N/A'}</p>
+    <p><strong>Bộ nhớ:</strong> ${product.bo_nho || 'N/A'}</p>
+    <p><strong>Màu sắc:</strong> ${product.mau_sac || 'N/A'}</p>
     <p><strong>Camera:</strong> ${product.camera || 'N/A'}</p>
     <p><strong>Dung lượng pin:</strong> ${product.dung_luong_pin || 'N/A'}</p>
   `;
 
   productPrice.textContent = `${product.gia?.toLocaleString() || "N/A"} VND`;
 
-  // Tạo nút RAM / Bộ nhớ
-  const availableRams = [...new Set(currentProductGroup.map(p => p.bo_nho))];
-  ramButtonContainer.innerHTML = "";
-  availableRams.forEach(ram => {
-    const button = document.createElement("button");
-    button.className = "option-button";
-    button.textContent = ram;
-    button.dataset.ram = ram;
-    if (ram === product.bo_nho) button.classList.add("active");
-    ramButtonContainer.appendChild(button);
-  });
+  const memoryValueEl = document.getElementById("product-memory-value");
+  const colorValueEl = document.getElementById("product-color-value");
 
-  // Tạo nút màu sắc
-  const availableColors = [...new Set(currentProductGroup.map(p => p.mau_sac))];
-  colorButtonContainer.innerHTML = "";
-  availableColors.forEach(color => {
-    const button = document.createElement("button");
-    button.className = "option-button";
-    button.textContent = color;
-    button.dataset.color = color;
-    if (color === product.mau_sac) button.classList.add("active");
-    colorButtonContainer.appendChild(button);
-  });
-  
-  addVariantListeners();
-}
-
-// ===================================
-// GẮN SỰ KIỆN CHO NÚT TÙY CHỌN
-// ===================================
-function addVariantListeners() {
-  const ramButtons = ramButtonContainer.querySelectorAll(".option-button");
-  const colorButtons = colorButtonContainer.querySelectorAll(".option-button");
-
-  ramButtons.forEach(button => {
-    button.addEventListener("click", () => handleVariantSelection(button, "ram"));
-  });
-  colorButtons.forEach(button => {
-    button.addEventListener("click", () => handleVariantSelection(button, "color"));
-  });
-}
-
-// ===================================
-// XỬ LÝ KHI CHỌN BIẾN THỂ
-// ===================================
-function handleVariantSelection(clickedButton, type) {
-  const currentActiveRam = ramButtonContainer.querySelector(".active")?.dataset.ram;
-  const currentActiveColor = colorButtonContainer.querySelector(".active")?.dataset.color;
-
-  let newSelectedRam = currentActiveRam;
-  let newSelectedColor = currentActiveColor;
-
-  if (type === "ram") {
-    newSelectedRam = clickedButton.dataset.ram;
-  } else {
-    newSelectedColor = clickedButton.dataset.color;
+  // Gán giá trị cho chúng
+  if (memoryValueEl) {
+    memoryValueEl.textContent = product.bo_nho || 'N/A';
   }
-
-  let newProduct = currentProductGroup.find(
-    p => p.bo_nho === newSelectedRam && p.mau_sac === newSelectedColor
-  );
-
-  if (!newProduct) {
-    newProduct = type === "ram"
-      ? currentProductGroup.find(p => p.bo_nho === newSelectedRam)
-      : currentProductGroup.find(p => p.mau_sac === newSelectedColor);
+  if (colorValueEl) {
+    colorValueEl.textContent = product.mau_sac || 'N/A';
   }
-
-  if (newProduct) renderProductDetails(newProduct);
 }
 
 // ===================================
-// NÚT MUA NGAY (ĐÃ SỬA LẠI ĐẦY ĐỦ)
+// NÚT MUA NGAY (Giữ nguyên)
 // ===================================
 if (buyNowBtn) {
   buyNowBtn.addEventListener("click", () => {
@@ -197,12 +122,12 @@ if (buyNowBtn) {
 
     // 4. Tạo đối tượng data để gửi qua trang thanh toán
     const paymentData = {
-      items: [singleItem], // Gửi 1 mảng chỉ chứa 1 item
+      items: [singleItem],
       total: price * quantity,
-      type: 'direct' // Báo cho trang thanh toán biết đây là mua trực tiếp
+      type: 'direct'
     };
 
-    // 5. LƯU DỮ LIỆU VÀO LOCALSTORAGE (Bước bạn đang thiếu)
+    // 5. LƯU DỮ LIỆU VÀO LOCALSTORAGE
     ghidulieuLocalStorage('paymentData', paymentData);
 
     // 6. Chuyển sang trang thanh toán
@@ -211,7 +136,7 @@ if (buyNowBtn) {
 }
 
 // ===================================
-// HÀM XỬ LÝ NÚT SỐ LƯỢNG (MỚI)
+// HÀM XỬ LÝ NÚT SỐ LƯỢNG (Giữ nguyên)
 // ===================================
 function setupQuantityControls() {
   // 1. Lấy các phần tử
