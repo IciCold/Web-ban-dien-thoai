@@ -13,12 +13,14 @@ const navProfile = document.getElementById("nav-profile-link");
 const navBanking = document.getElementById("nav-banking-link");
 const navAddress = document.getElementById("nav-address-link");
 const navHistory = document.getElementById("nav-history-link");
+const navChangePw = document.getElementById("nav-changePw-link");
 const profileView = document.getElementById("profile-view");
 const bankingView = document.getElementById("banking-view");
 const addressView = document.getElementById("address-view");
 const histotyView = document.getElementById("history-view");
-const allViews = [profileView, bankingView, addressView, histotyView];
-const allNavLinks = [navProfile, navBanking, navAddress,navHistory];
+const ChangePwView = document.getElementById("changepw-view");
+const allViews = [profileView, bankingView, addressView, histotyView,ChangePwView];
+const allNavLinks = [navProfile, navBanking, navAddress,navHistory,navChangePw];
 
 // --- Trang Hồ Sơ ---
 const profileForm = document.querySelector(".input-user");
@@ -494,8 +496,11 @@ window.addEventListener("hashchange", () => {
     } else if (currentHash === "profile") {
         showView(profileView, navProfile);
     }
-    else if(currentHash === "history"){
+     else if(currentHash === "history"){
         showView(histotyView, navHistory);
+    }
+    else if(currentHash === "changepw"){
+        showView(ChangePwView,navChangePw);
     }
 });
 

@@ -83,7 +83,7 @@ function showPage() {
  */
 function getMainPageKey(hash) {
   // Danh sách sub-routes của profile
-  const profileSubRoutes = ["banking", "address", "history"];
+  const profileSubRoutes = ["banking", "address", "history", "changepw"];
   
   if (profileSubRoutes.includes(hash)) {
     return "profile";
