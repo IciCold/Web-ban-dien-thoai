@@ -166,21 +166,6 @@
     margin-bottom: 10px;
 }
 
-.buy-btn {
-    background-color: #5f7df5;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.buy-btn:hover {
-    background-color: #415ed0;
-}
-
 /*GIAO DIỆN POPUP LỌC*/
 /* ============ POPUP LỌC ============ */
 .filter-popup {
