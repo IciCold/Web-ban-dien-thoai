@@ -9,8 +9,8 @@ import "./LocSanPham.js";
 import "./alert.js";
 import { initProfilePage } from "./profile.js";
 import { initChiTietPage } from "./chitiet.js";
-import { initCartDetailPage } from './cart-page.js';
-import { initThanhToanPage } from "./thanhtoan.js"; 
+import { initCartDetailPage } from "./cart-page.js";
+import { initThanhToanPage } from "./thanhtoan.js";
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
@@ -20,7 +20,7 @@ const pages = {
   thanhtoan: document.querySelector(".payment-section"),
   chitiet: document.querySelector(".product-section"),
   profile: document.querySelector(".page-profile"),
-  cartDetailPage: document.getElementById("cartDetailPage")
+  cartDetailPage: document.getElementById("cartDetailPage"),
 };
 
 //Ẩn tất cả page
@@ -41,19 +41,19 @@ function hideAll() {
 //Hiện page
 function showPage() {
   const fullHash = location.hash.replace("#", "") || "home";
-  
+
   // Tách key chính và sub-route (nếu có)
   // "profile", "banking", "address" đều thuộc page profile
   const key = getMainPageKey(fullHash);
   const page = pages[key] || pages.home;
 
   hideAll();
-  
+
   if (!page) {
     console.log("Không tìm thấy page");
     return;
   }
-  
+
   page.classList.remove("hidden", "page-active-enter");
   page.classList.add("page-active");
 
@@ -71,9 +71,6 @@ function showPage() {
   } else if (key === "thanhtoan") {
     initThanhToanPage();
   }
-  else{
-    
-  }
 }
 
 /**
@@ -83,8 +80,7 @@ function showPage() {
  */
 function getMainPageKey(hash) {
   // Danh sách sub-routes của profile
-  const profileSubRoutes = ["banking", "address", "history"];
-  
+  const profileSubRoutes = ["banking", "address", "history", "changepw"];
   if (profileSubRoutes.includes(hash)) {
     return "profile";
   }

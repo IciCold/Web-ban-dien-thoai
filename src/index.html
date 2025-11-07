@@ -198,9 +198,6 @@
           <div class="product-image-container">
             <img src="" alt="" class="product-image">
           </div>
-
-          <div class="specs-box">
-          </div>
         </div>
 
         <div class="product-options">
@@ -210,15 +207,35 @@
           </div>
 
           <div class="option-group">
+            <span class="option-label">CPU:</span>
+            <span class="option-value" id="product-cpu-value"></span>
+          </div>
+
+          <div class="option-group">
+            <span class="option-label">RAM:</span>
+            <span class="option-value" id="product-ram-value"></span>
+          </div>
+
+          <div class="option-group">
+            <span class="option-label">Camera:</span>
+            <span class="option-value" id="product-camera-value"></span>
+          </div>
+
+          <div class="option-group">
+            <span class="option-label">Dung lượng pin:</span>
+            <span class="option-value" id="product-pin-value"></span>
+          </div>
+
+          <div class="option-group">
             <span class="option-label">Bộ nhớ:</span>
-            <div class="option-buttons" id="ramButton">
-            </div>
+            <span class="option-value" id="product-memory-value">
+            </span>
           </div>
 
           <div class="option-group">
             <span class="option-label">Màu:</span>
-            <div class="option-buttons" id="colorButton">
-            </div>
+            <span class="option-value" id="product-color-value">
+            </span>
           </div>
 
           <div class="option-group">
@@ -392,7 +409,8 @@
               <li class="active"><a href="#profile" id="nav-profile-link">Hồ Sơ</a></li>
               <li><a href="#banking" id="nav-banking-link">Ngân Hàng</a></li>
               <li><a href="#address" id="nav-address-link">Địa Chỉ</a></li>
-              <li><a href="#history" id="nav-history-link">Lịch sử mua hàng</a></li>
+              <li><a href="#changepw" id="nav-changePw-link" ">Đổi mật khẩu</a></li>
+              <li><a href=" #history" id="nav-history-link">Lịch sử mua hàng</a></li>
               <li> <button class="logout-btn">Đăng xuất</button> </li>
             </ul>
           </ul>
@@ -481,6 +499,7 @@
             </div>
           </div>
 
+
           <!--LỊCH SỬ MUA HÀNG-->
           <div class="profile-page-view hidden-view" id="history-view">
             <div class="history-header">
@@ -516,7 +535,7 @@
                     <!-- Dữ liệu sẽ được render bằng JS -->
                   </tbody>
                 </table>
-          
+
 
               </div>
             </div>
@@ -535,6 +554,40 @@
             </div>
           </div>
 
+          <!-- Đổi mật khẩu -->
+          <div class="profile-page-view" id="changepw-view">
+            <h2>Đổi mật khẩu</h2>
+            <p>Thay đổi mật khẩu để bảo mật tài khoản</p>
+            <hr>
+            <div class="form-and-avatar-wrapper">
+              <form class="change-user input-user">
+
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input type="email" id="changepw-email" value="" readonly>
+                </div>
+
+                <div class="form-group">
+                  <label for="password">Mật khẩu cũ</label>
+                  <input type="text" id="Opassword" placeholder="Nhập mật khẩu cũ">
+                </div>
+
+                <div class="form-group">
+                  <label for="password">Mật khẩu mới</label>
+                  <input type="text" id="Npassword" placeholder="Nhập mật khẩu mới">
+                </div>
+                <div class="form-group">
+                  <label for="password">Xác nhận mật khẩu</label>
+                  <input type="text" id="Cpassword" placeholder="Xác nhận">
+
+                </div>
+                <div class="form-group">
+                  <label></label>
+                  <button type="submit" class="btn-orange">Lưu</button>
+                </div>
+              </form>
+            </div>
+          </div>
 
         </main>
       </section>
