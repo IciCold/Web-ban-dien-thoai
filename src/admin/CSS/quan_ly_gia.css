@@ -1,0 +1,89 @@
+.price-management-wrapper {
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.price-management-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.price-management-header h1 {
+  font-size: 24px;
+  color: #333;
+}
+
+.price-filter {
+  display: flex;
+  gap: 10px;
+}
+
+.price-filter select,
+.price-filter input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+}
+
+.price-filter input {
+  width: 200px;
+}
+
+.price-table-container {
+  overflow-x: auto;
+}
+
+.price-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.price-table th,
+.price-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.price-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.price-table input {
+  width: 100px;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.save-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background-color: #45a049;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .price-management-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .price-filter {
+    width: 100%;
+  }
+}

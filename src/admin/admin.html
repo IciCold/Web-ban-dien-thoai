@@ -115,6 +115,12 @@
           <a href="#ds_nhapHang" class="icon-btn" title="Quản lý nhập hàng">
             <i class="fa-solid fa-boxes-packing"></i>
           </a>
+          <a href="#ds_giaBan" class="icon-btn" title="Quản lý giá bán">
+            <i class="fa-solid fa-money-bill"></i>
+          </a>
+          <a href="#ds_soLuongTon" class="icon-btn" title="Quản lý số lượn tồn">
+            <i class="fa-solid fa-rectangle-list"></i>
+          </a>
         </div>
       </div>
 
@@ -377,6 +383,108 @@
           <button type="button" id="btnXoaPhieu" class="btn-danger">Xóa Phiếu</button>
         </div>
       </form>
+    </div>
+  </div>
+</section>
+<section id="ds_giaBan" class="page-section">
+  <div class="price-management-wrapper">
+    <div class="price-management-header">
+      <h1>Quản lý giá bán</h1>
+      <div class="price-filter">
+        <select id="categoryFilter">
+          <option value="all">Tất cả loại</option>
+          <option value="phone">Điện thoại</option>
+          <option value="tablet">Máy tính bảng</option>
+        </select>
+        <input type="text" id="searchProduct" placeholder="Tìm kiếm sản phẩm...">
+      </div>
+    </div>
+
+    <div class="price-table-container">
+      <table class="price-table">
+        <thead>
+          <tr>
+            <th>Mã SP</th>
+            <th>Tên sản phẩm</th>
+            <th>Loại</th>
+            <th>Giá vốn (VNĐ)</th>
+            <th>% Lợi nhuận</th>
+            <th>Giá bán (VNĐ)</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<section id="ds_soLuongTon" class="page-section">
+  <div class="inventory-wrapper">
+    <div class="inventory-header">
+      <h1>Quản lý Số Lượng Tồn</h1>
+      <div class="inventory-toggle">
+        <button id="btn-current-stock" class="toggle-active">
+          Tồn Kho Hiện Tại
+        </button>
+        <button id="btn-ies-report">Báo Cáo Nhập-Xuất-Tồn</button>
+      </div>
+    </div>
+
+    <div id="inventory-current-stock" class="inventory-view page-active">
+      <div class="inventory-filters">
+        <input
+          type="text"
+          id="inv-search"
+          placeholder="Tìm theo tên sản phẩm..."
+        />
+        <select id="inv-category-filter">
+          <option value="all">Tất cả loại</option>
+          </select>
+        <label for="inv-threshold">Ngưỡng hết hàng:</label>
+        <input type="number" id="inv-threshold" value="5" min="0" />
+      </div>
+      <div class="inventory-table-container">
+        <table class="inventory-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tên Sản Phẩm</th>
+              <th>Loại</th>
+              <th>Số Lượng Tồn</th>
+              <th>Trạng Thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="inventory-report" class="inventory-view">
+      <div class="report-filters">
+        <label for="report-start-date">Từ ngày:</label>
+        <input type="date" id="report-start-date" />
+        <label for="report-end-date">Đến ngày:</label>
+        <input type="date" id="report-end-date" />
+        <button id="btn-generate-report">Xem Báo Cáo</button>
+      </div>
+      <div class="report-table-container">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Tên Sản Phẩm</th>
+              <th>Tổng Nhập</th>
+              <th>Tổng Xuất</th>
+              <th>Tồn Kho Hiện Tại</th>
+            </tr>
+          </thead>
+          <tbody>
+            </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </section>

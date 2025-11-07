@@ -5,6 +5,8 @@ import { loadStatistics, seedOrderData } from "./thongke.js";
 import "./login.js";
 import "./logout.js";
 import "./ds_donhang.js";
+import "./quan_ly_gia.js";
+import "./quanLyTonKho.js";
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
