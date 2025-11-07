@@ -155,7 +155,9 @@ function updateBang() {
       <td><img src="${item.src || ""}" width="50" height="50" alt="${item.ten}"></td>
       <td>${item.ten}</td>
       <td>${item.brand}</td>
-      <td>${item.gia.toLocaleString("vi-VN")}₫</td>
+      <td>${ item.giaBan 
+      ? item.giaBan.toLocaleString("vi-VN") + "₫" 
+      : "không có giá bán"}</td>
       <td>${item.so_luong || 0}</td>
       <td>
         <button class="sp-edit">Sửa</button>
