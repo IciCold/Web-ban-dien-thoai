@@ -61,6 +61,70 @@ function updateTable(data) {
 
   addRowEvents();
 }
+// ===================================
+// HÀM XỬ LÝ CẬP NHẬT TỒN KHO KHI GIAO HOẶC HỦY GIAO
+// isDelivery: true (trừ), false (cộng)
+// ===================================
+function capNhatTonKhoKhiGiaoHang(order, isDelivery) {
+  // 1. Lấy danh sách sản phẩm tổng (kho hàng)
+  let dataProducts = docdulieuLocalStorage("dataProducts");
+  const productsInOrder = order.products;
+  const operation = isDelivery ? "trừ" : "cộng";
+
+  // 2. Hàm tiện ích tìm Index (BỀN VỮNG HƠN)
+  const findProductIndex = (productName) => {
+    const normalizedName = (productName || '').trim().toLowerCase();
+    return dataProducts.findIndex(p => (p.ten || '').trim().toLowerCase() === normalizedName);
+  };
+
+  // 3. Kiểm tra tính hợp lệ TRƯỚC KHI TRỪ (chỉ áp dụng khi trừ)
+  if (isDelivery) {
+    for (const item of productsInOrder) {
+      const productName = item.name;
+      const quantityNeeded = item.quantity;
+      // Dùng hàm tìm mới
+      const productIndex = findProductIndex(productName); 
+
+      if (productIndex === -1) {
+        return { success: false, action: operation, productName: productName, reason: "Sản phẩm không tồn tại trong kho (Có thể do tên sản phẩm đã bị thay đổi)." };
+      }
+
+      const currentStock = dataProducts[productIndex].so_luong || 0;
+
+      if (currentStock < quantityNeeded) {
+        return { success: false, action: operation, productName: productName, reason: `Không đủ hàng (Cần ${quantityNeeded}, chỉ còn ${currentStock}).` };
+      }
+    }
+  }
+
+  // 4. Thực hiện Cập nhật kho hàng
+  for (const item of productsInOrder) {
+    const productName = item.name;
+    const quantity = item.quantity;
+    // Dùng hàm tìm mới
+    const productIndex = findProductIndex(productName); 
+
+    if (productIndex !== -1) {
+      if (isDelivery) {
+        // TRỪ TỒN KHO: Khi chuyển sang "Đã giao"
+        dataProducts[productIndex].so_luong -= quantity;
+      } else {
+        // CỘNG TỒN KHO: Khi chuyển từ "Đã giao" sang trạng thái khác
+        dataProducts[productIndex].so_luong = (dataProducts[productIndex].so_luong || 0) + quantity;
+      }
+      // Đảm bảo số lượng không âm
+      if (dataProducts[productIndex].so_luong < 0) {
+        dataProducts[productIndex].so_luong = 0;
+      }
+    }
+  }
+
+  // 5. Lưu kho hàng đã cập nhật vào localStorage
+  ghidulieuLocalStorage("dataProducts", dataProducts);
+
+  // 6. Trả về thành công
+  return { success: true, action: operation };
+}
 
 // =======================
 // Thêm sự kiện các nút + xử lý đổi trạng thái
@@ -71,23 +135,67 @@ function addRowEvents() {
   const btnUpdate = document.querySelectorAll(".dh-update");
   const selects = document.querySelectorAll(".dh-status-select");
 
-  // ====== XỬ LÝ ĐỔI TRẠNG THÁI NGAY TRONG BẢNG ======
+  // ====== XỬ LÝ ĐỔI TRẠNG THÁI (CÓ TRỪ/CỘNG KHO) ======
   selects.forEach((select) => {
     select.addEventListener("change", () => {
       const index = select.dataset.index;
       const newStatus = select.value;
+      const oldStatus = dsdonhang[index].status; // Lấy trạng thái CŨ
+      const order = dsdonhang[index];
 
-      dsdonhang[index].status = newStatus;
-      ghidulieuLocalStorage("orders", dsdonhang);
+      // Nếu trạng thái không đổi thì không làm gì
+      if (newStatus === oldStatus) return;
 
-      let text =
-        newStatus === "pending"
-          ? "Chờ xử lý"
-          : newStatus === "shipping"
-          ? "Đang giao"
-          : "Đã giao";
+      let result;
 
-      alert(`✅ Cập nhật trạng thái thành "${text}" thành công!`);
+      // 1. TRƯỜNG HỢP: CHUYỂN TỪ TRẠNG THÁI KHÁC -> "ĐÃ GIAO" (TRỪ KHO)
+      if (newStatus === "delivered" && oldStatus !== "delivered") {
+        if (!confirm(`Bạn có chắc muốn cập nhật trạng thái "Đã giao"?\n(Hành động này sẽ TRỪ sản phẩm khỏi tồn kho.)`)) {
+          select.value = oldStatus; 
+          return;
+        }
+        
+        // Gọi hàm trừ kho (isDelivery = true)
+        result = capNhatTonKhoKhiGiaoHang(order, true); 
+
+        if (result.success) {
+          dsdonhang[index].status = newStatus;
+          ghidulieuLocalStorage("orders", dsdonhang);
+          alert("✅ Đã giao hàng! Tồn kho đã được trừ.");
+        } else {
+          // Trừ kho thất bại
+          alert(`❌ LỖI TRỪ KHO!\nSản phẩm "${result.productName}" bị lỗi: ${result.reason}\n\nTrạng thái CHƯA được cập nhật.`);
+          select.value = oldStatus; 
+        }
+      } 
+      
+      // 2. TRƯỜNG HỢP: CHUYỂN TỪ "ĐÃ GIAO" -> TRẠNG THÁI KHÁC (CỘNG LẠI HÀNG VÀO KHO)
+      else if (oldStatus === "delivered" && newStatus !== "delivered") {
+        if (!confirm(`Bạn đang hủy trạng thái "Đã giao" cho đơn này.\n(Hành động này sẽ CỘNG lại sản phẩm vào tồn kho.)\nBạn có chắc chắn?`)) {
+          select.value = oldStatus; 
+          return;
+        }
+        
+        // Gọi hàm cộng lại kho (isDelivery = false)
+        result = capNhatTonKhoKhiGiaoHang(order, false); 
+        
+        // Cập nhật trạng thái và lưu, vì việc cộng kho không có rủi ro thiếu hàng
+        dsdonhang[index].status = newStatus;
+        ghidulieuLocalStorage("orders", dsdonhang);
+        alert(`✅ Cập nhật trạng thái thành công. Tồn kho đã được cộng lại.`);
+      }
+
+      // 3. TRƯỜNG HỢP: THAY ĐỔI BÌNH THƯỜNG (Pending <-> Shipping)
+      else if (newStatus !== "delivered" && oldStatus !== "delivered") {
+        dsdonhang[index].status = newStatus;
+        ghidulieuLocalStorage("orders", dsdonhang);
+        
+        let text = newStatus === "pending" ? "Chờ xử lý" : "Đang giao";
+        alert(`✅ Cập nhật trạng thái thành "${text}" thành công.`);
+      }
+      
+      // Trường hợp 4: Đổi từ Đã giao -> Đã giao (không làm gì)
+      // Trường hợp 5: Đổi từ Khác -> Khác (đã xử lý ở trường hợp 3)
     });
   });
 

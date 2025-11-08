@@ -7,6 +7,7 @@ import "./logout.js";
 import "./ds_donhang.js";
 import "./quan_ly_gia.js";
 import "./forgot.js";
+import "./quanLyTonKho.js";
 
 
 //==============Chuyển Page bằng Hash=======================//

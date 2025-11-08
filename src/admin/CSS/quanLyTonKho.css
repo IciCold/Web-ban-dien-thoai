@@ -1,0 +1,153 @@
+/* ==============================
+   QUẢN LÝ TỒN KHO
+   ============================== */
+
+.inventory-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+
+.inventory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+.inventory-header h1 {
+  color: #333;
+}
+
+.inventory-toggle button {
+  padding: 10px 15px;
+  border: 1px solid var(--color-light-gray);
+  background-color: #f9f9f9;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.inventory-toggle button:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.inventory-toggle button:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-left: none;
+}
+
+.inventory-toggle button.toggle-active {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.inventory-view {
+  display: none; /* Mặc định ẩn */
+  flex-direction: column;
+  gap: 15px;
+}
+
+.inventory-view.view-active {
+  display: flex; /* Hiển thị view đang active */
+}
+
+/* --- Filters --- */
+.inventory-filters,
+.report-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  padding: 15px;
+  background-color: #fdfdfd;
+  border: 1px solid #e9e9e9;
+  border-radius: 5px;
+}
+
+.inventory-filters input[type="text"],
+.inventory-filters select,
+.report-filters input[type="date"] {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.inventory-filters input[type="number"] {
+  width: 70px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.report-filters button,
+#btn-generate-report {
+  padding: 8px 15px;
+  background-color: var(--color-success);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* --- Tables --- */
+.inventory-table-container,
+.report-table-container {
+  overflow-x: auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.inventory-table,
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.inventory-table th,
+.inventory-table td,
+.report-table th,
+.report-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.inventory-table th,
+.report-table th {
+  background-color: #f7f7f7;
+  font-weight: 600;
+  color: #555;
+}
+
+.inventory-table tbody tr:hover,
+.report-table tbody tr:hover {
+  background-color: #fdfdfd;
+}
+
+/* --- Status Colors --- */
+.status-low {
+  color: #d9534f;
+  font-weight: 700;
+}
+
+.status-ok {
+  color: #5cb85c;
+}
+
+/* CSS cho table rỗng */
+.inventory-table td[colspan="5"],
+.report-table td[colspan="5"] {
+  text-align: center;
+  padding: 30px;
+  color: #888;
+  font-style: italic;
+}
