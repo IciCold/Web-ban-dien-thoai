@@ -1,5 +1,6 @@
 import "./register.js";
 import "./login.js";
+import "./forgot.js"
 import "./Home.js";
 import "./search.js";
 import "./thanhtoan.js";
@@ -16,11 +17,14 @@ import { initThanhToanPage } from "./thanhtoan.js";
 const pages = {
   home: document.querySelector(".Home"),
   login: document.querySelector(".page-login"),
+  forgot:document.querySelector(".page-forgot"),
   register: document.querySelector(".page-register"),
   thanhtoan: document.querySelector(".payment-section"),
   chitiet: document.querySelector(".product-section"),
   profile: document.querySelector(".page-profile"),
   cartDetailPage: document.getElementById("cartDetailPage"),
+  
+
 };
 
 //Ẩn tất cả page

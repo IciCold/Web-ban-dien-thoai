@@ -1,6 +1,7 @@
 /*import tất cả file css vào trong này*/
 @import url("register.css");
 @import url("login.css");
+@import url("forgot.css");
 @import url('Head-Footer.css');
 @import url('Home.css');
 @import url('chitiet.css');
@@ -11,6 +12,7 @@
 @import url('cart-page.css');
 @import url('phanTrang.css');
 @import url("alert.css");
+
 /*NHỮNG STYLE CHUNG CHO TOÀN BỘ TRANG WEB BỎ VÀO TRONG NÀY*/
 
 /* biến cục bộ */

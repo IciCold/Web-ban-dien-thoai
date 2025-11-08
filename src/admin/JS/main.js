@@ -6,6 +6,7 @@ import "./login.js";
 import "./logout.js";
 import "./ds_donhang.js";
 import "./quan_ly_gia.js";
+import "./forgot.js";
 
 
 //==============Chuyển Page bằng Hash=======================//
@@ -14,6 +15,7 @@ const pages = {
   register: document.querySelector(".page-register"),
   adminPages: document.querySelectorAll(".page-section"),
   admin: document.querySelector(".page-admin"),
+  forgot: document.querySelector(".page-forgot"),
 };
 
 const adminSpan = document.querySelector(".textUser");
