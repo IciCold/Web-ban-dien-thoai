@@ -55,7 +55,7 @@ form.addEventListener("submit", function (event) {
   });
 
   // ================= Kiểm tra email =================
-  const CheckEmail = document.querySelector(".warning-email");
+  const CheckEmail = document.querySelector("#register .warning-email");
   const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com)$/; //kiểm tra định dạng của gmail
 
   if (!emailRegex.test(email) && email !== "" && CheckEmail) {
@@ -74,7 +74,7 @@ form.addEventListener("submit", function (event) {
 
   //Kiểm tra password
   const comfirmPw = form.confirmPw.value;
-  const cfPassword = document.querySelector(".warning-pw");
+  const cfPassword = document.querySelector("#register .warning-pw");
   if (password != comfirmPw && cfPassword) {
     complete = false;
     cfPassword.style.display = "block";
@@ -90,7 +90,9 @@ form.addEventListener("submit", function (event) {
   }
 
   // Hiện thông báo đăng ký thành công
-  const message = document.querySelector(".thongbao");
+  const message = document.querySelector("#register .thongbao");
+  console.log(complete);
+  console.log(isEmpty);
   if (complete && !isEmpty.includes(false)) {
     register(email, userName, password);
     // Ẩn form, hiển thị thông báo
