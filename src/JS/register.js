@@ -58,19 +58,24 @@ form.addEventListener("submit", function (event) {
   const CheckUser = document.querySelector("#register .warning-user");
   const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com)$/; //kiểm tra định dạng của gmail
 
-  // 1. Kiểm tra xem email đã tồn tại chưa
+  // 1. Kiểm tra xem email& tài khoản đã tồn tại chưa
   const emailExists = users.some(user => user.email === email);
   const userNameExists = users.some(user => user.userName === userName);
 
   if(userNameExists){
-    complete=false;
+    complete = false;
     CheckUser.textContent = "Tài khoản đã tồn tại."; // Cập nhật nội dung lỗi
     CheckUser.style.display = "block";
-    form.userName.style.border = "1px solid red";
+    form.username.style.border = "1px solid red";
     //restart trình duyệt
     CheckUser.classList.remove("Ierror");
     void CheckUser.offsetWidth;
     CheckUser.classList.add("Ierror");
+  }
+    else {
+    CheckUser.classList.remove("Ierror");
+    CheckUser.style.display = "none";
+    form.username.style.border = "none";
   }
 
   if (emailExists) {
@@ -142,8 +147,7 @@ form.addEventListener("submit", function (event) {
       // Đợi hiệu ứng mờ hoàn tất rồi mới ẩn hẳn
       setTimeout(() => {
         message.classList.add("hidden");
-        loginDiv.classList.remove('hidden');
-        history.replaceState({ page: "login" }, "", "login");
+        location.hash = "login";
         form.classList.remove("fade-out");
       }, 500); // thời gian này phải khớp với thời gian của animation của CSS
     }, 3000);
