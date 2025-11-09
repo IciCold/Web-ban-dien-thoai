@@ -100,7 +100,7 @@ export function checkLoginStatus() {
         // Nếu tài khoản bị khóa, đăng xuất user
         localStorage.removeItem('currentUser');
         alert('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ admin.');
-        window.location.href = './login.html';
+        window.location.href = './index.html';
         return false;
     }
 
@@ -110,7 +110,7 @@ export function checkLoginStatus() {
 // Thêm hàm này vào các trang cần bảo vệ
 export function protectPage() {
     if (!checkLoginStatus()) {
-        window.location.href = './login.html';
+        window.location.href = './index.html';
     }
 }
 
