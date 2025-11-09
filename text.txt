@@ -1,0 +1,15 @@
+----WEBSITE BÁN ĐIỆN THOẠI----
+NHÓM: 14
+Tên thành viên:
+3124410028	Võ Thành Chiến
+3124410089	Nguyễn Trường Hiệp
+3124410144	Nguyễn Lý Phước	Khang
+3124410272	Nguyễn Hoàng Phi
+3124410282	Lê Phạm Hoàng Phúc
+3122410367	Nguyễn Mạnh Thành Tài
+
+TÀI KHOẢN TRÊN HỆ THỐNG
+Admin:
+ tài khoản: admin
+ mật khẩu: 123
+User: phải đăng ký lần đầu
