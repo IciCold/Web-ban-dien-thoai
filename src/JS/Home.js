@@ -159,7 +159,7 @@ export async function loadProducts() {
 
   } catch (error) {
     console.error("Không thể tải sản phẩm:", error);
-    productsGrid.innerHTML = "<p>Lỗi khi tải sản phẩm. Vui lòng thử lại.</p>";
+    productsGrid.innerHTML = "<p>Chưa có sản phẩm. Vui lòng đợi</p>";
   }
 }
 

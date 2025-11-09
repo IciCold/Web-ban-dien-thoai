@@ -2,7 +2,7 @@ const registerLink = document.querySelector(".register-link");
 const loginDiv = document.querySelector("#login");
 const registerDiv = document.querySelector("#register");
 const form = document.getElementById("form-register");
-
+let users = JSON.parse(localStorage.getItem("users")) || []; //lấy lại dữ liệu cũ từ localStorage, nếu không có tạo 1 mãng rỗng
 // Nếu thiếu phần tử nào thì dừng để tránh lỗi runtime
 if (!(!form || !registerLink || !loginDiv || !registerDiv)) {
   console.log("object");
@@ -19,7 +19,6 @@ registerLink.addEventListener("click", (e) => {
 
 // ================= Lưu thông tin User =================
 function register(email, userName, password) {
-  let users = JSON.parse(localStorage.getItem("users")) || []; //lấy lại dữ liệu cũ từ localStorage, nếu không có tạo 1 mãng rỗng
   let newUser = {
     email: email,
     userName: userName,
@@ -54,24 +53,53 @@ form.addEventListener("submit", function (event) {
     }
   });
 
-  // ================= Kiểm tra email =================
+// ================= Kiểm tra email =================
   const CheckEmail = document.querySelector("#register .warning-email");
+  const CheckUser = document.querySelector("#register .warning-user");
   const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|outlook\.com)$/; //kiểm tra định dạng của gmail
 
-  if (!emailRegex.test(email) && email !== "" && CheckEmail) {
+  // 1. Kiểm tra xem email đã tồn tại chưa
+  const emailExists = users.some(user => user.email === email);
+  const userNameExists = users.some(user => user.userName === userName);
+
+  if(userNameExists){
+    complete=false;
+    CheckUser.textContent = "Tài khoản đã tồn tại."; // Cập nhật nội dung lỗi
+    CheckUser.style.display = "block";
+    form.userName.style.border = "1px solid red";
+    //restart trình duyệt
+    CheckUser.classList.remove("Ierror");
+    void CheckUser.offsetWidth;
+    CheckUser.classList.add("Ierror");
+  }
+
+  if (emailExists) {
     complete = false;
+    CheckEmail.textContent = "Email này đã được sử dụng."; // Cập nhật nội dung lỗi
     CheckEmail.style.display = "block";
     form.email.style.border = "1px solid red";
     //restart trình duyệt
     CheckEmail.classList.remove("Ierror");
     void CheckEmail.offsetWidth;
     CheckEmail.classList.add("Ierror");
-  } else {
+  }
+  // 2. Kiểm tra định dạng email (nếu nó chưa tồn tại)
+  else if (!emailRegex.test(email) && email !== "" && CheckEmail) {
+    complete = false;
+    CheckEmail.textContent = "Định dạng email không hợp lệ."; // Cập nhật nội dung lỗi
+    CheckEmail.style.display = "block";
+    form.email.style.border = "1px solid red";
+    //restart trình duyệt
+    CheckEmail.classList.remove("Ierror");
+    void CheckEmail.offsetWidth;
+    CheckEmail.classList.add("Ierror");
+  }
+  // 3. Nếu mọi thứ OK
+  else {
     CheckEmail.classList.remove("Ierror");
     CheckEmail.style.display = "none";
     form.email.style.border = "none";
   }
-
   //Kiểm tra password
   const comfirmPw = form.confirmPw.value;
   const cfPassword = document.querySelector("#register .warning-pw");

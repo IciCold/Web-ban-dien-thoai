@@ -68,12 +68,10 @@ export function initCartDetailPage() {
   }
 }
 
-/**
+/*
  * Gắn sự kiện cho các nút "+", "-", "Xóa", "Mua ngay" trên trang chi tiết.
- * (Hàm này giữ nguyên)
  */
 function attachCartDetailListeners() {
-  // ... (Toàn bộ code từ dòng 107 đến 136 giữ nguyên) ...
   document.querySelectorAll('.qty-change-btn').forEach(button => {
     button.replaceWith(button.cloneNode(true)); 
   });

@@ -68,7 +68,6 @@ export function clearUserCart() {
 
 /**
  * Định dạng một SỐ thành chuỗi tiền tệ VND.
- * (Giữ nguyên)
  */
 export function formatVND(amount) {
   if (typeof amount !== 'number') {
@@ -82,7 +81,6 @@ export function formatVND(amount) {
 
 /**
  * Chuyển đổi một CHUỖI tiền tệ (từ giao diện) về dạng SỐ để tính toán.
- * (Giữ nguyên)
  */
 export function parseVNDPrice(priceText) {
   if (!priceText) return 0;
@@ -92,10 +90,8 @@ export function parseVNDPrice(priceText) {
 
 // ======================================================
 // PHẦN 2: LOGIC CHO POPUP GIỎ HÀNG (TRÊN HEADER)
-// (Phần này giữ nguyên, nó đã dùng các hàm tiện ích ở trên)
 // ======================================================
 document.addEventListener('DOMContentLoaded', () => {
-  // ... (Toàn bộ code từ dòng 110 đến cuối file giữ nguyên) ...
   // --- 1. Lấy các phần tử DOM cố định trên trang ---
   const addToCartBtn = document.querySelector('.add-to-cart-button'); // Nút ở trang chi tiết
   const cartItemsList = document.getElementById('cart-items-list'); // <ul> trong popup
@@ -158,9 +154,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const productQuantity = parseInt(productSection.querySelector('.qty-input').value, 10);
     const productId = productSection.dataset.currentId;
     const productPrice = parseVNDPrice(productPriceText);
+
+
     let cart = getUserCart();
     const existingItemIndex = cart.findIndex(item => item.id === productId);
-
+    //kiểm tra xem trong giỏ hàng đã có sản phẩm chưa nêu có thì tăng số lượng
+    //chưa thì tạo mới 1 đối tượng
     if (existingItemIndex > -1) {
       cart[existingItemIndex].quantity += productQuantity;
     } else {

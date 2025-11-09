@@ -3,18 +3,14 @@ import { parseVNDPrice } from "./cart.js";
 // ===================================
 // KHAI BÁO BIẾN CHO TRANG CHI TIẾT
 // ===================================
-let ProductsData = []; // --- XÓA Biến currentProductGroup ---
+let ProductsData = [];
 
 // Lấy các phần tử DOM
 const productSection = document.getElementById("productSection");
 const productTitle = productSection.querySelector(".product-title");
 const productPrice = productSection.querySelector(".product-price");
 const productImage = productSection.querySelector(".product-image");
-const specsBox = productSection.querySelector(".specs-box");
-// --- XÓA Biến ramButtonContainer ---
-// --- XÓA Biến colorButtonContainer ---
 const buyNowBtn = productSection.querySelector(".buy-now-button");
-const addToCartBtn = productSection.querySelector(".add-to-cart-button");
 
 // ===================================
 // HÀM KHỞI TẠO TRANG CHI TIẾT
@@ -22,7 +18,7 @@ const addToCartBtn = productSection.querySelector(".add-to-cart-button");
 export async function initChiTietPage() {
   console.log("Khởi tạo trang chi tiết...");
 
-  // 1️⃣ Lấy ID sản phẩm đã click từ localStorage
+  //Lấy ID sản phẩm đã click từ localStorage
   const selectedId = localStorage.getItem("selectedProductId");
   if (!selectedId) {
     console.error("Không tìm thấy ID sản phẩm. Quay về trang chủ.");
@@ -30,7 +26,7 @@ export async function initChiTietPage() {
     return;
   }
 
-  // 2️⃣ Đọc dữ liệu có sẵn trong localStorage
+  //Đọc dữ liệu có sẵn trong localStorage
   const Products = docdulieuLocalStorage("dataProducts");
 
   if (Products.length === 0) {
@@ -38,9 +34,7 @@ export async function initChiTietPage() {
     return;
   }
 
-  /* 3️⃣ Chuẩn hóa dữ liệu (Nếu cần) */
-
-  // 4️⃣ Tìm sản phẩm đang được chọn
+  //Tìm sản phẩm đang được chọn
   const selectedProduct = Products.find(p => p.id === selectedId);
   if (!selectedProduct) {
     console.error("Không tìm thấy sản phẩm với ID:", selectedId);
@@ -48,12 +42,10 @@ export async function initChiTietPage() {
     return;
   }
 
-  // --- XÓA Bước 5 (Lấy nhóm biến thể) vì không còn cần thiết ---
-
-  // 6️⃣ Hiển thị thông tin
+  //Hiển thị thông tin
   renderProductDetails(selectedProduct);
   
-  // 7️⃣ KÍCH HOẠT NÚT SỐ LƯỢNG
+  //KÍCH HOẠT NÚT SỐ LƯỢNG
   setupQuantityControls(); 
 }
 
@@ -97,7 +89,7 @@ function renderProductDetails(product) {
 }
 
 // ===================================
-// NÚT MUA NGAY (Giữ nguyên)
+// NÚT MUA NGAY
 // ===================================
 if (buyNowBtn) {
   buyNowBtn.addEventListener("click", () => {
@@ -140,7 +132,7 @@ if (buyNowBtn) {
 }
 
 // ===================================
-// HÀM XỬ LÝ NÚT SỐ LƯỢNG (Giữ nguyên)
+// HÀM XỬ LÝ NÚT SỐ LƯỢNG
 // ===================================
 function setupQuantityControls() {
   // 1. Lấy các phần tử

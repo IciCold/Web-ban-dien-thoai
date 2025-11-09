@@ -101,7 +101,7 @@ function setupBuyNowButton() {
 
 
 /**
- * HÀM LƯU ĐƠN HÀNG (Sửa lại)
+ * HÀM LƯU ĐƠN HÀNG
  * Được gọi khi nhấn nút Mua Ngay
  */
 function saveOrderAndCheckout() {
@@ -155,8 +155,6 @@ function saveOrderAndCheckout() {
   const orders = docdulieuLocalStorage('orders'); // Dùng helper
   orders.push(newOrder);
   ghidulieuLocalStorage('orders', orders); // Dùng helper
-
-  // 5. Xử lý sau khi thanh toán
   
   // 5a. Nếu là mua từ giỏ hàng, thì XÓA giỏ hàng
   if (currentPaymentData.type === 'cart') {
