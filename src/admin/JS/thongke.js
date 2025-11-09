@@ -1,5 +1,7 @@
 // thongKe.js
 
+import { showalert } from "../../JS/alert.js";
+
 export function loadStatistics() {
     const statsSection = document.getElementById('thongKe');
     if (!statsSection) return;
@@ -289,7 +291,7 @@ function showProductDetails(productName) {
         return sum + ((product?.price || 0) * (product?.quantity || 0));
     }, 0);
     
-    alert(`📊 Chi tiết sản phẩm: ${productName}
+    showalert(`📊 Chi tiết sản phẩm: ${productName}
 📦 Số đơn hàng: ${productOrders.length}
 🛒 Số lượng bán: ${totalSold}
 💰 Doanh thu: ${formatVND(totalRevenue)}

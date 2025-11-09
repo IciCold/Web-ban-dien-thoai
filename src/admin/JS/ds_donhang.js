@@ -1,5 +1,5 @@
 import { docdulieuLocalStorage, ghidulieuLocalStorage } from "./readandwrite.js";
-
+import {showalert} from "../../JS/alert.js";
 let dsdonhang = [];
 const divContainer = document.querySelector(".dh-table-container");
 const formSearch = document.querySelector(".dh-search-form");
@@ -161,10 +161,10 @@ function addRowEvents() {
         if (result.success) {
           dsdonhang[index].status = newStatus;
           ghidulieuLocalStorage("orders", dsdonhang);
-          alert("✅ Đã giao hàng! Tồn kho đã được trừ.");
+          showalert("✅ Đã giao hàng! Tồn kho đã được trừ.","success");
         } else {
           // Trừ kho thất bại
-          alert(`❌ LỖI TRỪ KHO!\nSản phẩm "${result.productName}" bị lỗi: ${result.reason}\n\nTrạng thái CHƯA được cập nhật.`);
+          showalert(`❌ LỖI TRỪ KHO!\nSản phẩm "${result.productName}" bị lỗi: ${result.reason}\n\nTrạng thái CHƯA được cập nhật.`,"error");
           select.value = oldStatus; 
         }
       } 
@@ -182,7 +182,7 @@ function addRowEvents() {
         // Cập nhật trạng thái và lưu, vì việc cộng kho không có rủi ro thiếu hàng
         dsdonhang[index].status = newStatus;
         ghidulieuLocalStorage("orders", dsdonhang);
-        alert(`✅ Cập nhật trạng thái thành công. Tồn kho đã được cộng lại.`);
+        showalert(`✅ Cập nhật trạng thái thành công. Tồn kho đã được cộng lại.`,"success");
       }
 
       // 3. TRƯỜNG HỢP: THAY ĐỔI BÌNH THƯỜNG (Pending <-> Shipping)
@@ -191,7 +191,7 @@ function addRowEvents() {
         ghidulieuLocalStorage("orders", dsdonhang);
         
         let text = newStatus === "pending" ? "Chờ xử lý" : "Đang giao";
-        alert(`✅ Cập nhật trạng thái thành "${text}" thành công.`);
+        showalert(`✅ Cập nhật trạng thái thành "${text}" thành công.`,"success");
       }
       
       // Trường hợp 4: Đổi từ Đã giao -> Đã giao (không làm gì)
@@ -238,7 +238,7 @@ function addRowEvents() {
           ? "Đang giao"
           : "Đã giao";
 
-      alert(
+      showalert(
         `🧾 Chi tiết đơn hàng\n` +
           `───────────────────────────────\n` +
           `Mã đơn: ${dh.id || "(Không có)"}\n` +
@@ -290,7 +290,7 @@ function addRowEvents() {
       dsdonhang[index] = updatedOrder;
       ghidulieuLocalStorage("orders", dsdonhang);
 
-      alert("✅ Cập nhật đơn hàng thành công!");
+      showalert("✅ Cập nhật đơn hàng thành công!","success");
       updateTable(dsdonhang);
     });
   });

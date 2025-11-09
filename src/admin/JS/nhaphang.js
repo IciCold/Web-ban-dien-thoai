@@ -1,6 +1,7 @@
 // ==============================
 //  IMPORT CÁC HÀM DÙNG CHUNG
 // ==============================
+import { showalert } from "../../JS/alert.js";
 import {
   docdulieuLocalStorage, //
   ghidulieuLocalStorage //
@@ -259,7 +260,7 @@ function handleThemSPVaoPhieu() {
   const giaNhap = parseInt(spGiaNhap.value);
 
   if (!idSP || !soLuong || isNaN(giaNhap) || soLuong <= 0 || giaNhap < 0) {
-    alert("Vui lòng chọn sản phẩm, nhập số lượng và giá nhập hợp lệ.");
+    showalert("Vui lòng chọn sản phẩm, nhập số lượng và giá nhập hợp lệ.","warning");
     return;
   }
   
@@ -306,7 +307,7 @@ function handleXoaSPKhoiPhieu(idSP) {
 // (5) Hoàn Thành Phiếu (Cập nhật số lượng vào kho)
 function handleHoanThanhPhieu() {
   if (!currentPhieu || currentPhieu.chiTiet.length === 0) {
-    alert("Phiếu đang trống, không thể hoàn thành.");
+    showalert("Phiếu đang trống, không thể hoàn thành.","warning");
     return;
   }
   
@@ -334,7 +335,7 @@ function handleHoanThanhPhieu() {
     
     // 4. Reset form
     resetFormChiTiet();
-    alert("Đã hoàn thành phiếu và cập nhật tồn kho!");
+    showalert("Đã hoàn thành phiếu và cập nhật tồn kho!","success");
     // 5. Cập nhật lại select
     populateProductSelect();
   }
@@ -343,7 +344,7 @@ function handleHoanThanhPhieu() {
 // (6) Xóa phiếu (chỉ khi đang tạo)
 function handleXoaPhieu() {
   if (!currentPhieu || currentPhieu.trangThai === 'hoanThanh') {
-    alert("Không thể xóa phiếu đã hoàn thành.");
+    showalert("Không thể xóa phiếu đã hoàn thành.","error");
     return;
   }
   

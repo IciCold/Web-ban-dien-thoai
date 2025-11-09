@@ -1,3 +1,4 @@
+import { showalert } from "../../JS/alert.js";
 import {
   docdulieuLocalStorage,
   ghidulieuLocalStorage,
@@ -109,7 +110,7 @@ function addEventListeners() {
       );
 
       if (giaVon < 0) {
-        alert("Giá vốn không thể âm!");
+        showalert("Giá vốn không thể âm!","warning");
         e.target.value = dsSanPham[index].gia; // Reset về giá trị cũ
         return;
       }
@@ -154,7 +155,7 @@ function addEventListeners() {
       );
 
       if (giaVon < 0 || giaBan <= 0) {
-        alert("Giá trị không hợp lệ! Giá vốn không thể âm và giá bán phải lớn hơn 0.");
+        showalert("Giá trị không hợp lệ! Giá vốn không thể âm và giá bán phải lớn hơn 0.","error");
         return;
       }
 
@@ -164,7 +165,7 @@ function addEventListeners() {
 
       // Lưu lại vào "dataProducts"
       ghidulieuLocalStorage("dataProducts", dsSanPham);
-      alert("Đã lưu thành công!");
+      showalert("Đã lưu thành công!","success");
 
       // Cập nhật lại % lợi nhuận trên UI
       const profitInput = document.querySelector(

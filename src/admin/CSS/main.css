@@ -7,7 +7,7 @@
 @import url('nhaphang.css');
 @import url('quan_ly_gia.css');
 @import url('quanLyTonKho.css');
-
+@import url('../../CSS/alert.css');
 /* biến cục bộ */
 :root {
   --main-color: #1bcaf1;

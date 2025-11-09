@@ -1,421 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../../asset/icon/fontawesome-free-7.1.0-web/css/all.min.css">
-    <link rel="stylesheet" href="CSS/main.css">
-    <script src="JS/main.js" type="module"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="../../asset/icon/fontawesome-free-7.1.0-web/css/all.min.css">
+  <link rel="stylesheet" href="CSS/main.css">
+  <script src="JS/main.js" type="module"></script>
 </head>
+
 <body>
 
-   <!--=============LOGIN===============-->
-    <section class="page-login" id="login">
-      <form class="login-form layout-form" id="login-form">
-        <div class="form-heading">Đăng nhập</div>
+  <!--=============LOGIN===============-->
+  <section class="page-login" id="login">
+    <form class="login-form layout-form" id="login-form">
+      <div class="form-heading">Đăng nhập</div>
 
-        <!--Tên đăng nhập-->
-        <div class="input-group">
-          <label class="label" for="username">Tên đăng nhập</label>
-          <input class="Ip" type="text" id="username" name="username" placeholder="Tên đăng nhập hoặc Email" required>
-          <p class="warning-user" style="color: red;
+      <!--Tên đăng nhập-->
+      <div class="input-group">
+        <label class="label" for="username">Tên đăng nhập</label>
+        <input class="Ip" type="text" id="username" name="username" placeholder="Tên đăng nhập hoặc Email" required>
+        <p class="warning-user" style="color: red;
               font-size: 0.7rem; font-weight: 600; display: none;">Tài khoản không tồn tại</p>
-        </div>
+      </div>
 
-        <!--Mật khẩu-->
-        <div class="input-group">
-          <label class="label" for="password">Mật khẩu</label>
-          <input class="Ip" type="password" id="password" name="password" placeholder="Mật khẩu" required>
-          <p class="warning-incorrect-password" style="color: red;
+      <!--Mật khẩu-->
+      <div class="input-group">
+        <label class="label" for="password">Mật khẩu</label>
+        <input class="Ip" type="password" id="password" name="password" placeholder="Mật khẩu" required>
+        <p class="warning-incorrect-password" style="color: red;
               font-size: 0.7rem; font-weight: 600; display: none;">Sai mật khẩu</p>
-        </div>
+      </div>
 
-        <!--Button-->
-        <div class="button">
-          <button type="submit">Đăng nhập</button>
-        </div>
+      <!--Button-->
+      <div class="button">
+        <button type="submit">Đăng nhập</button>
+      </div>
 
-        <!--Liên kết-->
-        <div class="form-actions">
-          <a href="#forgot" class="forgot-link">Quên mật khẩu?</a>
-          <a href="#register" class="register-link">Đăng ký</a>
-        </div>
-      </form>
-    </section>
+      <!--Liên kết-->
+      <div class="form-actions">
+        <a href="#forgot" class="forgot-link">Quên mật khẩu?</a>
+        <a href="#register" class="register-link">Đăng ký</a>
+      </div>
+    </form>
+  </section>
 
 
-    <!--=============REGISTER===============-->
-    <section class="page-register" id="register">
-      <!-- Bảng đăng kí -->
-      <form class="signin-form layout-form" id="form-register">
-        <div class="form-heading">Đăng ký</div>
-        <div class="input-group">
-          <!--Tên đăng nhập-->
-          <label class="label" for="fname"> Tên đăng nhập</label>
-          <input class="register-Ip" name="username" type="text" id="fname" placeholder="Nhập tên đăng nhập">
-          <!--buộc người dùng nhập vào thì mới cho gửi form-->
-          </div>
+  <!--=============REGISTER===============-->
+  <section class="page-register" id="register">
+    <!-- Bảng đăng kí -->
+    <form class="signin-form layout-form" id="form-register">
+      <div class="form-heading">Đăng ký</div>
+      <div class="input-group">
+        <!--Tên đăng nhập-->
+        <label class="label" for="fname"> Tên đăng nhập</label>
+        <input class="register-Ip" name="username" type="text" id="fname" placeholder="Nhập tên đăng nhập">
+        <!--buộc người dùng nhập vào thì mới cho gửi form-->
+      </div>
 
-        <!--Email-->
-        <div class="input-group">
-          <label class="label" for="femail">Email</label>
-          <input class="register-Ip" name="email" type="email" id="femail" placeholder="Nhập Email">
-          <p class="warning-email" style="color: red;
+      <!--Email-->
+      <div class="input-group">
+        <label class="label" for="femail">Email</label>
+        <input class="register-Ip" name="email" type="email" id="femail" placeholder="Nhập Email">
+        <p class="warning-email" style="color: red;
                        font-size: 0.7rem; font-weight: 600; display: none;">Email không hợp lệ</p>
-        </div>
+      </div>
 
-        <!--Mật khẩu-->
-        <div class="input-group">
-          <label class="label" for="fpassword">Mật khẩu</label>
-          <input class="register-Ip" name="password" type="password" id="fpassword" placeholder="Nhập Mật khẩu">
-        </div>
-        <div class="input-group">
-          <label class="label" for="fconfirm">Nhập lại mật khẩu</label>
-          <input class="register-Ip" name="confirmPw" type="password" id="fconfirm" placeholder="Nhập lại mật khẩu">
-          <p class="warning-pw" style="color: red;
+      <!--Mật khẩu-->
+      <div class="input-group">
+        <label class="label" for="fpassword">Mật khẩu</label>
+        <input class="register-Ip" name="password" type="password" id="fpassword" placeholder="Nhập Mật khẩu">
+      </div>
+      <div class="input-group">
+        <label class="label" for="fconfirm">Nhập lại mật khẩu</label>
+        <input class="register-Ip" name="confirmPw" type="password" id="fconfirm" placeholder="Nhập lại mật khẩu">
+        <p class="warning-pw" style="color: red;
                       font-size: 0.7rem; font-weight: 600; display: none;">Mật khẩu không khớp</p>
-        </div>
-
-        <!--button-->
-        <div class="button">
-          <button>Xác nhận</button>
-        </div>
-      </form>
-
-      <!--Đăng kí thành công-->
-      <div class="thongbao hidden">
-        <h1 class="style"><i class="fa-solid fa-circle-check" style="color: #74C0FC;"></i>
-          Đăng ký thành công
-        </h1>
-        <span class="loader"></span>
-      </div>
-    </section>
-    <!--=============FORGOT===============-->
-    <section class="page-forgot hidden" id="forgot">
-      <form class="signin-form layout-form" id="form-forgot">
-        <div class="form-heading">Quên mật khẩu</div>
-
-        <div class="input-group">
-          <label class="label" for="forgot-email">Email đã đăng ký</label>
-          <input class="register-Ip" type="email" id="forgot-email" placeholder="Nhập email của bạn">
-          <p class="warning-email" style="color:red;display:none;">Email không hợp lệ hoặc chưa đăng ký</p>
-        </div>
-
-        <div class="input-group">
-          <label class="label" for="forgot-password">Mật khẩu mới</label>
-          <input class="register-Ip" type="password" id="forgot-password" placeholder="Nhập mật khẩu mới">
-        </div>
-
-        <div class="input-group">
-          <label class="label" for="forgot-confirm">Nhập lại mật khẩu</label>
-          <input class="register-Ip" type="password" id="forgot-confirm" placeholder="Nhập lại mật khẩu mới">
-          <p class="warning-pw" style="color:red;display:none;">Mật khẩu không khớp</p>
-        </div>
-
-        <div class="button">
-          <button type="button" id="btn-reset">Xác nhận</button>
-        </div>
-
-        <div class="button">
-          <button type="button" id="btn-back-login">← Quay lại đăng nhập</button>
-        </div>
-      </form>
-
-      <div class="thongbao hidden">
-        <h1 class="style"><i class="fa-solid fa-circle-check" style="color:#74C0FC;"></i>
-          Mật khẩu đã được thay đổi thành công
-        </h1>
-        <span class="loader"></span>
-      </div>
-    </section>
-
-    <!--==========ADMIN===============-->
-    <section class="container-admin page-admin">
-      <div class="sidebar">
-        <div class="logo-on-admin">Logo</div>
-        <div class="menu">
-          <a href="#home" class="icon-btn" title="Trang chủ">
-            <i class="fa-solid fa-house"></i>
-          </a>
-          <a href="#ds_sanPham" class="icon-btn" title="Danh sách sản phẩm">
-            <i class="fa-solid fa-mobile-screen-button"></i>
-          </a>
-          <a href="#ds_donHang" class="icon-btn" title="Danh sách đơn hàng">
-            <i class="fa-solid fa-receipt"></i>
-          </a>
-          <a href="#ds_khachHang" class="icon-btn" title="Danh sách khách hàng">
-            <i class="fa-solid fa-users"></i>
-          </a>
-          <a href="#thongKe" class="icon-btn" title="Thống kê">
-            <i class="fa-solid fa-chart-bar"></i>
-          </a>
-          <a href="#ds_nhapHang" class="icon-btn" title="Quản lý nhập hàng">
-            <i class="fa-solid fa-boxes-packing"></i>
-          </a>
-          <a href="#ds_giaBan" class="icon-btn" title="Quản lý giá bán">
-            <i class="fa-solid fa-money-bill"></i>
-          </a>
-          <a href="#ds_soLuongTon" class="icon-btn" title="Quản lý số lượn tồn">
-            <i class="fa-solid fa-rectangle-list"></i>
-          </a>
-        </div>
       </div>
 
-      <div class="main">
-        <div class="login">
-          <div class="avatar">
-            <i class="fa-solid fa-user"></i>
-          </div>
-          <span class="textUser">Đăng nhập</span>
+      <!--button-->
+      <div class="button">
+        <button>Xác nhận</button>
+      </div>
+    </form>
+
+    <!--Đăng kí thành công-->
+    <div class="thongbao hidden">
+      <h1 class="style"><i class="fa-solid fa-circle-check" style="color: #74C0FC;"></i>
+        Đăng ký thành công
+      </h1>
+      <span class="loader"></span>
+    </div>
+  </section>
+  <!--=============FORGOT===============-->
+  <section class="page-forgot hidden" id="forgot">
+    <form class="signin-form layout-form" id="form-forgot">
+      <div class="form-heading">Quên mật khẩu</div>
+
+      <div class="input-group">
+        <label class="label" for="forgot-email">Email đã đăng ký</label>
+        <input class="register-Ip" type="email" id="forgot-email" placeholder="Nhập email của bạn">
+        <p class="warning-email" style="color:red;display:none;">Email không hợp lệ hoặc chưa đăng ký</p>
+      </div>
+
+      <div class="input-group">
+        <label class="label" for="forgot-password">Mật khẩu mới</label>
+        <input class="register-Ip" type="password" id="forgot-password" placeholder="Nhập mật khẩu mới">
+      </div>
+
+      <div class="input-group">
+        <label class="label" for="forgot-confirm">Nhập lại mật khẩu</label>
+        <input class="register-Ip" type="password" id="forgot-confirm" placeholder="Nhập lại mật khẩu mới">
+        <p class="warning-pw" style="color:red;display:none;">Mật khẩu không khớp</p>
+      </div>
+
+      <div class="button">
+        <button type="button" id="btn-reset">Xác nhận</button>
+      </div>
+
+      <div class="button">
+        <button type="button" id="btn-back-login">← Quay lại đăng nhập</button>
+      </div>
+    </form>
+
+    <div class="thongbao hidden">
+      <h1 class="style"><i class="fa-solid fa-circle-check" style="color:#74C0FC;"></i>
+        Mật khẩu đã được thay đổi thành công
+      </h1>
+      <span class="loader"></span>
+    </div>
+  </section>
+
+  <!--==========ADMIN===============-->
+  <section class="container-admin page-admin">
+    <div class="sidebar">
+      <div class="logo-on-admin">Logo</div>
+      <div class="menu">
+        <a href="#home" class="icon-btn" title="Trang chủ">
+          <i class="fa-solid fa-house"></i>
+        </a>
+        <a href="#ds_sanPham" class="icon-btn" title="Danh sách sản phẩm">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+        </a>
+        <a href="#ds_donHang" class="icon-btn" title="Danh sách đơn hàng">
+          <i class="fa-solid fa-receipt"></i>
+        </a>
+        <a href="#ds_khachHang" class="icon-btn" title="Danh sách khách hàng">
+          <i class="fa-solid fa-users"></i>
+        </a>
+        <a href="#thongKe" class="icon-btn" title="Thống kê">
+          <i class="fa-solid fa-chart-bar"></i>
+        </a>
+        <a href="#ds_nhapHang" class="icon-btn" title="Quản lý nhập hàng">
+          <i class="fa-solid fa-boxes-packing"></i>
+        </a>
+        <a href="#ds_giaBan" class="icon-btn" title="Quản lý giá bán">
+          <i class="fa-solid fa-money-bill"></i>
+        </a>
+        <a href="#ds_soLuongTon" class="icon-btn" title="Quản lý số lượn tồn">
+          <i class="fa-solid fa-rectangle-list"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="login">
+        <div class="avatar">
+          <i class="fa-solid fa-user"></i>
         </div>
+        <span class="textUser">Đăng nhập</span>
+      </div>
 
-        <section id="home" class="page-section">
-          <h1>Chào mừng tới giao diện admin</h1>
-          <h2>Hãy chọn các nút bên trái để bắt đầu</h2>
-        </section>
+      <section id="home" class="page-section">
+        <h1>Chào mừng tới giao diện admin</h1>
+        <h2>Hãy chọn các nút bên trái để bắt đầu</h2>
+      </section>
 
-        <section id="ds_sanPham" class="page-section">
-          <div id="sp-wrapper">
-            <div id="sp-left">
-              <h1 class="sp-title">Danh sách sản phẩm</h1>
-              <div class="sp-table-container">
-                <table class="sp-table">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Ảnh</th>
-                      <th>Tên sản phẩm</th>
-                      <th>Thương hiệu</th>
-                      <th>Giá</th>
-                      <th>Thao tác</th>
-                    </tr>
-                  </thead>
-                  
-                </table>
-              </div>
-              <div class="sp-search-box">
-                <h2 class="sp-subtitle">Tìm kiếm sản phẩm</h2>
-                <form class="sp-search-form"> 
-                  <input id = "timten" type="text" placeholder="Tên sản phẩm"> 
-                  <input id = "timbrand" type="text" placeholder="Thương hiệu"> 
-                  <button id = "timbtn">Tìm</button> </form>
-              </div>
+      <section id="ds_sanPham" class="page-section">
+        <div id="sp-wrapper">
+          <div id="sp-left">
+            <h1 class="sp-title">Danh sách sản phẩm</h1>
+            <div class="sp-table-container">
+              <table class="sp-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Ảnh</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Thương hiệu</th>
+                    <th>Giá</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+
+              </table>
             </div>
-            <div id="sp-right">
-              <div class="sp-add-box">
-                <h2 class="sp-subtitle">Thêm sản phẩm</h2>
-                <form class="sp-add-form"> 
-                   <input id = "tensp" type="text" placeholder="Tên sản phẩm"> 
-                   <input type="text" id = "brand" placeholder="Thương hiệu"> 
-                   <input id="size" type="text" placeholder="Kích thước">
-                   <input id="type" type="text" placeholder="Loại">
-                   <input id = "color" type = "text" placeholder ="Màu">
-                   <input id = "camera" type = "text" placeholder = "Camera">
-                   <input id = "cpu" type = "text" placeholder = "CPU">
-                   <input id = "memory" type = "text" placeholder = "Bộ nhớ">
-                   <input id = "ram" type = "text" placeholder = "RAM">
-                   <input id = "battery" type = "text" placeholder = "Dung lượng pin">
-                  <div class="sp-image-upload"> 
-                    <label>Ảnh</label> 
-                    <input id="revenue1" type="file"> 
-                    <img id = "preview" width = "100">
-                  </div> 
-                  <button id = "themsanphambtn">Thêm</button>
-                      
-                </form>
-              </div>
+            <div class="sp-search-box">
+              <h2 class="sp-subtitle">Tìm kiếm sản phẩm</h2>
+              <form class="sp-search-form">
+                <input id="timten" type="text" placeholder="Tên sản phẩm">
+                <input id="timbrand" type="text" placeholder="Thương hiệu">
+                <button id="timbtn">Tìm</button>
+              </form>
             </div>
           </div>
-        </section>
+          <div id="sp-right">
+            <div class="sp-add-box">
+              <h2 class="sp-subtitle">Thêm sản phẩm</h2>
+              <form class="sp-add-form">
+                <input id="tensp" type="text" placeholder="Tên sản phẩm">
+                <input type="text" id="brand" placeholder="Thương hiệu">
+                <input id="size" type="text" placeholder="Kích thước">
+                <input id="type" type="text" placeholder="Loại">
+                <input id="color" type="text" placeholder="Màu">
+                <input id="camera" type="text" placeholder="Camera">
+                <input id="cpu" type="text" placeholder="CPU">
+                <input id="memory" type="text" placeholder="Bộ nhớ">
+                <input id="ram" type="text" placeholder="RAM">
+                <input id="battery" type="text" placeholder="Dung lượng pin">
+                <div class="sp-image-upload">
+                  <label>Ảnh</label>
+                  <input id="revenue1" type="file">
+                  <img id="preview" width="100">
+                </div>
+                <button id="themsanphambtn">Thêm</button>
 
-        <section id="ds_donHang" class="page-section">
-          <div id="dh-wrapper">
-            <div id="dh-left">
-              <h1 class="dh-title">Danh sách đơn hàng</h1>
-              <div class="dh-table-container">
-                <table class="dh-table">
-                  <thead>
-                    <tr>
-                      <th>Ngày</th>
-                      <th>Khách hàng</th>
-                      <th>Giá</th>
-                      <th>Địa chỉ</th>
-                      <th>Trạng thái</th>
-                      <th>Thao tác</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div id="dh-right">
-              <div class="dh-search-box">
-                <h2 class="dh-subtitle">Tìm kiếm đơn hàng</h2 >
-                <form class="dh-search-form">
-                  <input type="text" placeholder="Tìm theo tên khách hàng..." />
-                  <input type="date" placeholder="Từ ngày" />
-                  <input type="date" placeholder="Đến ngày" />
-                  <select>
-                    <option value="" id = 'blank'>— Chọn trạng thái —</option>
-                    <option value="pending">Chờ xử lý</option>
-                    <option value="shipping">Đang giao</option>
-                    <option value="delivered">Đã giao</option>
-                  </select>
-                  <button type="submit">Tìm</button>
-                  <button type="button" id="resetFilter">Reset bộ lọc</button>
-                </form>
-
-              </div>
+              </form>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section id="ds_khachHang" class="page-section">
-          <div id="kh-wrapper">
-            <div id="kh-left">
-              <h1 class="kh-title">Danh sách khách hàng</h1>
-              <div class="kh-table-container">
-                <table class="kh-table">
-                  <thead>
-                    <tr>
-                      <th>Họ tên</th>
-                      <th>Tên đăng nhập</th>
-                      <th>Mật khẩu</th>
-                      <th>Ngày đăng ký</th>
-                      <th>Thao tác</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                     
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div id="kh-right">
-              <div class="kh-search-box">
-                <h2 class="kh-subtitle">Tìm kiếm khách hàng</h2>
-                <form class="kh-search-form"> 
-                  <input type="text" placeholder="Tên khách hàng"> 
-                  <input type="text" placeholder="Tên đăng nhập"> 
-                  <button type="submit">Tìm</button> </form>
-              </div>
+      <section id="ds_donHang" class="page-section">
+        <div id="dh-wrapper">
+          <div id="dh-left">
+            <h1 class="dh-title">Danh sách đơn hàng</h1>
+            <div class="dh-table-container">
+              <table class="dh-table">
+                <thead>
+                  <tr>
+                    <th>Ngày</th>
+                    <th>Khách hàng</th>
+                    <th>Giá</th>
+                    <th>Địa chỉ</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
             </div>
           </div>
-        </section>
-        <!--=============THỐNG KÊ===============-->
-        <section id="thongKe" class="page-section">
-          <div class="stats-wrapper">
-            <div class="stats-left-panel">
-              <h1 class="stats-title">📊 Thống Kê Doanh Thu</h1>
-              <div class="stats-table-container">
-                <table class="stats-table">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Tên Sản Phẩm</th>
-                      <th>Số Lượng Bán</th>
-                      <th>Doanh Thu</th>
-                      <th>Chi Tiết</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td colspan="5" style="text-align: center; padding: 20px; color: #666;">
+          <div id="dh-right">
+            <div class="dh-search-box">
+              <h2 class="dh-subtitle">Tìm kiếm đơn hàng</h2>
+              <form class="dh-search-form">
+                <input type="text" placeholder="Tìm theo tên khách hàng..." />
+                <input type="date" placeholder="Từ ngày" />
+                <input type="date" placeholder="Đến ngày" />
+                <select>
+                  <option value="" id='blank'>— Chọn trạng thái —</option>
+                  <option value="pending">Chờ xử lý</option>
+                  <option value="shipping">Đang giao</option>
+                  <option value="delivered">Đã giao</option>
+                </select>
+                <button type="submit">Tìm</button>
+                <button type="button" id="resetFilter">Reset bộ lọc</button>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="ds_khachHang" class="page-section">
+        <div id="kh-wrapper">
+          <div id="kh-left">
+            <h1 class="kh-title">Danh sách khách hàng</h1>
+            <div class="kh-table-container">
+              <table class="kh-table">
+                <thead>
+                  <tr>
+                    <th>Họ tên</th>
+                    <th>Tên đăng nhập</th>
+                    <th>Mật khẩu</th>
+                    <th>Ngày đăng ký</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div id="kh-right">
+            <div class="kh-search-box">
+              <h2 class="kh-subtitle">Tìm kiếm khách hàng</h2>
+              <form class="kh-search-form">
+                <input type="text" placeholder="Tên khách hàng">
+                <input type="text" placeholder="Tên đăng nhập">
+                <button type="submit">Tìm</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--=============THỐNG KÊ===============-->
+      <section id="thongKe" class="page-section">
+        <div class="stats-wrapper">
+          <div class="stats-left-panel">
+            <h1 class="stats-title">📊 Thống Kê Doanh Thu</h1>
+            <div class="stats-table-container">
+              <table class="stats-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Số Lượng Bán</th>
+                    <th>Doanh Thu</th>
+                    <th>Chi Tiết</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="5" style="text-align: center; padding: 20px; color: #666;">
                       Chưa có đơn hàng
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="stats-right-panel">
+            <div class="stats-filter-section">
+              <h3 class="stats-subtitle">🔍 Bộ Lọc Thống Kê</h3>
+              <form class="stats-filter-form">
+                <label for="filter-product">Lọc theo sản phẩm:</label>
+                <select id="filter-product">
+                  <option value="all">Tất cả sản phẩm</option>
+                  <option value="best">Sản phẩm bán chạy nhất</option>
+                  <option value="worst">Sản phẩm bán ít nhất</option>
+                </select>
+
+                <label for="filter-time">Thời gian:</label>
+                <select id="filter-time">
+                  <option value="all">Tất cả thời gian</option>
+                  <option value="week">Tuần này</option>
+                  <option value="month">Tháng này</option>
+                  <option value="quarter">Quý này</option>
+                </select>
+
+                <label for="revenue">Lọc theo doanh thu (từ):</label>
+                <input type="number" id="revenue" placeholder="Nhập số tiền tối thiểu">
+
+                <button type="submit">Áp Dụng Lọc</button>
+              </form>
             </div>
 
-            <div class="stats-right-panel">
-              <div class="stats-filter-section">
-                <h3 class="stats-subtitle">🔍 Bộ Lọc Thống Kê</h3>
-                <form class="stats-filter-form">
-                  <label for="filter-product">Lọc theo sản phẩm:</label>
-                  <select id="filter-product">
-                    <option value="all">Tất cả sản phẩm</option>
-                    <option value="best">Sản phẩm bán chạy nhất</option>
-                    <option value="worst">Sản phẩm bán ít nhất</option>
+            <div class="stats-result">
+              <!-- Kết quả thống kê sẽ được hiển thị ở đây -->
+              <h3 class="stats-subtitle">📈 Tổng Quan Hệ Thống</h3>
+              <p><strong>Chưa có thống kê</strong></p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Nhập hàng -->
+      <section id="ds_nhapHang" class="page-section">
+        <div id="nh-wrapper">
+          <div id="nh-left">
+            <h1 class="nh-title">Danh sách Phiếu Nhập Hàng</h1>
+            <div class="nh-actions">
+              <button id="btnTaoPhieuMoi">Tạo Phiếu Nhập Mới</button>
+              <input type="text" id="nh-search" placeholder="Tìm theo ID phiếu...">
+            </div>
+            <div class="nh-table-container"></div>
+          </div>
+
+          <div id="nh-right">
+            <h2 class="nh-subtitle">Chi Tiết Phiếu Nhập</h2>
+            <form id="nh-form-chitiet">
+              <div class="input-group">
+                <label for="nh-id">ID Phiếu:</label>
+                <input type="text" id="nh-id" disabled>
+              </div>
+              <div class="input-group">
+                <label for="nh-ngayNhap">Ngày nhập:</label>
+                <input type="text" id="nh-ngayNhap" disabled>
+              </div>
+              <div class="input-group">
+                <label for="nh-trangThai">Trạng thái:</label>
+                <input type="text" id="nh-trangThai" disabled>
+              </div>
+
+              <fieldset id="nh-add-sp-fieldset">
+                <legend>Thêm sản phẩm vào phiếu</legend>
+                <div class="input-group">
+                  <label for="nh-sp-select">Chọn sản phẩm:</label>
+                  <select id="nh-sp-select">
+                    <option value="">-- Đang tải sản phẩm --</option>
                   </select>
+                </div>
+                <div class="input-group">
+                  <label for="nh-sp-soluong">Số lượng nhập:</label>
+                  <input type="number" id="nh-sp-soluong" min="1" value="">
+                </div>
+                <div class="input-group">
+                  <label for="nh-sp-gianhap">Giá nhập (VNĐ):</label>
+                  <input type="number" id="nh-sp-gianhap" min="0">
+                </div>
+                <button type="button" id="btnThemSPVaoPhieu">Thêm SP</button>
+              </fieldset>
 
-                  <label for="filter-time">Thời gian:</label>
-                  <select id="filter-time">
-                    <option value="all">Tất cả thời gian</option>
-                    <option value="week">Tuần này</option>
-                    <option value="month">Tháng này</option>
-                    <option value="quarter">Quý này</option>
-                  </select>
-
-                  <label for="revenue">Lọc theo doanh thu (từ):</label>
-                  <input type="number" id="revenue" placeholder="Nhập số tiền tối thiểu">
-
-                  <button type="submit">Áp Dụng Lọc</button>
-                </form>
+              <h3>Sản phẩm trong phiếu</h3>
+              <div id="nh-chitiet-table-container">
               </div>
-
-              <div class="stats-result">
-                <!-- Kết quả thống kê sẽ được hiển thị ở đây -->
-                <h3 class="stats-subtitle">📈 Tổng Quan Hệ Thống</h3>
-                <p><strong>Chưa có thống kê</strong></p>
-              </div>
-            </div>
-          </div>
-        </section>
-        <!-- Nhập hàng -->
-        <section id="ds_nhapHang" class="page-section">
-          <div id="nh-wrapper">
-            <div id="nh-left">
-              <h1 class="nh-title">Danh sách Phiếu Nhập Hàng</h1>
-              <div class="nh-actions">
-                <button id="btnTaoPhieuMoi">Tạo Phiếu Nhập Mới</button>
-                <input type="text" id="nh-search" placeholder="Tìm theo ID phiếu...">
-              </div>
-              <div class="nh-table-container"></div>
-            </div>
-
-    <div id="nh-right">
-      <h2 class="nh-subtitle">Chi Tiết Phiếu Nhập</h2>
-      <form id="nh-form-chitiet">
-        <div class="input-group">
-          <label for="nh-id">ID Phiếu:</label>
-          <input type="text" id="nh-id" disabled>
-        </div>
-        <div class="input-group">
-          <label for="nh-ngayNhap">Ngày nhập:</label>
-          <input type="text" id="nh-ngayNhap" disabled>
-        </div>
-        <div class="input-group">
-          <label for="nh-trangThai">Trạng thái:</label>
-          <input type="text" id="nh-trangThai" disabled>
-        </div>
-
-        <fieldset id="nh-add-sp-fieldset">
-          <legend>Thêm sản phẩm vào phiếu</legend>
-          <div class="input-group">
-            <label for="nh-sp-select">Chọn sản phẩm:</label>
-            <select id="nh-sp-select">
-              <option value="">-- Đang tải sản phẩm --</option>
-            </select>
-          </div>
-          <div class="input-group">
-            <label for="nh-sp-soluong">Số lượng nhập:</label>
-            <input type="number" id="nh-sp-soluong" min="1" value="">
-          </div>
-          <div class="input-group">
-            <label for="nh-sp-gianhap">Giá nhập (VNĐ):</label>
-            <input type="number" id="nh-sp-gianhap" min="0">
-          </div>
-          <button type="button" id="btnThemSPVaoPhieu">Thêm SP</button>
-        </fieldset>
-
-        <h3>Sản phẩm trong phiếu</h3>
-        <div id="nh-chitiet-table-container">
-          </div>
-        <p><strong>Tổng tiền nhập: <span id="nh-tongTien">0</span> VNĐ</strong></p>
+              <p><strong>Tổng tiền nhập: <span id="nh-tongTien">0</span> VNĐ</strong></p>
 
         <div id="nh-form-actions">
           <button type="button" id="btnHoanThanhPhieu" class="btn-success">Hoàn Thành Phiếu</button>
@@ -439,95 +443,93 @@
       </div>
     </div>
 
-    <div class="price-table-container">
-      <table class="price-table">
-        <thead>
-          <tr>
-            <th>Mã SP</th>
-            <th>Tên sản phẩm</th>
-            <th>Loại</th>
-            <th>Giá vốn (VNĐ)</th>
-            <th>% Lợi nhuận</th>
-            <th>Giá bán (VNĐ)</th>
-            <th>Thao tác</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-<section id="ds_soLuongTon" class="page-section">
-  <div class="inventory-wrapper">
-    <div class="inventory-header">
-      <h1>Quản lý Số Lượng Tồn</h1>
-      <div class="inventory-toggle">
-        <button id="btn-current-stock" class="toggle-active">
-          Tồn Kho Hiện Tại
-        </button>
-        <button id="btn-ies-report">Báo Cáo Nhập-Xuất-Tồn</button>
-      </div>
-    </div>
+          <div class="price-table-container">
+            <table class="price-table">
+              <thead>
+                <tr>
+                  <th>Mã SP</th>
+                  <th>Tên sản phẩm</th>
+                  <th>Loại</th>
+                  <th>Giá vốn (VNĐ)</th>
+                  <th>% Lợi nhuận</th>
+                  <th>Giá bán (VNĐ)</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      <section id="ds_soLuongTon" class="page-section">
+        <div class="inventory-wrapper">
+          <div class="inventory-header">
+            <h1>Quản lý Số Lượng Tồn</h1>
+            <div class="inventory-toggle">
+              <button id="btn-current-stock" class="toggle-active">
+                Tồn Kho Hiện Tại
+              </button>
+              <button id="btn-ies-report">Báo Cáo Nhập-Xuất-Tồn</button>
+            </div>
+          </div>
 
-    <div id="inventory-current-stock" class="inventory-view view-active">
-      <div class="inventory-filters">
-        <input
-          type="text"
-          id="inv-search"
-          placeholder="Tìm theo tên sản phẩm..."
-        />
-        <select id="inv-category-filter">
-          <option value="all">Tất cả loại</option>
-          </select>
-        <label for="inv-threshold">Ngưỡng cảnh báo (sắp hết):</label>
-        <input type="number" id="inv-threshold" value="5" min="0" />
-      </div>
-      <div class="inventory-table-container">
-        <table class="inventory-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Tên Sản Phẩm</th>
-              <th>Loại</th>
-              <th>Số Lượng Tồn</th>
-              <th>Trạng Thái</th>
-            </tr>
-          </thead>
-          <tbody>
-            </tbody>
-        </table>
-      </div>
-    </div>
+          <div id="inventory-current-stock" class="inventory-view view-active">
+            <div class="inventory-filters">
+              <input type="text" id="inv-search" placeholder="Tìm theo tên sản phẩm..." />
+              <select id="inv-category-filter">
+                <option value="all">Tất cả loại</option>
+              </select>
+              <label for="inv-threshold">Ngưỡng cảnh báo (sắp hết):</label>
+              <input type="number" id="inv-threshold" value="5" min="0" />
+            </div>
+            <div class="inventory-table-container">
+              <table class="inventory-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Loại</th>
+                    <th>Số Lượng Tồn</th>
+                    <th>Trạng Thái</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-    <div id="inventory-report" class="inventory-view">
-      <div class="report-filters">
-        <label for="report-start-date">Từ ngày:</label>
-        <input type="date" id="report-start-date" />
-        <label for="report-end-date">Đến ngày:</label>
-        <input type="date" id="report-end-date" />
-        <button id="btn-generate-report">Xem Báo Cáo</button>
-      </div>
-      <div class="report-table-container">
-        <table class="report-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Tên Sản Phẩm</th>
-              <th>Tổng Nhập</th>
-              <th>Tổng Xuất</th>
-              <th>Tồn Kho (Hiện Tại)</th>
-            </tr>
-          </thead>
-          <tbody>
-            </tbody>
-        </table>
-      </div>
+          <div id="inventory-report" class="inventory-view">
+            <div class="report-filters">
+              <label for="report-start-date">Từ ngày:</label>
+              <input type="date" id="report-start-date" />
+              <label for="report-end-date">Đến ngày:</label>
+              <input type="date" id="report-end-date" />
+              <button id="btn-generate-report">Xem Báo Cáo</button>
+            </div>
+            <div class="report-table-container">
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Tổng Nhập</th>
+                    <th>Tổng Xuất</th>
+                    <th>Tồn Kho (Hiện Tại)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
-  </div>
-</section>
-      </div>
-    </section>
+  </section>
+  <div id="alert-normal"></div>
 </body>
+
 </html>

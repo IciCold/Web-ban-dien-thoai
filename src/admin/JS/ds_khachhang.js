@@ -1,5 +1,5 @@
 // ds_khachHang.js
-
+import {showalert} from "../../JS/alert.js";
 export function loadCustomerList() {
     const customerSection = document.getElementById('ds_khachHang');
     if (!customerSection) return;
@@ -72,7 +72,7 @@ function toggleLock(index) {
     
     // Reload danh sách
     loadCustomerList();
-    alert(currentlyLocked ? 'Đã mở khóa tài khoản.' : 'Đã khóa tài khoản.');
+    showalert(currentlyLocked ? 'Đã mở khóa tài khoản.' : 'Đã khóa tài khoản.');
 }
 
 function editCustomer(index) {
@@ -96,7 +96,7 @@ function editCustomer(index) {
 
     localStorage.setItem('users', JSON.stringify(users));
     loadCustomerList();
-    alert('Cập nhật thông tin thành công!');
+    showalert('Cập nhật thông tin thành công!',"success");
 }
 
 // Tìm kiếm khách hàng

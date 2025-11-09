@@ -8,7 +8,7 @@ import "./ds_donhang.js";
 import "./quan_ly_gia.js";
 import "./forgot.js";
 import "./quanLyTonKho.js";
-
+import "../../JS/alert.js";
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {

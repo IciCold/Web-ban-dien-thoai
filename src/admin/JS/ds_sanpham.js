@@ -1,6 +1,7 @@
 // ==============================
 //  IMPORT CÁC HÀM DÙNG CHUNG
 // ==============================
+import { showalert } from "../../JS/alert.js";
 import {
   docdulieuLocalStorage,
   ghidulieuLocalStorage,
@@ -13,7 +14,7 @@ import {
 const themsanpham = document.getElementById("themsanphambtn");
 const tenspinp = document.getElementById("tensp");
 const thuonghieuinp = document.getElementById("brand");
-const giainp = document.getElementById("price");
+
 const kichthuocinp = document.getElementById("size");
 const loaiinp = document.getElementById("type");
 const image = document.getElementById("revenue1");
@@ -57,7 +58,7 @@ themsanpham.addEventListener("click", function (e) {
   const anhFile = image.files[0];
 
   if (!ten || !brand) {
-    alert("Vui lòng nhập đầy đủ thông tin hợp lệ!");
+    showalert("Vui lòng nhập đầy đủ thông tin hợp lệ!","warning");
     return;
   }
 
@@ -90,7 +91,7 @@ function saveProduct({ten, brand, mau_sac = "", camera = "", cpu = "", bo_nho = 
     const duplicate = datalist.find(item => item.ten.toLowerCase() === ten.toLowerCase() && item.id !== currentEditingId);
 
     if (duplicate) {
-      alert("Tên sản phẩm này đã tồn tại ở một sản phẩm khác!");
+      showalert("Tên sản phẩm này đã tồn tại ở một sản phẩm khác!","warning");
       return;
     }
 
@@ -104,7 +105,7 @@ function saveProduct({ten, brand, mau_sac = "", camera = "", cpu = "", bo_nho = 
   } else {
     const existed = datalist.find(item => item.ten.toLowerCase() === ten.toLowerCase());
     if (existed) {
-      alert("Tên sản phẩm đã tồn tại. Không thể thêm mới.");
+      showalert("Tên sản phẩm đã tồn tại. Không thể thêm mới.","warning");
       return;
     }
 
@@ -172,7 +173,7 @@ function updateBang() {
     row.querySelector(".sp-edit").addEventListener("click", () => {
       tenspinp.value = item.ten;
       thuonghieuinp.value = item.brand;
-      giainp.value = item.gia;
+    
       document.getElementById("color").value = item.mau_sac || "";
       document.getElementById("size").value = item.kich_thuoc || "";
       document.getElementById("memory").value = item.bo_nho || "";
@@ -199,7 +200,7 @@ function updateBang() {
 
     // --- Nút xem chi tiết ---
     row.querySelector(".sp-view").addEventListener("click", () => {
-      alert(`
+      showalert(`
 Tên: ${item.ten}
 Thương hiệu: ${item.brand}
 Giá: ${item.gia.toLocaleString("vi-VN")}₫
@@ -291,6 +292,8 @@ function displayFilteredTable(filteredList) {
       tenspinp.value = item.ten;
       thuonghieuinp.value = item.brand;
       giainp.value = item.gia;
+     
+
       document.getElementById("color").value = item.mau_sac || "";
       document.getElementById("size").value = item.kich_thuoc || "";
       document.getElementById("memory").value = item.bo_nho || "";
@@ -315,7 +318,7 @@ function displayFilteredTable(filteredList) {
     });
 
     row.querySelector(".sp-view").addEventListener("click", () => {
-      alert(`
+      showalert(`
 Tên: ${item.ten}
 Thương hiệu: ${item.brand}
 Giá: ${item.gia.toLocaleString("vi-VN")}₫
