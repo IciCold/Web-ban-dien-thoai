@@ -61,7 +61,7 @@
 }
 
 /* Nút thao tác (Xóa và Chi tiết) */
-.kh-del, .kh-edit {
+.kh-edit{
     padding: 6px 10px;
     border: none;
     border-radius: 5px;
@@ -69,24 +69,39 @@
     cursor: pointer;
 }
 
-/* Màu nền của nút Xóa */
-.kh-del {
-    background-color: #dc3545;
-}
+
 
 /* Màu nền của nút Chi tiết */
 .kh-edit {
     background-color: #007bff;
 }
 
-/* Hiệu ứng khi di chuột vào nút Xóa */
-.kh-del:hover {
-    background-color: #c82333;
-}
+
 
 /* Hiệu ứng khi di chuột vào nút Chi tiết */
 .kh-edit:hover {
     background-color: #0056b3;
+}
+
+
+/* Style cho nút khóa */
+.kh-lock {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Style cho nút mở khóa */
+.kh-lock[title*="Mở khóa"] {
+    background-color: #ff4444;
+}
+
+/* Hover effect */
+.kh-lock:hover {
+    opacity: 0.8;
 }
 
 /* --- Phần phải: Tìm kiếm khách hàng --- */
@@ -154,22 +169,3 @@
 }
 
 
-/* Style cho nút khóa */
-.kh-lock {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-/* Style cho nút mở khóa */
-.kh-lock[title*="Mở khóa"] {
-    background-color: #ff4444;
-}
-
-/* Hover effect */
-.kh-lock:hover {
-    opacity: 0.8;
-}

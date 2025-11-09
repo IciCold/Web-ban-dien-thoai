@@ -20,8 +20,8 @@ export function loadCustomerList() {
         const lockTitle = locked ? 'Mở khóa tài khoản' : 'Khóa tài khoản';
         const row = document.createElement('tr');
         row.innerHTML = `
+            <td>${user.fullName || 'Chưa cài đặt'}</td>
             <td>${user.userName || 'N/A'}</td>
-            <td>${user.email || 'N/A'}</td>
             <td>******</td> <!-- Không hiển thị mật khẩu thật -->
             <td>${user.registrationDate || new Date().toLocaleDateString('vi-VN')}</td>
             <td>
@@ -80,16 +80,19 @@ function editCustomer(index) {
     const user = users[index];
     if (!user) return;
 
-    // Hiển thị form chỉnh sửa (có thể dùng modal)
-    const newName = prompt('Tên mới:', user.userName);
+    let newName = prompt('Tên mới: (để trống nếu giữ nguyên)', user.userName);
     if (newName === null) return; // User cancel
 
-    const newEmail = prompt('Email mới:', user.email);
+    let newEmail = prompt('Email mới: (để trống nếu giữ nguyên)', user.email);
     if (newEmail === null) return;
 
-    // Cập nhật thông tin
-    user.userName = newName;
-    user.email = newEmail;
+    let newPass = prompt('Password mới: (để trống nếu giữ nguyên)', user.password);
+    if (newPass === null) return;
+
+    // Cập nhật chỉ khi có thay đổi
+    if (newName.trim() !== '') user.userName = newName;
+    if (newEmail.trim() !== '') user.email = newEmail;
+    if (newPass.trim() !== '') user.password = newPass;
 
     localStorage.setItem('users', JSON.stringify(users));
     loadCustomerList();
