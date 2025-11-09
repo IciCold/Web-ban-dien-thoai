@@ -134,10 +134,21 @@
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
     margin-bottom: 30px;
-
-
 }
+/* CSS để sửa lỗi và tùy chỉnh logo */
+a.logo {
 
+  background: none; 
+  padding: 0;   
+  width: auto;   
+  height: auto;   
+} 
+
+a.logo img {
+  height: 58px;    
+  width: auto;    
+  display: block;
+}
 .product-card {
 
     cursor: pointer;
