@@ -1,3 +1,5 @@
+import { showalert } from "./alert.js";
+
 // ================== XỬ LÝ ĐĂNG NHẬP ==================
 const loginForm = document.querySelector(".login-form");
 const usernameInput = document.getElementById("username");
@@ -97,11 +99,19 @@ export function checkLoginStatus() {
     const userInDB = users.find(u => u.userName === currentUser.userName);
     
     if (userInDB && userInDB.locked === true) {
-        // Nếu tài khoản bị khóa, đăng xuất user
-        localStorage.removeItem('currentUser');
-        alert('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ admin.');
-        window.location.href = './index.html';
-        return false;
+      // Nếu tài khoản bị khóa, đăng xuất user
+      localStorage.removeItem("currentUser");
+      window.addEventListener("load", () => {
+        location.hash ="home";
+        setTimeout(() => {
+          showalert(
+            "Tài khoảng của bạn đã bị khoá, vui lòng liên hệ Admin",
+            "error"
+          );
+        }, 1000);
+      });
+     
+      return false;
     }
 
     return true;
