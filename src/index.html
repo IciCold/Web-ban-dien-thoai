@@ -145,6 +145,14 @@
           <h2>Bộ lọc sản phẩm</h2>
           <button class="close-filter" id="closeFilter">&times;</button>
 
+          <!--Lọc theo tên-->
+          <div class="filter-section">
+            <h3>Tên</h3>
+            <div class="name-options search-bar">
+              <input type="text" id="search-input-loc" placeholder="Nhập tên sản phẩm?">
+              
+            </div>
+          </div>
           <!-- Lọc theo hãng -->
           <div class="filter-section">
             <h3>Hãng</h3>
@@ -161,17 +169,28 @@
           </div>
 
           <!-- Lọc theo giá -->
-          <div class="filter-section">
-            <h3>Giá</h3>
-            <div class="price-options">
-              <button class="filter-btn " data-min="0" data-max="2000000">Dưới 2 triệu</button>
-              <button class="filter-btn" data-min="2000000" data-max="4000000">2 - 4 triệu</button>
-              <button class="filter-btn" data-min="4000000" data-max="7000000">4 - 7 triệu</button>
-              <button class="filter-btn" data-min="7000000" data-max="13000000">7 - 13 triệu</button>
-              <button class="filter-btn" data-min="13000000" data-max="20000000">13 - 20 triệu</button>
-              <button class="filter-btn" data-min="20000000" data-max="999999999">Trên 20 triệu</button>
-            </div>
-          </div>
+                <div class="filter-section">
+                  <h3>Giá</h3>
+                  <div class="price-range-container">
+                    <div class="price-inputs">
+                      <div class="price-input-group">
+                        <input type="text" id="price-min-input" class="price-input" placeholder="0" inputmode="numeric" pattern="\d*" data-min="0" data-max="100000000">
+                        <span class="price-unit">₫</span>
+                      </div>
+                      <span class="price-separator">-</span>
+                      <div class="price-input-group">
+                        <input type="text" id="price-max-input" class="price-input" placeholder="100.000.000" inputmode="numeric" pattern="\d*" data-min="0" data-max="100000000">
+                        <span class="price-unit">₫</span>
+                      </div>
+                    </div>
+                <!--Thanh input range-->
+                    <div class="range-slider-container">
+                      <div class="range-slider-track" id="range-track"></div>
+                      <input type="range" id="range-min" class="range-slider" min="0" max="100000000" step="100000" value="0">
+                      <input type="range" id="range-max" class="range-slider" min="0" max="100000000" step="100000" value="100000000">
+                    </div>
+                  </div>
+                </div>
 
           <div class="filter-actions">
             <button id="resetFilter">Bỏ chọn</button>
