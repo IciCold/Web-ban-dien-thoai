@@ -33,3 +33,12 @@
 .alert.info { background-color: #2489f5; }
 .alert.warning { background-color: #f7bb05; color: #333; }
 
+.no-products-message {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 1.2em;
+    color: #666;
+    width: 100%;
+    margin: 20px auto;
+    background-color: none;
+}

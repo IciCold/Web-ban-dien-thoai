@@ -325,8 +325,14 @@ function updateDisplay() {
   // Hiển thị số lượng kết quả tìm được (tùy chọn)
   console.log(`Tìm thấy ${filtered.length} sản phẩm`);
 
-  // Gọi hàm hiển thị của Home.js với phân trang
-  displayProducts(filtered);
+  // Kiểm tra và hiển thị thông báo nếu không tìm thấy sản phẩm
+  const productsSection = document.querySelector(".products-section");
+  if (filtered.length === 0) {
+    productsSection.innerHTML = '<div class="no-products-message">Không tìm thấy sản phẩm phù hợp</div>';
+  } else {
+    // Gọi hàm hiển thị của Home.js với phân trang
+    displayProducts(filtered);
+  }
   console.log(filtered);
-  document.querySelector(".products-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  productsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
