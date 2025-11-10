@@ -13,3 +13,4 @@ Admin:
  tài khoản: admin
  mật khẩu: 123
 User: phải đăng ký lần đầu
+- Sản phẩm phải được set giá lần đầu bên mục quản lí giá bản của admin thì sản phẩm mới hiện ra bên User ạ
