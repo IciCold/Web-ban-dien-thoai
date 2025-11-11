@@ -29,7 +29,7 @@
       </div>
       <div class="icons">
         <i class="fa fa-bell" id="icon"></i>
-  <!--giỏ hàng-->
+        <!--giỏ hàng-->
         <div class="cart-wrapper">
           <i class="fa fa-shopping-cart" id="icon-cart"></i>
           <div class="cart-popup" id="cart-popup">
@@ -150,7 +150,7 @@
             <h3>Tên</h3>
             <div class="name-options search-bar">
               <input type="text" id="search-input-loc" placeholder="Nhập tên sản phẩm?">
-              
+
             </div>
           </div>
           <!-- Lọc theo hãng -->
@@ -169,28 +169,31 @@
           </div>
 
           <!-- Lọc theo giá -->
-                <div class="filter-section">
-                  <h3>Giá</h3>
-                  <div class="price-range-container">
-                    <div class="price-inputs">
-                      <div class="price-input-group">
-                        <input type="text" id="price-min-input" class="price-input" placeholder="0" inputmode="numeric" pattern="\d*" data-min="0" data-max="100000000">
-                        <span class="price-unit">₫</span>
-                      </div>
-                      <span class="price-separator">-</span>
-                      <div class="price-input-group">
-                        <input type="text" id="price-max-input" class="price-input" placeholder="100.000.000" inputmode="numeric" pattern="\d*" data-min="0" data-max="100000000">
-                        <span class="price-unit">₫</span>
-                      </div>
-                    </div>
-                <!--Thanh input range-->
-                    <div class="range-slider-container">
-                      <div class="range-slider-track" id="range-track"></div>
-                      <input type="range" id="range-min" class="range-slider" min="0" max="100000000" step="100000" value="0">
-                      <input type="range" id="range-max" class="range-slider" min="0" max="100000000" step="100000" value="100000000">
-                    </div>
-                  </div>
+          <div class="filter-section">
+            <h3>Giá</h3>
+            <div class="price-range-container">
+              <div class="price-inputs">
+                <div class="price-input-group">
+                  <input type="text" id="price-min-input" class="price-input" placeholder="0" inputmode="numeric"
+                    pattern="\d*" data-min="0" data-max="100000000">
+                  <span class="price-unit">₫</span>
                 </div>
+                <span class="price-separator">-</span>
+                <div class="price-input-group">
+                  <input type="text" id="price-max-input" class="price-input" placeholder="100.000.000"
+                    inputmode="numeric" pattern="\d*" data-min="0" data-max="100000000">
+                  <span class="price-unit">₫</span>
+                </div>
+              </div>
+              <!--Thanh input range-->
+              <div class="range-slider-container">
+                <div class="range-slider-track" id="range-track"></div>
+                <input type="range" id="range-min" class="range-slider" min="0" max="100000000" step="100000" value="0">
+                <input type="range" id="range-max" class="range-slider" min="0" max="100000000" step="100000"
+                  value="100000000">
+              </div>
+            </div>
+          </div>
 
           <div class="filter-actions">
             <button id="resetFilter">Bỏ chọn</button>
@@ -299,9 +302,18 @@
 
           <div class="payment-info">
 
-            <label for="delivery-address" class="info-label">Địa chỉ giao hàng:</label>
-            <input type="text" id="delivery-address" class="text-input" placeholder="Địa chỉ default (placeholder)">
-
+            <div class="payment-address-section">
+              <div class="payment-address-header">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>Địa Chỉ Nhận Hàng</span>
+              </div>
+              <div class="payment-address-details-wrapper">
+                <div id="payment-address-details">
+                  <span class="no-address-warning">Vui lòng chọn hoặc thêm địa chỉ giao hàng.</span>
+                </div>
+                <button type="button" class="btn-link" id="payment-change-address-btn">Thay Đổi</button>
+              </div>
+            </div>
             <div class="payment-methods">
               <button class="payment-button cash" type="button"><i class="fa-solid fa-money-bill"></i> Cash</button>
               <button class="payment-button visa" type="button"><i class="fa-brands fa-cc-visa"></i> Visa</button>
@@ -321,6 +333,60 @@
           </div>
         </div>
       </form class="payment-form layout-form" id="payment-form">
+      <div class="bank-modal-overlay hidden-view" id="checkout-address-modal-overlay"></div>
+
+      <div class="bank-modal checkout-address-modal hidden-view" id="checkout-address-modal">
+
+        <div class="checkout-address-view" id="checkout-address-list-view">
+          <h2 class="view-title">Địa Chỉ Của Tôi</h2>
+          <button class="modal-close-btn" id="checkout-modal-close-btn">&times;</button>
+          <hr>
+
+          <div class="checkout-address-list" id="checkout-address-list-container">
+            <p class="address-empty-state">Không tìm thấy địa chỉ nào.</p>
+          </div>
+
+          <div class="checkout-address-actions">
+            <button type="button" class="btn-add-new-address" id="checkout-goto-add-new-btn">
+              <i class="fa-solid fa-plus"></i> Thêm Địa Chỉ Mới
+            </button>
+          </div>
+
+          <hr>
+          <div class="form-actions">
+            <button type="button" class="btn-link" id="checkout-modal-cancel-btn">Hủy</button>
+            <button type="button" class="btn-orange" id="checkout-modal-confirm-btn">Xác nhận</button>
+          </div>
+        </div>
+
+        <div class="checkout-address-view hidden-view" id="checkout-address-form-view">
+          <h2 class="view-title">Địa chỉ mới</h2>
+          <button class="modal-close-btn" id="checkout-modal-close-btn-form">&times;</button>
+          <hr>
+
+          <form class="bank-form" id="checkout-add-address-form">
+
+            <div class="form-group-stacked">
+              <label for="checkout-addr-specific"
+                style="font-weight: 600; font-size: 1.1rem; margin-bottom: 10px; display: block;">Địa chỉ cụ thể</label>
+              <textarea id="checkout-addr-specific"
+                placeholder="Nhập địa chỉ cụ thể (Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố)" required
+                rows="4"></textarea>
+            </div>
+
+            <div class="form-group-checkbox">
+              <input type="checkbox" id="checkout-addr-default">
+              <label for="checkout-addr-default">Đặt làm địa chỉ mặc định</label>
+            </div>
+
+            <hr>
+            <div class="form-actions">
+              <button type="button" class="btn-link" id="checkout-modal-back-btn">Trở Lại</button>
+              <button type="submit" class="btn-orange">Hoàn Thành</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </section>
 
 
@@ -358,25 +424,25 @@
       </form>
     </section>
 
-<!--=============FORGOT===============-->
+    <!--=============FORGOT===============-->
     <section class="page-forgot hidden" id="forgot">
       <form class="signin-form layout-form" id="form-forgot">
         <div class="form-heading">Quên mật khẩu</div>
 
         <div class="input-group">
           <label class="label" for="forgot-email">Email đã đăng ký</label>
-          <input  type="email" id="forgot-email" placeholder="Nhập email của bạn">
+          <input type="email" id="forgot-email" placeholder="Nhập email của bạn">
           <p class="warning-email" style="color:red;display:none;">Email không hợp lệ hoặc chưa đăng ký</p>
         </div>
 
         <div class="input-group">
           <label class="label" for="forgot-password">Mật khẩu mới</label>
-          <input  type="password" id="forgot-password" placeholder="Nhập mật khẩu mới">
+          <input type="password" id="forgot-password" placeholder="Nhập mật khẩu mới">
         </div>
 
         <div class="input-group">
           <label class="label" for="forgot-confirm">Nhập lại mật khẩu</label>
-          <input  type="password" id="forgot-confirm" placeholder="Nhập lại mật khẩu mới">
+          <input type="password" id="forgot-confirm" placeholder="Nhập lại mật khẩu mới">
           <p class="warning-pw" style="color:red;display:none;">Mật khẩu không khớp</p>
         </div>
 
@@ -725,7 +791,6 @@
             <input type="checkbox" id="addr-default">
             <label for="addr-default">Đặt làm địa chỉ mặc định</label>
           </div>
-
           <div class="form-actions">
             <button type="button" class="btn-link" id="add-address-modal-back">TRỞ LẠI</button>
             <button type="submit" class="btn-orange">Hoàn Thành</button>
