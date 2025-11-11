@@ -34,8 +34,11 @@
 .alert.warning { background-color: #f7bb05; color: #333; }
 
 .no-products-message {
+    white-space: nowrap;
+    position:relative;
+    left: 152%;
     text-align: center;
-    padding: 40px 20px;
+    padding: 40px 10px;
     font-size: 1.2em;
     color: #666;
     width: 100%;

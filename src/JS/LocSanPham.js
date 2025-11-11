@@ -52,10 +52,11 @@ const applyFilter = document.getElementById("applyFilter");
 const resetFilter = document.getElementById("resetFilter");
 const searchInput = document.querySelector(".name-options #search-input-loc");
 
-// Lọc theo tên khi gõ
+//Lọc theo tên
 if (searchInput) {
   searchInput.addEventListener("input", (e) => {
     searchKeyword = e.target.value.trim().toLowerCase();
+    // Cập nhật hiển thị ngay khi thay đổi từ khóa
     updateDisplay();
   });
 }
@@ -276,7 +277,7 @@ function updateDisplay() {
   const price_max = document.getElementById("price-max-input");
   let Min = 0;
   let Max = 100000000;
-
+  //Lấy giá từ ô input
   if (price_min && price_max) {
     const rawMin = parseInt(String(price_min.value).replace(/\D/g, ""), 10);
     const rawMax = parseInt(String(price_max.value).replace(/\D/g, ""), 10);
@@ -284,55 +285,60 @@ function updateDisplay() {
     if (!isNaN(rawMax)) Max = rawMax;
     // Đảm bảo Min không lớn hơn Max
     if (Min > Max) {
-      const t = Min; Min = Max; Max = t;
+      const t = Min;
+      Min = Max;
+      Max = t;
     }
   }
-  
-
 
   let filtered = docdulieuLocalStorage("dataProducts");
-  
-  // Lọc theo tên (nếu có)
+
+  // Lọc theo tên
   if (searchKeyword) {
-    console.log('Đang tìm với từ khóa:', searchKeyword);
-    filtered = filtered.filter(p => {
-      // Chỉ tìm trong thuộc tính 'ten' vì đó là trường chứa tên sản phẩm
+    console.log("Đang tìm với từ khóa:", searchKeyword);
+    filtered = filtered.filter((p) => {
       return p.ten.toLowerCase().includes(searchKeyword);
     });
-    console.log('Kết quả sau khi lọc:', filtered.length, 'sản phẩm');
   }
-  
+
   // Lọc theo hãng (ngoài popup)
   // Chỉ lọc nếu *không* có lọc hãng nào trong popup được chọn
   if (currentBrand !== "all" && selectedBrands.length === 0) {
-    filtered = filtered.filter(p => p.brand.toLowerCase() === currentBrand.toLowerCase());
+    filtered = filtered.filter(
+      (p) => p.brand.toLowerCase() === currentBrand.toLowerCase()
+    );
   }
 
   // Lọc theo hãng trong popup (đa chọn)
   // Nếu có chọn, nó sẽ ghi đè bộ lọc hãng bên ngoài
   if (selectedBrands.length > 0) {
-    filtered = filtered.filter(p =>
+    filtered = filtered.filter((p) =>
       selectedBrands.includes(p.brand.toLowerCase())
     );
   }
 
-
   // Lọc theo giá trong popup
-  filtered = filtered.filter(
-    p => p.gia >= Min && p.gia <= Max
-  );  
-
-  // Hiển thị số lượng kết quả tìm được (tùy chọn)
-  console.log(`Tìm thấy ${filtered.length} sản phẩm`);
+  filtered = filtered.filter((p) => p.gia >= Min && p.gia <= Max);
 
   // Kiểm tra và hiển thị thông báo nếu không tìm thấy sản phẩm
+  const productsGrid = document.querySelector(".products-grid");
   const productsSection = document.querySelector(".products-section");
+  const oldmessage = document.querySelector(".no-products-message");
+  if (oldmessage) oldmessage.remove();
+
+  // Nếu không tìm thấy sản phẩm: hiển thị thông báo và ẩn/loại bỏ phân trang cũ
   if (filtered.length === 0) {
-    productsSection.innerHTML = '<div class="no-products-message">Không tìm thấy sản phẩm phù hợp</div>';
+    
+    if (productsGrid) productsGrid.innerHTML = '<div class="no-products-message">Không tìm thấy sản phẩm phù hợp</div>';
+
+    // Loại bỏ container phân trang cũ nếu tồn tại — tránh hiển thị trang trước đó
+    const pagination = document.getElementById("pagination-container");
+    if (pagination) pagination.remove();
+
   } else {
-    // Gọi hàm hiển thị của Home.js với phân trang
     displayProducts(filtered);
   }
-  console.log(filtered);
+
+  // Cuộn tới vùng sản phẩm (nếu tồn tại)
   productsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
