@@ -44,11 +44,6 @@ function updateTable(data) {
       <td>${donhang.total.toLocaleString("vi-VN")}₫</td>
       <td>${donhang.deliveryAddress}</td>
       <td>
-        <select class="dh-status-select" data-index="${index}">
-          ${statusOptions}
-        </select>
-      </td>
-      <td>
         <div class="dh-actions">
           <button class="dh-edit" data-index="${index}">Chi tiết</button>
           <button class="dh-update" data-index="${index}">Sửa</button>

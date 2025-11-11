@@ -1,22 +1,22 @@
 // ds_khachHang.js
 import {showalert} from "../../JS/alert.js";
+import { docdulieuLocalStorage, ghidulieuLocalStorage } from "./readandwrite.js";
 export function loadCustomerList() {
     const customerSection = document.getElementById('ds_khachHang');
     if (!customerSection) return;
 
     // Lấy dữ liệu users từ localStorage
-    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const users = docdulieuLocalStorage("users") || [];
     const tableBody = customerSection.querySelector('.kh-table tbody');
     
     if (!tableBody) return;
 
     // Xóa dữ liệu cũ
     tableBody.innerHTML = '';
-
-    // Thêm dữ liệu mới
+    // Thêm dữ liệu mớis
     users.forEach((user, index) => {
-        const locked = user.locked === true;
-        const lockIcon = locked ? '<i class="fa-solid fa-lock"></i>' : '<i class="fa-solid fa-lock-open"></i>';
+        const locked = user.locked;
+        //const lockIcon = locked ? '<i class="fa-solid fa-lock"></i>' : '<i class="fa-solid fa-lock-open"></i>';
         const lockTitle = locked ? 'Mở khóa tài khoản' : 'Khóa tài khoản';
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -24,18 +24,26 @@ export function loadCustomerList() {
             <td>${user.userName || 'N/A'}</td>
             <td>******</td> <!-- Không hiển thị mật khẩu thật -->
             <td>${user.registrationDate || new Date().toLocaleDateString('vi-VN')}</td>
-            <td>
-                <button class="kh-lock" data-index="${index}" title="${lockTitle}">${lockIcon}</button>
-                <button class="kh-edit" data-index="${index}">Sửa</button>
+            <td class = "kh-methods">
+                <button class="kh-details" data-index="${index}">Chi tiết</button>
+                <button class="kh-reset" data-index="${index}">Reset mật khẩu</button>
+                <button class="kh-lock" data-index="${index}" title="${lockTitle}">
+                <i class="fa-solid fa-lock"></i>
+                <i class="fa-solid fa-lock-open"></i>
+                ${lockTitle}</button>
             </td>
         `;
         tableBody.appendChild(row);
     });
 
+    ghidulieuLocalStorage("users",users);
+
     // Gắn sự kiện khóa/mở khóa
     attachLockEvents();
     // Gắn sự kiện sửa
-    attachEditEvents();
+    attachDetailsEvents();
+
+    attachResetEvents();
 }
 
 function attachLockEvents() {
@@ -48,56 +56,147 @@ function attachLockEvents() {
     });
 }
 
-function attachEditEvents() {
-    const editButtons = document.querySelectorAll('.kh-edit');
+function attachDetailsEvents() {
+    const editButtons = document.querySelectorAll('.kh-details');
     editButtons.forEach(button => {
         button.addEventListener('click', function() {
             const index = this.getAttribute('data-index');
-            editCustomer(index);
+            detailsCustomer(index);
         });
     });
 }
 
+function attachResetEvents() {
+    const resetButtons = document.querySelectorAll('.kh-reset');
+    resetButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const index = this.getAttribute('data-index');
+            resetpassword(index);
+        });
+    });
+}
+
+
 function toggleLock(index) {
-    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const users = docdulieuLocalStorage("users") || [];
     const user = users[index];
     if (!user) return;
 
-    const currentlyLocked = user.locked === true;
+    const currentlyLocked = user.locked;
     const confirmMsg = currentlyLocked ? 'Bạn có chắc muốn mở khóa tài khoản này?' : 'Bạn có chắc muốn khóa tài khoản này? (Tài khoản sẽ bị vô hiệu hóa nhưng không bị xóa)';
     if (!confirm(confirmMsg)) return;
 
     user.locked = !currentlyLocked;
-    localStorage.setItem('users', JSON.stringify(users));
+    ghidulieuLocalStorage("users",users);
     
     // Reload danh sách
     loadCustomerList();
     showalert(currentlyLocked ? 'Đã mở khóa tài khoản.' : 'Đã khóa tài khoản.');
 }
 
-function editCustomer(index) {
-    const users = JSON.parse(localStorage.getItem('users')) || [];
+function detailsCustomer(index) {
+    const users = docdulieuLocalStorage("users") || [];
+    const user = users[index];
+    if (!user) return;
+    // Kiểm tra nếu popup cũ đã tồn tại thì xóa
+    const oldPopup = document.querySelector('.details-popup');
+    if (oldPopup) oldPopup.remove();
+
+    // Tạo popup mới
+    const popup = document.createElement('div');
+    popup.classList.add('details-popup');
+    popup.innerHTML = `
+        <div class="popup-header">Thông tin khách hàng</div>
+        <div class="popup-body">
+            <p><strong>Họ tên:</strong> ${user.fullName || 'Chưa cài đặt'}</p>
+            <p><strong>Username:</strong> ${user.userName || 'N/A'}</p>
+            <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
+            <p><strong>Địa chỉ nhà:</strong><br> ${(user.addressList).join('<br>')}</p>
+            <p><strong>Tài khoản ngân hàng:</strong> <br> ${(user.bankingList).join('<br>')} </p> 
+            <p><strong>Ngày đăng ký:</strong> ${user.registrationDate || 'N/A'}</p>
+            <button class="close-popup">Đóng</button>
+        </div>
+    `;
+    document.body.appendChild(popup);
+
+    popup.querySelector('.close-popup').addEventListener('click', () => {
+        popup.remove();
+    });
+
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    const header = popup.querySelector('.popup-header');
+
+    header.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        offsetX = e.clientX - popup.getBoundingClientRect().left;
+        offsetY = e.clientY - popup.getBoundingClientRect().top;
+        popup.style.cursor = 'grabbing';
+    });
+
+
+    // Khi di chuột
+    document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    popup.style.left = e.clientX - offsetX + 'px';
+    popup.style.top = e.clientY - offsetY + 'px';
+    popup.style.transform = 'none'; // bỏ transform khi di chuyển
+    });
+
+    // Khi thả chuột
+    document.addEventListener('mouseup', () => {
+    if (isDragging) {
+        isDragging = false;
+        popup.style.cursor = 'grab';
+    }
+    });
+    
+    
+    showalert('Hiển thị thông tin thành công!',"success");
+}
+
+function resetpassword(index) {
+    const users = docdulieuLocalStorage("users") || [];
     const user = users[index];
     if (!user) return;
 
-    let newName = prompt('Tên mới: (để trống nếu giữ nguyên)', user.userName);
-    if (newName === null) return; // User cancel
+    // Xóa popup cũ nếu có
+    document.querySelectorAll('.popup-overlay, .reset-popup').forEach(el => el.remove());
 
-    let newEmail = prompt('Email mới: (để trống nếu giữ nguyên)', user.email);
-    if (newEmail === null) return;
+    // Tạo overlay
+    const overlay = document.createElement('div');
+    overlay.classList.add('popup-overlay');
+    document.body.appendChild(overlay);
 
-    let newPass = prompt('Password mới: (để trống nếu giữ nguyên)', user.password);
-    if (newPass === null) return;
+    // Tạo popup
+    const popup = document.createElement('div');
+    popup.classList.add('reset-popup');
+    popup.innerHTML = `
+        <p>Bạn có chắc muốn reset mật khẩu không?</p>
+        <div class="button-group">
+            <button class="yes">Có</button>
+            <button class="no">Không</button>
+        </div>
+    `;
+    document.body.appendChild(popup);
 
-    // Cập nhật chỉ khi có thay đổi
-    if (newName.trim() !== '') user.userName = newName;
-    if (newEmail.trim() !== '') user.email = newEmail;
-    if (newPass.trim() !== '') user.password = newPass;
+    // Nút “Có”
+    popup.querySelector('.yes').addEventListener('click', () => {
+        user.password = '123'; // reset
+        ghidulieuLocalStorage("users", users);
+        overlay.remove();
+        popup.remove();
+        showalert('Reset password thành công!', "success");
+    });
 
-    localStorage.setItem('users', JSON.stringify(users));
-    loadCustomerList();
-    showalert('Cập nhật thông tin thành công!',"success");
+    // Nút “Không”
+    popup.querySelector('.no').addEventListener('click', () => {
+        overlay.remove();
+        popup.remove();
+    });
 }
+
 
 // Tìm kiếm khách hàng
 export function setupCustomerSearch() {
@@ -149,5 +248,5 @@ function searchCustomers(name, username) {
 
     // Re-attach events
     attachLockEvents();
-    attachEditEvents();
+    attachDetailsEvents();
 }
