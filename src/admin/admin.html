@@ -206,25 +206,36 @@
           </div>
           <div id="sp-right">
             <div class="sp-add-box">
-              <h2 class="sp-subtitle">Thêm sản phẩm</h2>
-              <form class="sp-add-form">
-                <input id="tensp" type="text" placeholder="Tên sản phẩm">
-                <input type="text" id="brand" placeholder="Thương hiệu">
-                <input id="size" type="text" placeholder="Kích thước">
-                <input id="type" type="text" placeholder="Loại">
-                <input id="color" type="text" placeholder="Màu">
-                <input id="camera" type="text" placeholder="Camera">
-                <input id="cpu" type="text" placeholder="CPU">
-                <input id="memory" type="text" placeholder="Bộ nhớ">
-                <input id="ram" type="text" placeholder="RAM">
-                <input id="battery" type="text" placeholder="Dung lượng pin">
-                <div class="sp-image-upload">
-                  <label>Ảnh</label>
-                  <input id="revenue1" type="file">
-                  <img id="preview" width="100">
-                </div>
-                <button id="themsanphambtn">Thêm</button>
-
+              <h2 class="sp-subtitle" id="form-product-title">Thêm sản phẩm</h2>
+              <form class="sp-add-form" id="product-form">
+              <input id="tensp" type="text" placeholder="Tên sản phẩm" required list="product-names">
+              <datalist id="product-names"></datalist>              
+              <input type="text" id="brand" placeholder="Thương hiệu" required list="brand-list">
+              <datalist id="brand-list"></datalist>             
+              <input id="size" type="text" placeholder="Kích thước" list="size-list">
+              <datalist id="size-list"></datalist>              
+              <input id="type" type="text" placeholder="Loại" list="type-list">
+              <datalist id="type-list"></datalist>              
+              <input id="color" type="text" placeholder="Màu" list="color-list">
+              <datalist id="color-list"></datalist>              
+              <input id="camera" type="text" placeholder="Camera" list="camera-list">
+              <datalist id="camera-list"></datalist>              
+              <input id="cpu" type="text" placeholder="CPU" list="cpu-list">
+              <datalist id="cpu-list"></datalist>             
+              <input id="memory" type="text" placeholder="Bộ nhớ" list="memory-list">
+              <datalist id="memory-list"></datalist>              
+              <input id="ram" type="text" placeholder="RAM" list="ram-list">
+              <datalist id="ram-list"></datalist>            
+              <input id="battery" type="text" placeholder="Dung lượng pin" list="battery-list">
+              <datalist id="battery-list"></datalist>
+              <div class="sp-image-upload">
+                <label for="revenue1">Ảnh sản phẩm</label>
+                <input id="revenue1" type="file" accept="image/*">
+                <img id="preview" width="100" alt="Xem trước ảnh">
+              </div>
+              <div class="form-buttons-container">
+                <button id="themsanphambtn" type="submit" class="add-mode">Thêm</button>
+              </div>
               </form>
             </div>
           </div>
