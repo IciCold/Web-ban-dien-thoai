@@ -104,7 +104,7 @@ function detailsCustomer(index) {
 
     // Tạo popup mới
     const popup = document.createElement('div');
-    popup.classList.add('details-popup');
+    popup.classList.add('kh-details-popup');
     popup.innerHTML = `
         <div class="popup-header">Thông tin khách hàng</div>
         <div class="popup-body">
@@ -171,7 +171,7 @@ function resetpassword(index) {
 
     // Tạo popup
     const popup = document.createElement('div');
-    popup.classList.add('reset-popup');
+    popup.classList.add('kh-reset-popup');
     popup.innerHTML = `
         <p>Bạn có chắc muốn reset mật khẩu không?</p>
         <div class="button-group">

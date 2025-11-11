@@ -254,19 +254,37 @@
           <div id="dh-right">
             <div class="dh-search-box">
               <h2 class="dh-subtitle">Tìm kiếm đơn hàng</h2>
-              <form class="dh-search-form">
-                <input type="text" placeholder="Tìm theo tên khách hàng..." />
+              <form class = "dh-search-options">
+                <select>
+                  <option value = "Date">Tìm kiếm theo ngày</option>
+                  <option value = "Status">Tìm kiếm theo trạng thái</option>
+                  <option value = "Both">Tìm kiếm theo ngày và trạng thái</option>
+                </select>
+              </form>
+              
+              <form class="dh-search">
+
+                <div id = "date-search">
+                <p>Từ ngày:</p>
                 <input type="date" placeholder="Từ ngày" />
+                <p>Đến ngày:</p>
                 <input type="date" placeholder="Đến ngày" />
+                </div>
+                
+                <div id = "status-search">
                 <select>
                   <option value="" id='blank'>— Chọn trạng thái —</option>
-                  <option value="pending">Chờ xử lý</option>
-                  <option value="shipping">Đang giao</option>
-                  <option value="delivered">Đã giao</option>
+                  <option value="mới đặt">Mới đặt</option>
+                  <option value="đã xử lý">Đã xử lý</option>
+                  <option value="đã giao">Đã giao</option>
+                  <option value="đã hủy">Đã Hủy</option>
                 </select>
+                </div>
+              
                 <button type="submit">Tìm</button>
                 <button type="button" id="resetFilter">Reset bộ lọc</button>
               </form>
+              
 
             </div>
           </div>

@@ -1,7 +1,7 @@
 import { docdulieuLocalStorage, ghidulieuLocalStorage } from "./readandwrite.js";
 
 let dsdonhang = [];
-const divContainer = document.querySelector(".dh-table-container");
+
 const formSearch = document.querySelector(".dh-search-form");
 
 // Tải dữ liệu đơn hàng khi trang load
@@ -211,11 +211,12 @@ function addRowEvents() {
       console.log(productList);
 
       const popup = document.createElement('div');
-      popup.classList.add('details-popup');
+      
+      popup.classList.add('dh-details-popup');
       popup.innerHTML = `
         <div class="popup-header">
           <p>🧾 Chi tiết đơn hàng</p>
-          <button class="close-popup">Dong</button>
+          <button class="close-popup">X</button>
         </div>
         <div class="popup-body">
         Mã đơn: ${dh.id || "(Không có)"}<br>
@@ -227,7 +228,30 @@ function addRowEvents() {
         <br>📦 Sản phẩm:<br>${productList.replace(/\n/g, '<br>')}<br>
         ───────────────────────────────<br>
         Tổng tiền: ${Number(dh.total).toLocaleString("vi-VN")}₫<br>
-        </div>
+        <br>
+      
+            
+          <div>
+            Trạng thái đơn hàng: 
+            <span id="current-status">${dh.status || "Mới đặt"}</span>
+            <button id="edit-status" type="button">Chỉnh sửa</button>
+          </div>
+
+          
+          <form id="order-status-form" style="display:none;">
+            <select id="status" name="status">
+              <option value="mới đặt">Mới đặt</option>
+              <option value="đã xử lý">Đã xử lý</option>
+              <option value="đã giao">Đã giao</option>
+              <option value="đã hủy">Đã hủy</option>
+            </select>
+            <button type="submit">Cập nhật trạng thái</button>
+            <button type="button" id="cancel-status">Hủy</button>
+          </form>  
+           
+        </div>  
+
+
       `;
 
       document.body.appendChild(popup);
@@ -264,6 +288,70 @@ function addRowEvents() {
           popup.style.cursor = 'grab';
       }
       });  
+
+      
+
+      const currentStatusSpan = popup.querySelector('#current-status');
+      const editBtn = popup.querySelector('#edit-status');
+      const statusForm = popup.querySelector('#order-status-form');
+      const statusSelect = popup.querySelector('#status');
+      const cancelBtn = popup.querySelector('#cancel-status');
+
+      
+
+      // Khi nhấn "Chỉnh sửa"
+      editBtn.addEventListener('click', () => {
+        statusForm.style.display = 'block';       // hiển thị form
+        editBtn.style.display = 'none';           // ẩn nút "Chỉnh sửa"
+        
+        // chọn giá trị hiện tại trong select
+        statusSelect.value = dh.status;
+      });
+
+      // Khi nhấn "Hủy"
+      cancelBtn.addEventListener('click', () => {
+        statusForm.style.display = 'none';        // ẩn form
+        editBtn.style.display = 'inline-block';   // hiện lại nút "Chỉnh sửa"
+      });
+
+      statusForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newStatus = statusSelect.value;
+      if(newStatus==="đã giao"){
+        const check = "Bạn có chắc chắn là đã giao hàng chưa?";
+        if(!confirm(check)) return;
+        capNhatTonKhoKhiGiaoHang(dh,true);
+      }
+      else if(newStatus==="đã hủy"){
+        const check = "Bạn có chắc chắn là hủy đơn hàng không?";
+        if(!confirm(check)) return;
+        capNhatTonKhoKhiGiaoHang(dh,false);
+      }
+      // Cập nhật object đơn hàng
+      dh.status = newStatus;
+
+      // Cập nhật localStorage nếu bạn lưu ở đó
+      ghidulieuLocalStorage('orders',dsdonhang);
+
+      // Cập nhật giao diện
+      currentStatusSpan.textContent = newStatus;
+
+      // Ẩn form, hiện lại nút "Chỉnh sửa"
+      statusForm.style.display = 'none';
+      if(dh.status==='đã giao'||dh.status==='đã hủy'){
+        editBtn.style.display = "none";
+      }
+      else{
+        editBtn.style.display='inline-block';
+      }
+
+
+    });
+      //tiếp tục làm tìm kiếm
+
+
+      
+      
 
       
 
@@ -324,41 +412,64 @@ function addRowEvents() {
     });
   });*/
 }
+const select = document.querySelector(".dh-search-options select");
+const search = document.querySelector(".dh-search");
+const datesearch = document.querySelector(".dh-search #date-search");
+const statussearch = document.querySelector(".dh-search #status-search");
 
 
 
-// =======================
-// TÌM KIẾM
-formSearch.addEventListener("submit", (e) => {
+datesearch.style.display = 'none';
+statussearch.style.display = 'none';
+select.addEventListener("click", e => {
+  if(select.value === 'Date'){
+    datesearch.style.display = 'flex';
+    statussearch.style.display = 'none';
+  }
+  else if(select.value ==='Status'){
+    datesearch.style.display = 'none';
+    statussearch.style.display = 'block';
+  }
+  else{
+    datesearch.style.display = 'flex';
+    statussearch.style.display = 'block';
+  }
+});
+
+search.addEventListener("submit", e => {
   e.preventDefault();
-  const inputs = formSearch.querySelectorAll("input");
-  const select = formSearch.querySelector("select");
+  const dateInputs = search.querySelectorAll('input[type="date"]');
+  const statusSelect = search.querySelector('select');
 
-  const keyword = inputs[0].value.trim().toLowerCase();
-  const dateFrom = inputs[1].value ? new Date(inputs[1].value) : null;
-  const dateTo = inputs[2].value ? new Date(inputs[2].value) : null;
-  const status = select.value;
+  const dateFrom = dateInputs[0].value ? new Date(dateInputs[0].value) : null;
+  const dateTo = dateInputs[1].value ? new Date(dateInputs[1].value) : null;
+  const status = statusSelect.value;
 
-  const filtered = dsdonhang.filter((dh) => {
-    const nameMatch = dh.customer.toLowerCase().includes(keyword);
+  const filtered = dsdonhang.filter(dh => {
     const date = new Date(dh.date);
-    const inDateRange =
-      (!dateFrom || date >= dateFrom) && (!dateTo || date <= dateTo);
+    const inDateRange = (!dateFrom || date >= dateFrom) && (!dateTo || date <= dateTo);
+    const statusMatch = !status || dh.status === status;
 
-    // So sánh trạng thái theo value chuẩn
-    const statusMatch =
-      !status || dh.status === status;
+    if(select.value === 'Date') return inDateRange;
+    if(select.value === 'Status') return statusMatch;
+    if(select.value === 'Both') return inDateRange && statusMatch;
 
-    return nameMatch && inDateRange && statusMatch;
+    return true;
   });
-
   updateTable(filtered);
 });
+
+
+
+
+
+
+
 
 // RESET BỘ LỌC
 const btnReset = document.getElementById("resetFilter");
 btnReset.addEventListener("click", () => {
-  formSearch.reset(); // Xóa hết dữ liệu trong form
+  search.reset(); // Xóa hết dữ liệu trong form
   updateTable(dsdonhang); // Hiển thị lại toàn bộ đơn hàng
 });
 

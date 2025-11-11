@@ -92,7 +92,7 @@
   border-color: #333;
 }
 
-.details-popup{
+.dh-details-popup{
     display: block; /* Ẩn popup mặc định */
     position: fixed; /* fixed để popup đứng yên trên viewport */
     top: 50%; 
@@ -108,7 +108,7 @@
     cursor: grab; /* hiển thị như có thể kéo */
 }
 
-.details-popup .popup-header {
+.dh-details-popup .popup-header {
     display: flex;
     font-weight: bold;
     background-color: #4e73df;
@@ -121,17 +121,54 @@
     
 }
 
-.details-popup .popup-body {
+.dh-details-popup .popup-body {
     padding: 10px;
 }
 
-.details-popup .close-popup {
-    margin: 0;
+.dh-details-popup .close-popup {
     padding: 5px 10px;
     background-color: #ff4444;
     color: white;
     border: none;
     cursor: pointer;
+
+}
+.dh-details-popup .close-popup:hover{
+  opacity: 0.8;
+}
+
+.dh-details-popup select {
+  width: 100%;
+  padding: 6px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+}
+
+.dh-details-popup form button {
+  margin-top: 10px;
+  background-color: #4e73df;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.dh-details-popup form button:hover {
+  background-color: #2e59d9;
+}
+#current-status{
+  font-weight: bold;
+}
+#edit-status{
+  margin-top: 4px;
+  background-color: #4e73df;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 
@@ -153,8 +190,9 @@
     padding: 15px;
     width: 100%;
     box-shadow: none;
-    color: white;
+    color: black;
 }
+
 
 /* Tiêu đề của ô tìm kiếm */
 .dh-subtitle {
@@ -165,15 +203,15 @@
 }
 
 /* Form tìm kiếm */
-.dh-search-form {
+.dh-search {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
 /* Các ô nhập liệu */
-.dh-search-form select,
-.dh-search-form input {
+.dh-search select,
+.dh-search input {
     padding: 12px;
     border-radius: 5px;
     border: 1px solid #ccc;
@@ -184,7 +222,7 @@
 }
 
 /* Nút tìm kiếm */
-.dh-search-form button {
+.dh-search button {
     background-color: #4e73df;
     color: white;
     padding: 12px;
@@ -196,6 +234,33 @@
 }
 
 /* Hiệu ứng khi di chuột vào nút */
-.dh-search-form button:hover {
+.dh-search button:hover {
     background-color: #375aeb;
 }
+.dh-search button[id='resetFilter']{
+    background-color: #ff4444;
+}
+.dh-search button[id='resetFilter']:hover{
+    background-color: #f00b0b;
+}
+.dh-search-options{
+    display: flex;
+    margin-bottom: 15px;
+}
+.dh-search-options select{
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dh-search #date-search{
+    align-items:flex-start;
+    gap: 6px;
+    flex-direction: column;
+}
+
+

@@ -160,7 +160,7 @@
 }
 
 
-.details-popup{
+.kh-details-popup{
     display: block; /* Ẩn popup mặc định */
     position: fixed; /* fixed để popup đứng yên trên viewport */
     top: 50%; 
@@ -176,7 +176,7 @@
     cursor: grab; /* hiển thị như có thể kéo */
 }
 
-.details-popup .popup-header {
+.kh-details-popup .popup-header {
     font-weight: bold;
     background-color: #4e73df;
     color: white;
@@ -185,11 +185,11 @@
     cursor: grab;
 }
 
-.details-popup .popup-body {
+.kh-details-popup .popup-body {
     padding: 10px;
 }
 
-.details-popup .close-popup {
+.kh-details-popup .close-popup {
     margin-top: 10px;
     padding: 5px 10px;
     background-color: #ff4444;
@@ -199,7 +199,7 @@
     cursor: pointer;
 }
 
-.popup-overlay {
+.kh-popup-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -209,7 +209,7 @@
     z-index: 1000;
 }
 
-.reset-popup {
+.kh-reset-popup {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -229,25 +229,25 @@
 }
 
 /* Header / message */
-.reset-popup p {
+.kh-reset-popup p {
     text-align: center;
     font-weight: italic;
 }
 
 /* Nút */
-.reset-popup button {
+.kh-reset-popup button {
     padding: 8px 16px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
-.reset-popup .yes {
+.kh-reset-popup .yes {
     background-color: #28a745;
     color: white;
 }
 
-.reset-popup .no {
+.kh-reset-popup .no {
     background-color: #ff4444;
     color: white;
 }
