@@ -208,34 +208,34 @@
             <div class="sp-add-box">
               <h2 class="sp-subtitle" id="form-product-title">Thêm sản phẩm</h2>
               <form class="sp-add-form" id="product-form">
-              <input id="tensp" type="text" placeholder="Tên sản phẩm" required list="product-names">
-              <datalist id="product-names"></datalist>              
-              <input type="text" id="brand" placeholder="Thương hiệu" required list="brand-list">
-              <datalist id="brand-list"></datalist>             
-              <input id="size" type="text" placeholder="Kích thước" list="size-list">
-              <datalist id="size-list"></datalist>              
-              <input id="type" type="text" placeholder="Loại" list="type-list">
-              <datalist id="type-list"></datalist>              
-              <input id="color" type="text" placeholder="Màu" list="color-list">
-              <datalist id="color-list"></datalist>              
-              <input id="camera" type="text" placeholder="Camera" list="camera-list">
-              <datalist id="camera-list"></datalist>              
-              <input id="cpu" type="text" placeholder="CPU" list="cpu-list">
-              <datalist id="cpu-list"></datalist>             
-              <input id="memory" type="text" placeholder="Bộ nhớ" list="memory-list">
-              <datalist id="memory-list"></datalist>              
-              <input id="ram" type="text" placeholder="RAM" list="ram-list">
-              <datalist id="ram-list"></datalist>            
-              <input id="battery" type="text" placeholder="Dung lượng pin" list="battery-list">
-              <datalist id="battery-list"></datalist>
-              <div class="sp-image-upload">
-                <label for="revenue1">Ảnh sản phẩm</label>
-                <input id="revenue1" type="file" accept="image/*">
-                <img id="preview" width="100" alt="Xem trước ảnh">
-              </div>
-              <div class="form-buttons-container">
-                <button id="themsanphambtn" type="submit" class="add-mode">Thêm</button>
-              </div>
+                <input id="tensp" type="text" placeholder="Tên sản phẩm" required list="product-names">
+                <datalist id="product-names"></datalist>
+                <input type="text" id="brand" placeholder="Thương hiệu" required list="brand-list">
+                <datalist id="brand-list"></datalist>
+                <input id="size" type="text" placeholder="Kích thước" list="size-list">
+                <datalist id="size-list"></datalist>
+                <input id="type" type="text" placeholder="Loại" list="type-list">
+                <datalist id="type-list"></datalist>
+                <input id="color" type="text" placeholder="Màu" list="color-list">
+                <datalist id="color-list"></datalist>
+                <input id="camera" type="text" placeholder="Camera" list="camera-list">
+                <datalist id="camera-list"></datalist>
+                <input id="cpu" type="text" placeholder="CPU" list="cpu-list">
+                <datalist id="cpu-list"></datalist>
+                <input id="memory" type="text" placeholder="Bộ nhớ" list="memory-list">
+                <datalist id="memory-list"></datalist>
+                <input id="ram" type="text" placeholder="RAM" list="ram-list">
+                <datalist id="ram-list"></datalist>
+                <input id="battery" type="text" placeholder="Dung lượng pin" list="battery-list">
+                <datalist id="battery-list"></datalist>
+                <div class="sp-image-upload">
+                  <label for="revenue1">Ảnh sản phẩm</label>
+                  <input id="revenue1" type="file" accept="image/*">
+                  <img id="preview" width="100" alt="Xem trước ảnh">
+                </div>
+                <div class="form-buttons-container">
+                  <button id="themsanphambtn" type="submit" class="add-mode">Thêm</button>
+                </div>
               </form>
             </div>
           </div>
@@ -379,6 +379,7 @@
           </div>
         </div>
       </section>
+
       <!-- Nhập hàng -->
       <section id="ds_nhapHang" class="page-section">
         <div id="nh-wrapper">
@@ -431,35 +432,39 @@
               </div>
               <p><strong>Tổng tiền nhập: <span id="nh-tongTien">0</span> VNĐ</strong></p>
 
-        <div id="nh-form-actions">
-          <button type="button" id="btnHoanThanhPhieu" class="btn-success">Hoàn Thành Phiếu</button>
-          <button type="button" id="btnXoaPhieu" class="btn-danger">Xóa Phiếu</button>
+              <div id="nh-form-actions">
+                <button type="button" id="btnHoanThanhPhieu" class="btn-success">Hoàn Thành Phiếu</button>
+                <button type="button" id="btnXoaPhieu" class="btn-danger">Xóa Phiếu</button>
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
-    </div>
-  </div>
-</section>
-<section id="ds_giaBan" class="page-section">
-  <div class="price-management-wrapper">
-    <div class="price-management-header">
-      <h1>Quản lý giá bán</h1>
-      <div class="price-filter">
-        <select id="categoryFilter">
-          <option value="all">Tất cả loại</option>
-          <option value="Smartphone">Điện thoại</option>
-          <option value="tablet">Máy tính bảng</option>
-        </select>
-        <input type="text" id="searchProduct" placeholder="Tìm kiếm sản phẩm...">
-      </div>
-    </div>
+      </section>
 
+      <!--QUẢN LÍ GIÁ BÁN-->
+      <section id="ds_giaBan" class="page-section">
+        <div class="price-management-wrapper">
+          <div class="price-management-header">
+            <h1>Quản lý giá bán</h1>
+            <div class="price-filter">
+              <select id="categoryFilter">
+                <option value="all">Tất cả hãng</option>
+              </select>
+
+              <div class="batch-update-group">
+                <input type="number" id="batchProfitInput" placeholder="Nhập % lợi nhuận">
+                <button type="button" id="btnApplyBatchProfit">Áp dụng cho toàn hãng</button>
+              </div>
+              <button type="button" id="btnOpenSearchPopup">🔍 Tra cứu</button>
+            </div>
+          </div>
           <div class="price-table-container">
             <table class="price-table">
               <thead>
                 <tr>
                   <th>Mã SP</th>
                   <th>Tên sản phẩm</th>
-                  <th>Loại</th>
+                  <th>Hãng (Thương hiệu)</th>
                   <th>Giá vốn (VNĐ)</th>
                   <th>% Lợi nhuận</th>
                   <th>Giá bán (VNĐ)</th>
@@ -467,12 +472,37 @@
                 </tr>
               </thead>
               <tbody>
-                <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
               </tbody>
             </table>
           </div>
+          <div id="priceSearchOverlay" class="modal-overlay"></div>
+          <div id="priceSearchPopup" class="modal-popup">
+            <div class="modal-header">
+              <h2>Tra cứu nâng cao</h2>
+              <button id="btnCloseSearchPopup" class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="filter-group">
+                <label for="costFilterInput">Giá vốn từ (VNĐ):</label>
+                <input type="number" id="costFilterInput" placeholder="VD: 1000000" min="0">
+              </div>
+              <div class="filter-group">
+                <label for="profitFilter">Lợi nhuận từ (%):</label>
+                <input type="number" id="profitFilter" placeholder="VD: 0" min="0">
+              </div>
+              <div class="filter-group">
+                <label for="priceFilterInput">Giá bán từ (VNĐ):</label>
+                <input type="number" id="priceFilterInput" placeholder="VD: 2000000" min="0">
+              </div>
+            </div>
+            <div class="modal-actions">
+              <button type="button" id="btnResetSearchPopup" class="btn-reset">Xóa bộ lọc</button>
+              <button type="button" id="btnApplySearchPopup" class="btn-apply">Áp dụng</button>
+            </div>
+          </div>
         </div>
       </section>
+      <!--QUẢN LÍ SỐ LƯỢNG TỒN-->
       <section id="ds_soLuongTon" class="page-section">
         <div class="inventory-wrapper">
           <div class="inventory-header">
