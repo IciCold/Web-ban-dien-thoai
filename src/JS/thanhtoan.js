@@ -1,17 +1,35 @@
 // --- Import các hàm cần thiết ---
 import { showalert } from './alert.js';
-import { clearUserCart,formatVND,getCurrentUserObject } from './cart.js'; // Hàm xóa giỏ hàng
+import { clearUserCart, formatVND, getCurrentUserObject } from './cart.js'; // Hàm xóa giỏ hàng
 import { docdulieuLocalStorage, ghidulieuLocalStorage } from './readandwrite.js';
 
 // --- Biến toàn cục để lưu trữ dữ liệu thanh toán ---
-// Biến này sẽ giữ thông tin (sản phẩm, tổng tiền) được gửi từ trang giỏ hàng.
 let currentPaymentData = null;
 
 // --- Khai báo biến DOM chính (sẽ gán giá trị sau) ---
 let itemListContainer = null;
 let totalAmountSpan = null;
 let finalBuyButton = null;
-let addressInput = null;
+
+// (MỚI) Biến cho khối hiển thị địa chỉ
+let paymentAddressContainer = null;
+let paymentAddressDetails = null;
+let paymentChangeAddressBtn = null;
+
+// (MỚI) Biến cho Modal chọn địa chỉ
+let checkoutModalOverlay = null;
+let checkoutModal = null;
+let checkoutModalViewList = null;
+let checkoutModalViewForm = null;
+let checkoutAddressListContainer = null;
+let checkoutModalConfirmBtn = null;
+let checkoutModalCancelBtn = null;
+let checkoutGotoAddNewBtn = null;
+let checkoutModalBackBtn = null;
+let checkoutAddAddressForm = null;
+let checkoutModalCloseBtn = null;
+let checkoutModalCloseBtnForm = null;
+
 let paymentMethodsContainer = null;
 let cardInfoBox = null;
 let cardNameInput = null;
@@ -23,43 +41,51 @@ let cardNumberInput = null;
 export function initThanhToanPage() {
   console.log("Khởi tạo trang thanh toán...");
   
-  // Lấy DOM Elements (lấy tại đây để đảm bảo chúng tồn tại khi trang #thanhtoan được tải)
-  // LẤY DOM: <div> chứa danh sách tóm tắt sản phẩm
-  itemListContainer = document.getElementById('payment-item-list'); //
-  // LẤY DOM: <span> hiển thị tổng tiền
-  totalAmountSpan = document.querySelector('.payment-form .total-amount'); //
-  // LẤY DOM: Nút "Mua ngay" (nút xác nhận cuối cùng)
-  finalBuyButton = document.querySelector('.buy-now-button-large'); //
-  // LẤY DOM: <input> địa chỉ giao hàng
-  addressInput = document.getElementById('delivery-address'); //
-  // LẤY DOM: <div> chứa các nút chọn PTTT
-  paymentMethodsContainer = document.querySelector('.payment-methods'); //
-  // LẤY DOM: <div> chứa thông tin thẻ (để ẩn/hiện)
-  cardInfoBox = document.querySelector('.info'); //
-  // LẤY DOM: <input> tên chủ thẻ
-  cardNameInput = document.getElementById('card-name'); //
-  // LẤY DOM: <input> số thẻ
-  cardNumberInput = document.getElementById('card-number'); //
+  // Lấy DOM Elements
+  itemListContainer = document.getElementById('payment-item-list');
+  totalAmountSpan = document.querySelector('.payment-form .total-amount');
+  finalBuyButton = document.querySelector('.buy-now-button-large');
+  
+  // (MỚI) Lấy DOM cho địa chỉ
+  paymentAddressContainer = document.querySelector('.payment-address-section');
+  paymentAddressDetails = document.getElementById('payment-address-details');
+  paymentChangeAddressBtn = document.getElementById('payment-change-address-btn');
+  
+  // (MỚI) Lấy DOM cho Modal
+  checkoutModalOverlay = document.getElementById('checkout-address-modal-overlay');
+  checkoutModal = document.getElementById('checkout-address-modal');
+  checkoutModalViewList = document.getElementById('checkout-address-list-view');
+  checkoutModalViewForm = document.getElementById('checkout-address-form-view');
+  checkoutAddressListContainer = document.getElementById('checkout-address-list-container');
+  checkoutModalConfirmBtn = document.getElementById('checkout-modal-confirm-btn');
+  checkoutModalCancelBtn = document.getElementById('checkout-modal-cancel-btn');
+  checkoutGotoAddNewBtn = document.getElementById('checkout-goto-add-new-btn');
+  checkoutModalBackBtn = document.getElementById('checkout-modal-back-btn');
+  checkoutAddAddressForm = document.getElementById('checkout-add-address-form');
+  checkoutModalCloseBtn = document.getElementById('checkout-modal-close-btn');
+  checkoutModalCloseBtnForm = document.getElementById('checkout-modal-close-btn-form');
+
+  // Lấy các DOM còn lại
+  paymentMethodsContainer = document.querySelector('.payment-methods');
+  cardInfoBox = document.querySelector('.info');
+  cardNameInput = document.getElementById('card-name');
+  cardNumberInput = document.getElementById('card-number');
 
   // 1. Lấy dữ liệu "cầu nối" từ localStorage
-  // Dữ liệu này được 'cart-page.js' lưu vào trước khi chuyển trang
-  const data = docdulieuLocalStorage('paymentData'); //
+  const data = docdulieuLocalStorage('paymentData');
   
   // 2. Kiểm tra dữ liệu
-  // Nếu không có data, hoặc data là mảng rỗng, hoặc không có 'items'
-  if (!data || Array.isArray(data) || !data.items || data.items.length === 0) { //
+  if (!data || Array.isArray(data) || !data.items || data.items.length === 0) {
     showalert("Lỗi: Không tìm thấy dữ liệu thanh toán. Quay về trang chủ.","error");
     location.hash = 'home'; // Đẩy về trang chủ
     return;
   }
   
   // 3. *** Logic quan trọng: Xóa ngay lập tức ***
-  // Sau khi lấy được dữ liệu, xóa nó khỏi localStorage ngay.
-  // Tránh trường hợp user F5 lại trang và dữ liệu bị xử lý 2 lần.
   ghidulieuLocalStorage('paymentData', []); // Ghi mảng rỗng
   
-  // 4. Lưu data vào biến toàn cục để các hàm khác trên trang này sử dụng.
-  currentPaymentData = data; //
+  // 4. Lưu data vào biến toàn cục
+  currentPaymentData = data;
   
   // 5. "Vẽ" lại giao diện (Render)
   if (!itemListContainer || !totalAmountSpan) {
@@ -67,26 +93,24 @@ export function initThanhToanPage() {
     return;
   }
 
-  // 5a. Xóa item cũ (phòng trường hợp render lại)
-  itemListContainer.innerHTML = ''; //
+  itemListContainer.innerHTML = '';
 
-  // 5b. Lặp qua các sản phẩm trong 'currentPaymentData' và thêm vào list
-  currentPaymentData.items.forEach(item => { //
+  currentPaymentData.items.forEach(item => {
     const itemHTML = `
       <p class="order-item">
         ${item.quantity} x ${item.name} 
         </p>
     `;
-    itemListContainer.innerHTML += itemHTML; //
+    itemListContainer.innerHTML += itemHTML;
   });
 
-  // 5c. Cập nhật tổng số tiền
-  totalAmountSpan.textContent = formatVND(currentPaymentData.total); //
+  totalAmountSpan.textContent = formatVND(currentPaymentData.total);
 
-  // 6. Gọi các hàm helper để cài đặt phần còn lại của trang.
+  // 6. Gọi các hàm helper
   autoFillUserInfo(); // Tự điền địa chỉ, tên thẻ
-  setupPaymentMethodToggle(); // Cài đặt sự kiện cho các nút chọn PTTT
-  setupBuyNowButton(); // Gắn sự kiện cho nút "Mua Ngay" cuối cùng
+  setupPaymentMethodToggle();
+  setupBuyNowButton();
+  setupCheckoutAddressModalListeners(); // (MỚI) Gọi hàm setup listener cho modal
 }
 
 /**
@@ -94,126 +118,157 @@ export function initThanhToanPage() {
  */
 function setupBuyNowButton() {
   if (finalBuyButton) {
-    // 1. Clone (sao chép) cái nút.
-    const newButton = finalBuyButton.cloneNode(true); //
-    // 2. Thay thế nút cũ bằng nút mới (nút mới này chưa có sự kiện nào).
-    finalBuyButton.parentNode.replaceChild(newButton, finalBuyButton); //
-    // 3. Cập nhật lại biến 'finalBuyButton' để trỏ tới nút mới
+    const newButton = finalBuyButton.cloneNode(true);
+    finalBuyButton.parentNode.replaceChild(newButton, finalBuyButton);
     finalBuyButton = newButton; 
     
-    // 4. Gắn sự kiện 'click' MỘT LẦN DUY NHẤT cho nút mới.
-    finalBuyButton.addEventListener('click', (e) => { //
-        e.preventDefault(); // Ngăn hành vi mặc định của nút (nếu có)
-        saveOrderAndCheckout(); // Gọi hàm xử lý chính
+    finalBuyButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        saveOrderAndCheckout();
     });
   }
 }
 
 
 /**
- * HÀM LƯU ĐƠN HÀNG
+ * HÀM LƯU ĐƠN HÀNG (ĐÃ CẬP NHẬT)
  * Được gọi khi nhấn nút Mua Ngay
  */
 function saveOrderAndCheckout() {
-  const currentUser = getCurrentUserObject(); // Lấy thông tin user hiện tại
+  const currentUser = getCurrentUserObject();
   if (!currentUser) {
     showalert("Vui lòng đăng nhập để mua hàng","warning");
     location.hash = 'login';
     return;
   }
   
-  // 1. Kiểm tra lại dữ liệu thanh toán (lấy từ biến toàn cục)
-  if (!currentPaymentData || !currentPaymentData.items || currentPaymentData.items.length === 0) { //
+  // 1. Kiểm tra lại dữ liệu thanh toán
+  if (!currentPaymentData || !currentPaymentData.items || currentPaymentData.items.length === 0) {
        showalert("Lỗi: Không có sản phẩm nào để thanh toán.","error");
        return;
   }
 
   // 2. Lấy thông tin từ Form
-  // LẤY DOM: Tìm nút PTTT đang có class 'active'
-  const selectedPaymentBtn = document.querySelector('.payment-button.active'); //
+  const selectedPaymentBtn = document.querySelector('.payment-button.active');
   if (!selectedPaymentBtn) {
       showalert("Vui lòng chọn phương thức thanh toán!","warning");
       return;
   }
-  const selectedPayment = selectedPaymentBtn.textContent.trim(); // Lấy text (Momo, Visa...)
-  const deliveryAddress = addressInput.value.trim(); // Lấy địa chỉ
+  const selectedPayment = selectedPaymentBtn.textContent.trim();
+  
+  // Lấy địa chỉ từ data-attribute
+  let selectedAddrObj = null;
+  let deliveryAddressString = ''; // Sẽ chỉ lưu địa chỉ
+
+  if (paymentAddressContainer && paymentAddressContainer.dataset.selectedAddress) {
+      try {
+          selectedAddrObj = JSON.parse(paymentAddressContainer.dataset.selectedAddress);
+          // (THAY ĐỔI) Chỉ lấy địa chỉ cụ thể
+          deliveryAddressString = selectedAddrObj.specific; 
+      } catch (e) {
+          selectedAddrObj = null;
+      }
+  }
 
   // Validate địa chỉ
-  if (!deliveryAddress) { //
-      showalert("Vui lòng nhập địa chỉ giao hàng!","warning");
-      addressInput.focus(); // Focus vào ô input địa chỉ
+  if (!selectedAddrObj || !deliveryAddressString) {
+      showalert("Vui lòng chọn địa chỉ giao hàng!", "warning");
+      openCheckoutAddressModal();
       return;
   }
   
-  // 3. Tạo đối tượng đơn hàng (newOrder)
+  // 3. Tạo đối tượng đơn hàng (newOrder) (ĐÃ CẬP NHẬT)
   const newOrder = {
-      id: 'ORD_' + Date.now(), // Tạo ID đơn hàng duy nhất bằng timestamp
-      customer: currentUser.fullName, // Tên khách
-      customerEmail: currentUser.email, // Email khách
-      // Map lại mảng sản phẩm cho gọn gàng
-      products: currentPaymentData.items.map(item => ({ //
+      id: 'ORD_' + Date.now(),
+      customer: selectedAddrObj.fullName,      // (MỚI) Lấy tên từ địa chỉ đã chọn
+      customerEmail: currentUser.email,       // Lấy email từ user đăng nhập
+      customerPhone: selectedAddrObj.phone,       // (MỚI) Lấy SĐT từ địa chỉ đã chọn
+      products: currentPaymentData.items.map(item => ({
           name: item.name,
           price: item.price,
           quantity: item.quantity,
-          image: item.image || '' // Lấy ảnh (hoặc chuỗi rỗng nếu không có)
+          image: item.image || ''
       })),
-      total: currentPaymentData.total, // Tổng tiền
-      status: 'pending', // Trạng thái: chờ xử lý
-      date: new Date().toISOString(), // Ngày đặt hàng (chuẩn ISO)
-      paymentMethod: selectedPayment, // Phương thức thanh toán
-      deliveryAddress: deliveryAddress // Địa chỉ giao
+      total: currentPaymentData.total,
+      status: 'pending',
+      date: new Date().toISOString(),
+      paymentMethod: selectedPayment,
+      deliveryAddress: deliveryAddressString // (MỚI) Chỉ lưu chuỗi địa chỉ
   };
 
   // 4. Lưu đơn hàng vào localStorage
-  const orders = docdulieuLocalStorage('orders'); // Lấy danh sách 'orders' cũ
-  orders.push(newOrder); // Thêm đơn hàng mới vào danh sách
-  ghidulieuLocalStorage('orders', orders); // Lưu lại danh sách đã cập nhật
+  const orders = docdulieuLocalStorage('orders');
+  orders.push(newOrder);
+  ghidulieuLocalStorage('orders', orders);
   
   // 5a. Nếu đơn hàng này đến từ giỏ hàng (kiểm tra 'type')
-  if (currentPaymentData.type === 'cart') { //
-      clearUserCart(); // <-- Gọi hàm import từ 'cart.js' để XÓA giỏ hàng
-      // Bắn ra sự kiện 'cartUpdated'
-      // Để 'cart.js' (popup header) lắng nghe và render lại (thành rỗng)
-      window.dispatchEvent(new Event('cartUpdated')); //
+  if (currentPaymentData.type === 'cart') {
+      clearUserCart();
+      window.dispatchEvent(new Event('cartUpdated'));
   }
 
   // 6. Thông báo và chuyển trang
+  // (Thông báo giờ sẽ gọn hơn, chỉ hiện địa chỉ)
   showalert(`🎉 THANH TOÁN THÀNH CÔNG!\n
 📦 Mã đơn hàng: ${newOrder.id}
 💰 Tổng tiền: ${formatVND(newOrder.total)}
 🏠 Địa chỉ giao: ${newOrder.deliveryAddress}\n
-Cảm ơn bạn đã mua hàng!`,"success"); //
+Cảm ơn bạn đã mua hàng!`,"success");
   
-  currentPaymentData = null; // Xóa dữ liệu thanh toán tạm thời
-  location.hash = 'home'; // Chuyển về trang chủ
+  currentPaymentData = null;
+  location.hash = 'home';
 }
 
 // ===============================================
 // CÁC HÀM TIỆN ÍCH (riêng của trang này)
 // ===============================================
 
-// Hàm gộp lại logic tự động điền thông tin
-function autoFillUserInfo() {
-  const currentUser = getCurrentUserObject(); //
-  if (!currentUser) return; // Nếu không có user, dừng lại
+/**
+ * (ĐÃ CẬP NHẬT theo yêu cầu trước)
+ * Hàm helper để cập nhật khối hiển thị địa chỉ trên trang
+ * Chỉ hiển thị địa chỉ, không hiển thị Tên và SĐT
+ */
+function updatePaymentAddressDisplay(addressObject) {
+    if (!paymentAddressDetails || !paymentAddressContainer) return;
 
-  try {
-    // Lấy danh sách địa chỉ (hoặc mảng rỗng nếu không có)
-    const userAddressList = currentUser.addressList || []; //
-
-    // 1. Điền địa chỉ
-    if (addressInput && userAddressList.length > 0) { //
-      // Tìm địa chỉ 'isDefault' (mặc định)
-      const defaultAddr = userAddressList.find(addr => addr.isDefault) || userAddressList[0]; // Nếu không có, lấy cái đầu tiên
-      if (defaultAddr) {
-        addressInput.value = defaultAddr.specific; // Gán vào ô input
-      }
+    if (!addressObject) {
+        paymentAddressDetails.innerHTML = `<span class="no-address-warning">Vui lòng chọn hoặc thêm địa chỉ giao hàng.</span>`;
+        paymentAddressContainer.dataset.selectedAddress = "";
+        return;
     }
     
-    // 2. Điền thông tin thẻ
-    if (cardNameInput) { //
-        // Tự điền tên chủ thẻ là tên user
-        cardNameInput.value = currentUser.fullName || currentUser.userName || ""; //
+    // (MỚI) Chỉ tạo HTML cho địa chỉ
+    paymentAddressDetails.innerHTML = `
+        <div class="address-display-line2">
+            ${addressObject.specific}
+        </div>
+    `;
+    
+    // (QUAN TRỌNG) Lưu trữ TOÀN BỘ địa chỉ (gồm cả Tên, SĐT) vào data-attribute
+    // để hàm saveOrderAndCheckout() có thể lấy được
+    paymentAddressContainer.dataset.selectedAddress = JSON.stringify(addressObject);
+}
+
+
+// Hàm gộp lại logic tự động điền thông tin
+function autoFillUserInfo() {
+  const currentUser = getCurrentUserObject();
+  if (!currentUser) return;
+
+  try {
+    const userAddressList = currentUser.addressList || [];
+
+    // 1. Điền địa chỉ
+    if (paymentAddressContainer && userAddressList.length > 0) {
+      const defaultAddr = userAddressList.find(addr => addr.isDefault) || userAddressList[0];
+      updatePaymentAddressDisplay(defaultAddr); 
+    } else {
+      updatePaymentAddressDisplay(null);
+    }
+    
+    // 2. Điền thông tin thẻ (Giữ nguyên logic cũ)
+    if (cardNameInput) {
+        cardNameInput.value = currentUser.fullName || currentUser.userName || "";
     }
     
   } catch (e) {
@@ -223,54 +278,290 @@ function autoFillUserInfo() {
 
 // Hàm gộp logic xử lý Phương Thức Thanh Toán (PTTT)
 function setupPaymentMethodToggle() {
-  if (!paymentMethodsContainer || !cardInfoBox) return; //
+  if (!paymentMethodsContainer || !cardInfoBox) return;
   
-  const currentUser = getCurrentUserObject(); //
-  // Lấy danh sách ngân hàng của user (hoặc mảng rỗng)
-  const userBankingList = (currentUser && currentUser.bankingList) ? currentUser.bankingList : []; //
+  const currentUser = getCurrentUserObject();
+  const userBankingList = (currentUser && currentUser.bankingList) ? currentUser.bankingList : [];
   
-  // LẤY DOM (nhiều): Lặp qua tất cả các nút PTTT (Cash, Visa, Momo...)
-  paymentMethodsContainer.querySelectorAll('.payment-button').forEach(btn => { //
-    // Dùng "trick" clone-và-thay-thế để xóa listener cũ (nếu có)
-    const newBtn = btn.cloneNode(true); //
-    btn.parentNode.replaceChild(newBtn, btn); //
+  paymentMethodsContainer.querySelectorAll('.payment-button').forEach(btn => {
+    // (SỬ DỤNG CLONE NODE)
+    const newBtn = btn.cloneNode(true);
+    btn.parentNode.replaceChild(newBtn, btn);
 
-    // Gắn listener mới
-    newBtn.addEventListener('click', function () { //
-        // LẤY DOM (nhiều): Xóa class 'active' khỏi TẤT CẢ các nút
-        paymentMethodsContainer.querySelectorAll('.payment-button').forEach(b => b.classList.remove('active')); //
-        // 2. Thêm class 'active' cho nút VỪA ĐƯỢC CLICK (dùng 'this')
-        this.classList.add('active'); //
+    newBtn.addEventListener('click', function () {
+        paymentMethodsContainer.querySelectorAll('.payment-button').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
 
-        // 3. Xử lý ẩn/hiện ô nhập thông tin thẻ
-        if (this.classList.contains('visa')) { //
-            cardInfoBox.style.display = 'block'; // Hiện ô
-            if (cardNameInput && currentUser) cardNameInput.value = currentUser.fullName || ''; //
-            // Tự điền số thẻ
-            if (cardNumberInput && userBankingList.length > 0) { //
-                const defaultBank = userBankingList.find(b => b.isDefault) || userBankingList[0]; //
-                if(defaultBank) cardNumberInput.value = defaultBank.account; //
+        if (this.classList.contains('visa')) {
+            cardInfoBox.style.display = 'block';
+            if (cardNameInput && currentUser) cardNameInput.value = currentUser.fullName || '';
+            if (cardNumberInput && userBankingList.length > 0) {
+                const defaultBank = userBankingList.find(b => b.isDefault) || userBankingList[0];
+                if(defaultBank) cardNumberInput.value = defaultBank.account;
             }
-        } else if (this.classList.contains('momo')) { //
-            cardInfoBox.style.display = 'block'; // Hiện ô
-            if (cardNameInput && currentUser) cardNameInput.value = currentUser.fullName || ''; //
-            // Tự điền SĐT Momo (nếu có)
-            if (cardNumberInput && currentUser) cardNumberInput.value = currentUser.phone || ''; //
+        } else if (this.classList.contains('momo')) {
+            cardInfoBox.style.display = 'block';
+            if (cardNameInput && currentUser) cardNameInput.value = currentUser.fullName || '';
+            if (cardNumberInput && currentUser) cardNumberInput.value = currentUser.phone || '';
         } else {
-            // (Trường hợp là Cash)
-            cardInfoBox.style.display = 'none'; // Ẩn ô
+            cardInfoBox.style.display = 'none';
         }
     });
   });
   
-  // Set default là cash (thanh toán khi nhận hàng)
-  // LẤY DOM: Nút "Cash"
-  const cashButton = paymentMethodsContainer.querySelector('.payment-button.cash'); //
+  const cashButton = paymentMethodsContainer.querySelector('.payment-button.cash');
   if(cashButton) {
-      // Chỉ 'click' tự động nếu chưa có nút nào 'active'
-      // LẤY DOM: Kiểm tra xem có nút nào đang 'active' không
-      if (!paymentMethodsContainer.querySelector('.payment-button.active')) { //
-          cashButton.click(); // Giả lập một cú click để chọn Cash làm mặc định
+      if (!paymentMethodsContainer.querySelector('.payment-button.active')) {
+          cashButton.click();
       }
   }
+}
+
+
+// ===============================================
+// (MỚI) CÁC HÀM QUẢN LÝ MODAL ĐỊA CHỈ
+// ===============================================
+
+/**
+ * (MỚI) Hiển thị một view cụ thể trong modal (list hoặc form)
+ */
+function showCheckoutModalView(viewToShow) {
+  if (viewToShow === 'list') {
+    if(checkoutModalViewList) checkoutModalViewList.classList.remove('hidden-view');
+    if(checkoutModalViewForm) checkoutModalViewForm.classList.add('hidden-view');
+  } else if (viewToShow === 'form') {
+    if(checkoutModalViewList) checkoutModalViewList.classList.add('hidden-view');
+    if(checkoutModalViewForm) checkoutModalViewForm.classList.remove('hidden-view');
+  }
+}
+
+/**
+ * (MỚI) Mở Modal chọn địa chỉ
+ */
+function openCheckoutAddressModal() {
+  renderCheckoutAddressList(); // Render lại danh sách mỗi khi mở
+  showCheckoutModalView('list'); // Luôn bắt đầu ở view list
+  if(checkoutModalOverlay) checkoutModalOverlay.classList.remove('hidden-view');
+  if(checkoutModal) checkoutModal.classList.remove('hidden-view');
+}
+
+/**
+ * (MỚI) Đóng Modal chọn địa chỉ
+ */
+function closeCheckoutAddressModal() {
+  if(checkoutModalOverlay) checkoutModalOverlay.classList.add('hidden-view');
+  if(checkoutModal) checkoutModal.classList.add('hidden-view');
+}
+
+/**
+ * (MỚI) Render danh sách địa chỉ vào trong Modal
+ */
+function renderCheckoutAddressList() {
+  if (!checkoutAddressListContainer) return;
+
+  const currentUser = getCurrentUserObject();
+  const addressList = currentUser.addressList || [];
+  
+  let currentSelectedAddress = null;
+  try {
+    currentSelectedAddress = JSON.parse(paymentAddressContainer.dataset.selectedAddress || 'null');
+  } catch (e) {
+    currentSelectedAddress = null;
+  }
+
+  if (addressList.length === 0) {
+    checkoutAddressListContainer.innerHTML = '<p class="address-empty-state">Bạn chưa có địa chỉ nào. Vui lòng thêm địa chỉ mới.</p>';
+    setTimeout(() => showCheckoutModalView('form'), 300); 
+    return;
+  }
+
+  let html = '';
+  addressList.forEach((addr, index) => {
+    const isChecked = currentSelectedAddress && currentSelectedAddress.specific === addr.specific;
+    const addrStringValue = JSON.stringify(addr); 
+    
+    html += `
+      <label class="address-radio-item">
+        <input type="radio" name="checkout-address" value='${addrStringValue}' ${isChecked ? 'checked' : ''}>
+        <div class="address-radio-details">
+          <div class="address-radio-header">
+            <strong>${addr.fullName}</strong>
+            <span>(+84) ${addr.phone.replace(/^0+/, '')}</span>
+            ${addr.isDefault ? '<span class="address-card-default">Mặc định</span>' : ''}
+          </div>
+          <p>${addr.specific}</p>
+        </div>
+      </label>
+    `;
+  });
+  checkoutAddressListContainer.innerHTML = html;
+}
+
+/**
+ * (MỚI) Gắn tất cả sự kiện cho Modal chọn/thêm địa chỉ
+ * (ĐÃ CẬP NHẬT) - SỬ DỤNG KỸ THUẬT "CLONE NODE" ĐỂ TRÁNH TRÙNG LẶP SỰ KIỆN
+ */
+function setupCheckoutAddressModalListeners() {
+  if (!paymentChangeAddressBtn) return;
+
+  // 1. Mở Modal
+  const newChangeAddressBtn = paymentChangeAddressBtn.cloneNode(true);
+  paymentChangeAddressBtn.parentNode.replaceChild(newChangeAddressBtn, paymentChangeAddressBtn);
+  paymentChangeAddressBtn = newChangeAddressBtn;
+  paymentChangeAddressBtn.addEventListener('click', openCheckoutAddressModal);
+
+  // 2. Đóng Modal
+  const newOverlay = checkoutModalOverlay.cloneNode(true);
+  checkoutModalOverlay.parentNode.replaceChild(newOverlay, checkoutModalOverlay);
+  checkoutModalOverlay = newOverlay;
+  checkoutModalOverlay.addEventListener('click', closeCheckoutAddressModal);
+
+  const newCancelBtn = checkoutModalCancelBtn.cloneNode(true);
+  checkoutModalCancelBtn.parentNode.replaceChild(newCancelBtn, checkoutModalCancelBtn);
+  checkoutModalCancelBtn = newCancelBtn;
+  checkoutModalCancelBtn.addEventListener('click', closeCheckoutAddressModal);
+  
+  const newCloseBtn = checkoutModalCloseBtn.cloneNode(true);
+  checkoutModalCloseBtn.parentNode.replaceChild(newCloseBtn, checkoutModalCloseBtn);
+  checkoutModalCloseBtn = newCloseBtn;
+  checkoutModalCloseBtn.addEventListener('click', closeCheckoutAddressModal);
+  
+  const newCloseBtnForm = checkoutModalCloseBtnForm.cloneNode(true);
+  checkoutModalCloseBtnForm.parentNode.replaceChild(newCloseBtnForm, checkoutModalCloseBtnForm);
+  checkoutModalCloseBtnForm = newCloseBtnForm;
+  checkoutModalCloseBtnForm.addEventListener('click', closeCheckoutAddressModal);
+
+  // 3. Chuyển sang View "Thêm Mới"
+  const newGotoAddNewBtn = checkoutGotoAddNewBtn.cloneNode(true);
+  checkoutGotoAddNewBtn.parentNode.replaceChild(newGotoAddNewBtn, checkoutGotoAddNewBtn);
+  checkoutGotoAddNewBtn = newGotoAddNewBtn;
+  checkoutGotoAddNewBtn.addEventListener('click', () => {
+    // Form gốc vẫn tồn tại trong DOM, nên .reset() vẫn hoạt động
+    if(checkoutAddAddressForm) checkoutAddAddressForm.reset(); 
+    showCheckoutModalView('form');
+  });
+
+  // 4. Quay lại View "Danh Sách"
+  const newBackBtn = checkoutModalBackBtn.cloneNode(true);
+  checkoutModalBackBtn.parentNode.replaceChild(newBackBtn, checkoutModalBackBtn);
+  checkoutModalBackBtn = newBackBtn;
+  checkoutModalBackBtn.addEventListener('click', () => {
+    showCheckoutModalView('list');
+  });
+
+  // 5. Nút "Xác nhận" (Chọn địa chỉ từ danh sách)
+  const newConfirmBtn = checkoutModalConfirmBtn.cloneNode(true);
+  checkoutModalConfirmBtn.parentNode.replaceChild(newConfirmBtn, checkoutModalConfirmBtn);
+  checkoutModalConfirmBtn = newConfirmBtn;
+  newConfirmBtn.addEventListener('click', () => {
+    const selectedRadio = document.querySelector('input[name="checkout-address"]:checked');
+    if (!selectedRadio) {
+      showalert("Vui lòng chọn một địa chỉ.", "warning");
+      return;
+    }
+    try {
+      const selectedAddrObj = JSON.parse(selectedRadio.value);
+      updatePaymentAddressDisplay(selectedAddrObj); // Cập nhật trang thanh toán
+      closeCheckoutAddressModal(); // Đóng modal
+    } catch (e) {
+      showalert("Lỗi: Không thể chọn địa chỉ này.", "error");
+    }
+  });
+
+  // 6. Submit Form "Thêm Mới"
+  const newAddAddressForm = checkoutAddAddressForm.cloneNode(true);
+  checkoutAddAddressForm.parentNode.replaceChild(newAddAddressForm, checkoutAddAddressForm);
+  checkoutAddAddressForm = newAddAddressForm;
+  checkoutAddAddressForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    handleAddNewAddressSubmit();
+  });
+}
+
+/**
+ * (MỚI) Xử lý lưu địa chỉ mới từ modal (ĐÃ CẬP NHẬT theo yêu cầu trước)
+ * - Lấy Tên và SĐT từ currentUser
+ * - Chỉ lấy địa chỉ đầy đủ từ textarea
+ */
+function handleAddNewAddressSubmit() {
+  let currentUser = getCurrentUserObject();
+  let users = docdulieuLocalStorage('users');
+  const userIndex = users.findIndex(u => u.email === currentUser.email);
+
+  if (userIndex === -1) {
+    showalert("Lỗi: Không tìm thấy người dùng.", "error");
+    return;
+  }
+
+  // (MỚI) Lấy Họ Tên và SĐT từ currentUser (giống logic profile.js)
+  const profileFullName = currentUser.fullName;
+  const profilePhone = currentUser.phone;
+
+  // (MỚI) Kiểm tra xem user đã cập nhật thông tin profile chưa
+  if (!profileFullName || !profilePhone) {
+      showalert(
+          "Vui lòng cập nhật Tên và Số điện thoại trong Hồ Sơ của bạn trước khi thêm địa chỉ.",
+          "warning"
+      );
+      closeCheckoutAddressModal(); // Đóng modal thanh toán
+      location.hash = 'profile'; // Chuyển họ về trang profile
+      return;
+  }
+
+  // (MỚI) Lấy dữ liệu từ form (chỉ còn 2 trường)
+  // Lưu ý: chúng ta đang tìm ID trên form *mới* đã được clone
+  const fullSpecificAddress = checkoutAddAddressForm.querySelector('#checkout-addr-specific').value.trim();
+  const isDefault = checkoutAddAddressForm.querySelector('#checkout-addr-default').checked;
+
+
+  // (MỚI) Validate
+  if (!fullSpecificAddress) {
+      showalert("Vui lòng điền địa chỉ cụ thể.", "warning");
+      checkoutAddAddressForm.querySelector('#checkout-addr-specific').focus();
+      return;
+  }
+
+  // Lấy danh sách địa chỉ hiện tại
+  if (!currentUser.addressList) {
+    currentUser.addressList = [];
+  }
+  let addressList = currentUser.addressList;
+
+  // Kiểm tra trùng lặp
+  if (addressList.some(addr => addr.specific.toLowerCase() === fullSpecificAddress.toLowerCase())) {
+      showalert("Địa chỉ này đã tồn tại!", "warning");
+      return;
+  }
+
+  // Xử lý "Mặc định"
+  if (isDefault) {
+      addressList.forEach(addr => (addr.isDefault = false));
+  }
+
+  // (MỚI) Tạo đối tượng địa chỉ mới
+  const newAddress = {
+      fullName: profileFullName,      // Dùng tên từ profile
+      phone: profilePhone,          // Dùng SĐT từ profile
+      specific: fullSpecificAddress,  // Dùng địa chỉ đầy đủ từ textarea
+      isDefault: isDefault,
+  };
+
+  // Thêm vào danh sách
+  addressList.push(newAddress);
+  
+  // Cập nhật lại currentUser và mảng users
+  currentUser.addressList = addressList;
+  users[userIndex] = currentUser;
+
+  // Lưu vào localStorage
+  ghidulieuLocalStorage('currentUser', currentUser);
+  ghidulieuLocalStorage('users', users);
+
+  showalert("Đã thêm địa chỉ mới thành công!", "success");
+
+  // (QUAN TRỌNG) Cập nhật trang thanh toán với địa chỉ mới này
+  updatePaymentAddressDisplay(newAddress);
+  
+  // Đóng modal
+  closeCheckoutAddressModal();
 }

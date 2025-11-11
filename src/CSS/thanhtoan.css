@@ -10,11 +10,9 @@
 }
 
 .payment-form{
-  /* Bỏ position: relative, max-height, height */
-  /* Thêm display: flex để sắp xếp .payment-title và .payment-grid */
   display: flex;
   flex-direction: column; 
-  align-items: center; /* Căn giữa form theo chiều ngang */
+  align-items: center;
   max-width: 900px;
   width: 100%;
   padding: 40px;
@@ -25,8 +23,7 @@
 
 /* Tiêu đề lớn "Thanh toán" */
 .payment-title {
-    /* Bỏ position: absolute và top */
-    width: 100%; /* Đảm bảo text-align center hoạt động */
+    width: 100%;
     text-align: center;
     font-size: 2.5rem;
     font-weight: 700;
@@ -37,12 +34,10 @@
 /* Khung lưới chính chứa tóm tắt và thông tin thanh toán */
 .payment-grid {
     display: grid;
-    /* Hai cột bằng nhau trên desktop */
     grid-template-columns: 1fr 1fr; 
     gap: 80px;
     text-align: left;
-    /* Bỏ position: absolute và top */
-    width: 100%; /* Đảm bảo grid chiếm đủ không gian */
+    width: 100%;
 }
 
 /* --- Tóm Tắt Đơn Hàng (Order Summary) --- */
@@ -57,7 +52,6 @@
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 20px;
-    /* Đường kẻ ngang ngăn cách */
     border-bottom: 2px solid rgba(255, 255, 255, 0.3);
     padding-bottom: 10px;
 }
@@ -71,7 +65,6 @@
 .total-box {
     margin-top: 30px;
     padding-top: 20px;
-    /* Đường kẻ ngang trên tổng tiền */
     border-top: 2px solid #FFFFFF;
     display: flex;
     justify-content: space-between;
@@ -86,7 +79,6 @@
 .total-amount {
     font-size: 2rem;
     font-weight: 700;
-    /* Màu nổi bật giống nút Visa trong ảnh */
     letter-spacing: 0.5px;
 }
 
@@ -103,7 +95,6 @@
     margin-bottom: 8px;
     margin-top: 20px;
 }
-/* Thiết lập lại margin cho label đầu tiên */
 .payment-info > .info-label:first-child {
     margin-top: 0;
 }
@@ -115,7 +106,6 @@
     margin-bottom: 20px;
     border: none;
     border-radius: 6px;
-    /* Nền input màu trắng nhạt */
     background-color: rgba(255, 255, 255, 0.9); 
     color: #333;
     font-size: 1rem;
@@ -156,23 +146,20 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Màu riêng cho từng phương thức */
 .cash {
-    background-color: #4CAF50; /* Xanh lá cây */
+    background-color: #4CAF50;
 }
 
 .visa {
-    background: linear-gradient(to right, #0A2A6C, #1E3A8A, #2F55D1); /* Vàng */
-    color: white; /* Chữ đen trên nền vàng */
+    background: linear-gradient(to right, #0A2A6C, #1E3A8A, #2F55D1);
+    color: white;
 }
 
 .momo {
-    background-color: rgba(176, 0, 106, 1); /* Màu thương hiệu MoMo */
+    background-color: rgba(176, 0, 106, 1);
 }
 
-/* Trạng thái active của nút thanh toán */
 .payment-button.active {
-    /* Viền trắng nổi bật */
     box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px rgba(0, 0, 0, 0.2); 
     transform: scale(1.05);
 }
@@ -182,7 +169,6 @@
     width: 100%;
     padding: 18px 20px;
     margin-top: 20px;
-    /* Màu xám nhạt từ ảnh */
     background-color: #E0E0E0; 
     color: #333; 
     font-size: 1.5rem;
@@ -204,4 +190,353 @@
     height: 20px;
     vertical-align: middle;
     margin-right: 8px;
+}
+
+/* =================================================================== */
+/* === CSS MỚI CHO KHỐI ĐỊA CHỈ VÀ MODAL (THÊM TỪ ĐÂY TRỞ XUỐNG) === */
+/* =================================================================== */
+
+/* --- 1. CSS CHO KHỐI HIỂN THỊ ĐỊA CHỈ TRÊN TRANG THANH TOÁN --- */
+.payment-address-section {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.payment-address-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--main-color);
+    margin-bottom: 10px;
+}
+
+.payment-address-details-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 40px;
+}
+
+#payment-address-details {
+    flex-grow: 1;
+    padding-right: 20px;
+}
+
+/* (ĐÃ XÓA) - Class này không còn được dùng ở đây, nhưng giữ lại để không ảnh hưởng chỗ khác */
+.address-display-line1 {
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* (ĐÃ CẬP NHẬT) - Chỉnh lại style cho đẹp hơn khi chỉ có 1 dòng */
+.address-display-line2 {
+    font-size: 1rem;  /* Tăng kích thước font */
+    color: #333;
+    opacity: 1;         /* Hiển thị rõ hơn */
+    line-height: 1.4;   /* Thêm chiều cao dòng */
+    /* margin-top: 4px; */ /* Bỏ margin-top */
+}
+
+.no-address-warning {
+    color: red;
+    font-weight: 600;
+}
+
+/* Thẻ "Mặc định" (dùng chung cho cả modal) */
+.address-card-default,
+.address-card-default-inline {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 2px 5px;
+    border-radius: 2px;
+    white-space: nowrap;
+}
+
+/* Nút "Thay Đổi" (dùng chung .btn-link) */
+.btn-link {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    padding: 0;
+    white-space: nowrap;
+}
+.btn-link:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+/* Nút cam (dùng chung) */
+.btn-orange {
+    background-color: #EE4D2D;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: opacity 0.2s;
+}
+.btn-orange:hover {
+    opacity: 0.85;
+}
+
+/* --- 2. CSS CHO MODAL CHUNG --- */
+
+.hidden-view {
+    display: none !important;
+}
+
+.bank-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.bank-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    width: 90%;
+    max-width: 500px;
+    color: #333;
+}
+
+.checkout-address-modal {
+    padding: 20px 24px 24px 24px;
+}
+
+.checkout-address-view {
+    width: 100%;
+}
+
+.view-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+.bank-modal hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 16px 0;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2rem;
+    color: #aaa;
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+}
+.modal-close-btn:hover {
+    color: #333;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+}
+
+/* --- 3. CSS CHO VIEW 1: DANH SÁCH ĐỊA CHỈ --- */
+.checkout-address-list {
+    max-height: 350px;
+    overflow-y: auto;
+    margin: 0 -24px;
+    padding: 0 24px;
+}
+
+.address-empty-state {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+.address-radio-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+.address-radio-item:last-child {
+    border-bottom: none;
+}
+.address-radio-item:hover {
+    background-color: #fcfcfc;
+}
+
+.address-radio-item input[type="radio"] {
+    margin-top: 2px;
+    transform: scale(1.1);
+}
+
+.address-radio-details {
+    flex-grow: 1;
+}
+
+.address-radio-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+.address-radio-header strong {
+    font-weight: 600;
+}
+.address-radio-header span:not(.address-card-default) {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.address-radio-details p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.checkout-address-actions {
+    margin-top: 16px;
+}
+
+.btn-add-new-address {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #555;
+    background-color: #fafafa;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+.btn-add-new-address:hover {
+    background-color: #f5f5f5;
+    border-color: #aaa;
+}
+.btn-add-new-address .fa-solid {
+    margin-right: 8px;
+    color: #007bff;
+}
+
+
+/* --- 4. CSS CHO VIEW 2: FORM THÊM MỚI (ĐÃ ĐƠN GIẢN HÓA) --- */
+
+.bank-form .form-group-inline {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 16px;
+}
+.bank-form .form-group-inline input {
+    flex: 1;
+}
+
+.bank-form .form-group-stacked {
+    margin-bottom: 16px;
+}
+
+.bank-form input[type="text"],
+.bank-form input[type="tel"],
+.bank-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+}
+.bank-form input[type="text"]:focus,
+.bank-form input[type="tel"]:focus,
+.bank-form textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
+}
+
+.bank-form textarea {
+    resize: vertical;
+    min-height: 80px; /* Chiều cao tối thiểu cho textarea */
+}
+
+.bank-form .form-group-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0;
+}
+.bank-form .form-group-checkbox input[type="checkbox"] {
+    transform: scale(1.1);
+}
+.bank-form .form-group-checkbox label {
+    font-size: 0.9rem;
+    color: #333;
+    cursor: pointer;
+}
+
+/* --- 5. ĐIỀU CHỈNH RESPONSIVE --- */
+
+@media (max-width: 768px) {
+    .payment-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .order-summary {
+        padding-right: 0;
+        order: 2; 
+    }
+
+    .payment-info {
+        order: 1;
+    }
+
+    .payment-form {
+        padding: 20px;
+    }
+
+    .payment-title {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+
+    .payment-methods {
+        gap: 10px;
+    }
 }
