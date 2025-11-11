@@ -1,5 +1,5 @@
 import { docdulieuLocalStorage, ghidulieuLocalStorage } from "./readandwrite.js";
-import {showalert} from "../../JS/alert.js";
+
 let dsdonhang = [];
 const divContainer = document.querySelector(".dh-table-container");
 const formSearch = document.querySelector(".dh-search-form");
@@ -28,15 +28,10 @@ function updateTable(data) {
     return;
   }
 
-  data.forEach((donhang, index) => {
+  data.forEach((donhang) => {
     const row = document.createElement("tr");
 
-    // Định dạng trạng thái hiển thị và tạo select option
-    const statusOptions = `
-      <option value="pending" ${donhang.status === "pending" ? "selected" : ""}>Chờ xử lý</option>
-      <option value="shipping" ${donhang.status === "shipping" ? "selected" : ""}>Đang giao</option>
-      <option value="delivered" ${donhang.status === "delivered" ? "selected" : ""}>Đã giao</option>
-    `;
+    
 
     row.innerHTML = `
       <td>${new Date(donhang.date).toLocaleDateString("vi-VN")}</td>
@@ -45,9 +40,7 @@ function updateTable(data) {
       <td>${donhang.deliveryAddress}</td>
       <td>
         <div class="dh-actions">
-          <button class="dh-edit" data-index="${index}">Chi tiết</button>
-          <button class="dh-update" data-index="${index}">Sửa</button>
-          <button class="dh-del" data-index="${index}">Xóa</button>
+          <button class="dh-details" data-id="${donhang.id}">Chi tiết</button>
         </div>
       </td>
     `;
@@ -125,12 +118,10 @@ function capNhatTonKhoKhiGiaoHang(order, isDelivery) {
 // Thêm sự kiện các nút + xử lý đổi trạng thái
 // =======================
 function addRowEvents() {
-  const btnDelete = document.querySelectorAll(".dh-del");
-  const btnDetail = document.querySelectorAll(".dh-edit");
-  const btnUpdate = document.querySelectorAll(".dh-update");
-  const selects = document.querySelectorAll(".dh-status-select");
+  const btnDetail = document.querySelectorAll(".dh-details");
+  
 
-  // ====== XỬ LÝ ĐỔI TRẠNG THÁI (CÓ TRỪ/CỘNG KHO) ======
+  /*// ====== XỬ LÝ ĐỔI TRẠNG THÁI (CÓ TRỪ/CỘNG KHO) ======
   selects.forEach((select) => {
     select.addEventListener("change", () => {
       const index = select.dataset.index;
@@ -192,25 +183,16 @@ function addRowEvents() {
       // Trường hợp 4: Đổi từ Đã giao -> Đã giao (không làm gì)
       // Trường hợp 5: Đổi từ Khác -> Khác (đã xử lý ở trường hợp 3)
     });
-  });
+  });*/
 
-  // ====== XÓA ======
-  btnDelete.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const index = btn.dataset.index;
-      if (confirm("Bạn có chắc muốn xóa đơn hàng này?")) {
-        dsdonhang.splice(index, 1);
-        ghidulieuLocalStorage("orders", dsdonhang);
-        updateTable(dsdonhang);
-      }
-    });
-  });
+  
 
   // ====== CHI TIẾT ======
   btnDetail.forEach((btn) => {
     btn.addEventListener("click", () => {
-      const index = btn.dataset.index;
-      const dh = dsdonhang[index];
+      const id = btn.dataset.id;
+      const dh = dsdonhang.find(d => d.id === id);
+      if(!dh) return;
 
       let productList = "";
       if (dh.products && Array.isArray(dh.products) && dh.products.length > 0) {
@@ -226,14 +208,66 @@ function addRowEvents() {
         productList = "(Không có sản phẩm)";
       }
 
-      let statusText =
-        dh.status === "pending"
-          ? "Chờ xử lý"
-          : dh.status === "shipping"
-          ? "Đang giao"
-          : "Đã giao";
+      console.log(productList);
 
-      showalert(
+      const popup = document.createElement('div');
+      popup.classList.add('details-popup');
+      popup.innerHTML = `
+        <div class="popup-header">
+          <p>🧾 Chi tiết đơn hàng</p>
+          <button class="close-popup">Dong</button>
+        </div>
+        <div class="popup-body">
+        Mã đơn: ${dh.id || "(Không có)"}<br>
+        Khách hàng: ${dh.customer}<br>
+        Email: ${dh.customerEmail || "(Không có)"}<br>
+        Ngày đặt: ${new Date(dh.date).toLocaleString("vi-VN")}<br>
+        Địa chỉ giao hàng: ${dh.deliveryAddress}<br>
+        Phương thức thanh toán: ${dh.paymentMethod || "(Không có)"}<br>
+        <br>📦 Sản phẩm:<br>${productList.replace(/\n/g, '<br>')}<br>
+        ───────────────────────────────<br>
+        Tổng tiền: ${Number(dh.total).toLocaleString("vi-VN")}₫<br>
+        </div>
+      `;
+
+      document.body.appendChild(popup);
+
+      popup.querySelector('.close-popup').addEventListener('click', () => {
+        popup.remove();
+      });
+
+      let isDragging = false;
+      let offsetX, offsetY;
+
+      const header = popup.querySelector('.popup-header');
+
+      header.addEventListener('mousedown', (e) => {
+          isDragging = true;
+          offsetX = e.clientX - popup.getBoundingClientRect().left;
+          offsetY = e.clientY - popup.getBoundingClientRect().top;
+          popup.style.cursor = 'grabbing';
+      });
+
+
+      // Khi di chuột
+      document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      popup.style.left = e.clientX - offsetX + 'px';
+      popup.style.top = e.clientY - offsetY + 'px';
+      popup.style.transform = 'none'; // bỏ transform khi di chuyển
+      });
+
+      // Khi thả chuột
+      document.addEventListener('mouseup', () => {
+      if (isDragging) {
+          isDragging = false;
+          popup.style.cursor = 'grab';
+      }
+      });  
+
+      
+
+      /*showalert(
         `🧾 Chi tiết đơn hàng\n` +
           `───────────────────────────────\n` +
           `Mã đơn: ${dh.id || "(Không có)"}\n` +
@@ -246,11 +280,11 @@ function addRowEvents() {
           `───────────────────────────────\n` +
           `Tổng tiền: ${Number(dh.total).toLocaleString("vi-VN")}₫\n` +
           `Trạng thái: ${statusText}`
-      );
+      );*/
     });
   });
 
-  // ====== SỬA (ngoại trừ trạng thái) ======
+  /*// ====== SỬA (ngoại trừ trạng thái) ======
   btnUpdate.forEach((btn) => {
     btn.addEventListener("click", () => {
       const index = btn.dataset.index;
@@ -288,7 +322,7 @@ function addRowEvents() {
       showalert("✅ Cập nhật đơn hàng thành công!","success");
       updateTable(dsdonhang);
     });
-  });
+  });*/
 }
 
 

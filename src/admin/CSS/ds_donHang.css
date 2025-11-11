@@ -70,47 +70,70 @@
 /* Cụm chứa các nút */
 .dh-actions {
   display: flex;
-  flex-direction: column;   /* xếp dọc */
-  align-items: center;      /* căn giữa theo chiều ngang */
-  gap: 6px;                 /* khoảng cách giữa các nút */
+  align-items: center; 
+  justify-content: center; 
+  flex-direction: column;
 }
 
 /* Nút thao tác chung */
-.dh-del,
-.dh-edit,
-.dh-update {
+.dh-details {
   width: 60px;              /* chiều rộng cố định cho đều */
   padding: 6px 0;
-  border: none;
+  border: 3px solid transparent;
   border-radius: 5px;
+  background-color: var(--color-primary);
   color: #fff;
   cursor: pointer;
   font-size: 13px;
   transition: all 0.2s ease;
 }
 
-/* Màu từng nút */
-.dh-edit {
-  background-color: #007bff;
-}
-.dh-edit:hover {
-  background-color: #0056b3;
+.dh-details:hover{
+  border-color: #333;
 }
 
-.dh-update {
-  background-color: #ffc107;
-  color: #333;
-}
-.dh-update:hover {
-  background-color: #e0a800;
+.details-popup{
+    display: block; /* Ẩn popup mặc định */
+    position: fixed; /* fixed để popup đứng yên trên viewport */
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%); /* canh giữa */
+    width: 320px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    overflow: hidden;
+    cursor: grab; /* hiển thị như có thể kéo */
 }
 
-.dh-del {
-  background-color: #dc3545;
+.details-popup .popup-header {
+    display: flex;
+    font-weight: bold;
+    background-color: #4e73df;
+    color: white;
+    padding: 8px;
+    border-radius: 5px 5px 0 0;
+    cursor: grab;
+    justify-content: space-between;
+    align-items: center;
+    
 }
-.dh-del:hover {
-  background-color: #c82333;
+
+.details-popup .popup-body {
+    padding: 10px;
 }
+
+.details-popup .close-popup {
+    margin: 0;
+    padding: 5px 10px;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
 
 
 /* --- Phần phải: Tìm kiếm đơn hàng --- */

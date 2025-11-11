@@ -158,7 +158,7 @@ function saveOrderAndCheckout() {
           image: item.image || '' // Lấy ảnh (hoặc chuỗi rỗng nếu không có)
       })),
       total: currentPaymentData.total, // Tổng tiền
-      status: 'pending', // Trạng thái: chờ xử lý
+      status: 'mới đặt', // Trạng thái: mới đặt
       date: new Date().toISOString(), // Ngày đặt hàng (chuẩn ISO)
       paymentMethod: selectedPayment, // Phương thức thanh toán
       deliveryAddress: deliveryAddress // Địa chỉ giao
