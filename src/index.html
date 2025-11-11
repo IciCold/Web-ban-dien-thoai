@@ -334,6 +334,52 @@
         </div>
       </form class="payment-form layout-form" id="payment-form">
       <div class="bank-modal-overlay hidden-view" id="checkout-address-modal-overlay"></div>
+      <div class="bank-modal-overlay hidden-view" id="payment-confirm-overlay"></div>
+
+      <div class="bank-modal hidden-view" id="payment-confirm-modal" style="max-width: 500px;">
+        <h2 class="view-title">Xác Nhận Đơn Hàng</h2>
+        <hr>
+        <div class="confirm-modal-body">
+
+          <div class="confirm-group">
+            <strong>Khách hàng:</strong>
+            <span id="confirm-customer-name"></span>
+          </div>
+
+          <div class="confirm-group">
+            <strong>Giao đến:</strong>
+            <span id="confirm-delivery-address"></span>
+          </div>
+
+          <div class="confirm-group">
+            <strong>Sản phẩm:</strong>
+            <div id="confirm-product-list" class="confirm-product-list">
+            </div>
+          </div>
+
+          <div class="confirm-group">
+            <strong>Phương thức thanh toán:</strong>
+            <span id="confirm-payment-method"></span>
+          </div>
+
+          <div class="confirm-group" id="confirm-payment-info-group" style="display: none;">
+            <strong>Thông tin TT:</strong>
+            <span id="confirm-payment-info"></span>
+          </div>
+
+          <hr style="margin: 10px 0;">
+
+          <div class="confirm-group confirm-total">
+            <strong>Tổng tiền:</strong>
+            <span id="confirm-total-amount" class="total-amount" style="font-size: 1.2rem; color: #d70018;"></span>
+          </div>
+
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-link" id="confirm-cancel-btn">Hủy</button>
+          <button type="submit" class="btn-orange" id="confirm-submit-btn">Xác nhận</button>
+        </div>
+      </div>
 
       <div class="bank-modal checkout-address-modal hidden-view" id="checkout-address-modal">
 
@@ -780,7 +826,6 @@
         <hr>
         <form class="bank-form" id="add-address-form">
 
-          
           <div class="form-group-stacked">
             <label for="addr-specific">Địa chỉ cụ thể</label>
             <textarea id="addr-specific"
@@ -792,6 +837,7 @@
             <input type="checkbox" id="addr-default">
             <label for="addr-default">Đặt làm địa chỉ mặc định</label>
           </div>
+
           <div class="form-actions">
             <button type="button" class="btn-link" id="add-address-modal-back">TRỞ LẠI</button>
             <button type="submit" class="btn-orange">Hoàn Thành</button>
