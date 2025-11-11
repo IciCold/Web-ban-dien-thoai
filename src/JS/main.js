@@ -12,6 +12,8 @@ import { initProfilePage } from "./profile.js";
 import { initChiTietPage } from "./chitiet.js";
 import { initCartDetailPage } from "./cart-page.js";
 import { initThanhToanPage } from "./thanhtoan.js";
+import { renderData, renderUser } from "./autoRender.js";
+import { docdulieuLocalStorage } from "./readandwrite.js";
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
@@ -102,4 +104,18 @@ window.addEventListener("load", () => {
   const hash = location.hash || "home";
   console.log("hash hiện tại là ", hash);
   showPage();
+});
+
+//==============Cập nhật lại trang page=======================//
+window.addEventListener("storage", (e) => {
+  //Cập nhật lại sản phẩm
+  if (e.key === "dataProducts") renderData();
+
+  // Chỉ kiểm tra trạng thái khóa tài khoản nếu user đã đăng nhập
+  if (e.key === "users") {
+    const currentUser = localStorage.getItem("currentUser");
+    if (currentUser){
+      renderUser();
+    }
+  }
 });

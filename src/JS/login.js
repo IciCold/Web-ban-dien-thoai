@@ -7,32 +7,32 @@ const passwordInput = document.getElementById("password");
 const warningUser = document.querySelector(".warning-user");
 const warningPassword = document.querySelector(".warning-incorrect-password");
 
-function handleLogin(event) {
-    event.preventDefault();
+// function handleLogin(event) {
+//     event.preventDefault();
     
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+//     const username = document.getElementById('username').value;
+//     const password = document.getElementById('password').value;
     
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const user = users.find(u => u.userName === username && u.password === password);
+//     const users = JSON.parse(localStorage.getItem('users')) || [];
+//     const user = users.find(u => u.userName === username && u.password === password);
     
-    if (!user) {
-        document.querySelector('.warning-user').style.display = 'block';
-        return;
-    }
+//     if (!user) {
+//         document.querySelector('.warning-user').style.display = 'block';
+//         return;
+//     }
 
-    // Kiểm tra xem tài khoản có bị khóa không
-    if (user.locked === true) {
-        document.querySelector('.warning-user').textContent = 'Tài khoản của bạn đã bị khóa';
-        document.querySelector('.warning-user').style.display = 'block';
-        return;
-    }
+//     // Kiểm tra xem tài khoản có bị khóa không
+//     if (user.locked === true) {
+//         document.querySelector('.warning-user').textContent = 'Tài khoản của bạn đã bị khóa';
+//         document.querySelector('.warning-user').style.display = 'block';
+//         return;
+//     }
 
-    // Nếu không bị khóa thì cho phép đăng nhập
-    localStorage.setItem('currentUser', JSON.stringify(user));
-    alert('Đăng nhập thành công!');
-    window.location.href = '../index.html'; // Chuyển về trang chủ
-}
+//     // Nếu không bị khóa thì cho phép đăng nhập
+//     localStorage.setItem('currentUser', JSON.stringify(user));
+//     alert('Đăng nhập thành công!');
+//     window.location.href = '../index.html'; // Chuyển về trang chủ
+// }
 
 loginForm.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -101,19 +101,8 @@ export function checkLoginStatus() {
     if (userInDB && userInDB.locked === true) {
       // Nếu tài khoản bị khóa, đăng xuất user
       localStorage.removeItem("currentUser");
-      window.addEventListener("load", () => {
-        location.hash ="home";
-        setTimeout(() => {
-          showalert(
-            "Tài khoảng của bạn đã bị khoá, vui lòng liên hệ Admin",
-            "error"
-          );
-        }, 1000);
-      });
-     
       return false;
     }
-
     return true;
 }
 
