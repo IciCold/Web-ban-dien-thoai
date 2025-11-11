@@ -124,8 +124,7 @@ window.addEventListener("load", () => {
 //==============Cập nhật lại trang page=======================//
 window.addEventListener("storage", (e) => {
   //Cập nhật lại sản phẩm
-  if (e.key === "dataProducts") renderData();
-
+  if (e.key === "dataProducts") renderData(); //chưa hoàn thiện
 
   if (e.key === "users") {
       renderUser();
