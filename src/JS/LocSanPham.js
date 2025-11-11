@@ -273,6 +273,7 @@ function updateDisplay() {
   // **BƯỚC QUAN TRỌNG:** Reset về trang 1 khi lọc
   resetToFirstPage();
 
+  
   const price_min = document.getElementById("price-min-input");
   const price_max = document.getElementById("price-max-input");
   let Min = 0;
