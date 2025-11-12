@@ -1,3 +1,4 @@
+import { showalert } from "../../JS/alert.js";
 import { docdulieuLocalStorage, ghidulieuLocalStorage } from "./readandwrite.js";
 
 let dsdonhang = [];
@@ -348,6 +349,7 @@ function addRowEvents() {
         capNhatTonKhoKhiGiaoHang(dh,true);
         statusForm.style.display = 'none';
         editBtn.style.display = "none";
+        updateTable(dsdonhang);
       }
       else if(newStatus==="đã hủy"){
         const check = "Bạn có chắc chắn là hủy đơn hàng không?";
@@ -355,9 +357,10 @@ function addRowEvents() {
         capNhatTonKhoKhiGiaoHang(dh,false);
         statusForm.style.display = 'none';
         editBtn.style.display = "none";
+        updateTable(dsdonhang);
       }
       // Cập nhật object đơn hàng
-      updateTable(dsdonhang);
+      
       dh.status = newStatus;
 
       // Cập nhật localStorage nếu bạn lưu ở đó
@@ -366,8 +369,8 @@ function addRowEvents() {
       // Cập nhật giao diện
       currentStatusSpan.textContent = newStatus;
 
-      
-      
+      showalert('Thành công','success');
+      updateTable(dsdonhang);
 
 
     });
