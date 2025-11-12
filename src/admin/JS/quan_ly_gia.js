@@ -10,7 +10,10 @@ const categoryFilter = document.getElementById("categoryFilter");
 const batchProfitInput = document.getElementById("batchProfitInput");
 const btnApplyBatchProfit = document.getElementById("btnApplyBatchProfit");
 
-// SỬA 1: Lấy 6 ô input (Min và Max)
+// SỬA 1: Thêm ô tìm kiếm tên
+const priceSearchProduct = document.getElementById("priceSearchProduct");
+
+// Lấy 6 ô input (Min và Max) từ Pop-up
 const costFilterInputMin = document.getElementById("costFilterInputMin");
 const costFilterInputMax = document.getElementById("costFilterInputMax");
 const profitFilterMin = document.getElementById("profitFilterMin");
@@ -168,7 +171,6 @@ function addEventListeners() {
   // Xử lý khi nhấn nút Lưu
   document.querySelectorAll("#ds_giaBan .save-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
-      window.location.reload();
       const index = e.target.dataset.index;
       const giaVon = Number(
         document.querySelector(
@@ -208,12 +210,15 @@ if (
   categoryFilter &&
   btnApplyBatchProfit &&
   btnOpenSearchPopup &&
-  costFilterInputMin // Kiểm tra 1 ô đại diện là đủ
+  priceSearchProduct // Thêm ô tìm kiếm
 ) {
-  // Lọc hãng (vẫn như cũ, lọc ngay)
+  // Lọc hãng (lọc ngay)
   categoryFilter.addEventListener("change", filterData);
   
-  // Cập nhật lợi nhuận hàng loạt (vẫn như cũ)
+  // SỬA 3: Lọc theo tên (lọc ngay)
+  priceSearchProduct.addEventListener("input", filterData);
+
+  // Cập nhật lợi nhuận hàng loạt
   btnApplyBatchProfit.addEventListener("click", applyBatchProfit);
 
   // --- Logic Pop-up Mới ---
@@ -242,7 +247,7 @@ if (
     togglePopup(false); // Đóng pop-up
   });
 
-  // SỬA 3: Cập nhật nút "Xóa bộ lọc"
+  // Cập nhật nút "Xóa bộ lọc"
   btnResetSearchPopup.addEventListener("click", () => {
     costFilterInputMin.value = "";
     costFilterInputMax.value = "";
@@ -258,6 +263,8 @@ if (
 // SỬA 4: Cập nhật hàm filterData
 function filterData() {
   const category = categoryFilter.value;
+  // Lấy keyword từ ô tìm kiếm tên
+  const keyword = priceSearchProduct ? priceSearchProduct.value.toLowerCase().trim() : "";
 
   // Lấy giá trị Min (nếu rỗng, mặc định là 0)
   const minCost = Number(costFilterInputMin.value) || 0;
@@ -274,17 +281,21 @@ function filterData() {
     // 1. Lọc Hãng
     const matchCategory = category === "all" || sp.brand === category;
 
-    // 2. Lọc Giá Vốn (trong khoảng Min - Max)
+    // 2. Lọc Tên
+    const matchKeyword = sp.ten.toLowerCase().includes(keyword);
+
+    // 3. Lọc Giá Vốn (trong khoảng Min - Max)
     const matchCost = sp.gia >= minCost && sp.gia <= maxCost;
 
-    // 3. Lọc % Lợi nhuận
+    // 4. Lọc % Lợi nhuận
     const currentProfit = calculateProfit(sp.gia, sp.giaBan);
     const matchProfit = currentProfit >= minProfit && currentProfit <= maxProfit;
 
-    // 4. Lọc Giá Bán
+    // 5. Lọc Giá Bán
     const matchPrice = sp.giaBan >= minPrice && sp.giaBan <= maxPrice;
 
-    return matchCategory && matchCost && matchProfit && matchPrice;
+    // Trả về true nếu khớp TẤT CẢ
+    return matchCategory && matchKeyword && matchCost && matchProfit && matchPrice;
   });
 
   renderTable(filteredData);
