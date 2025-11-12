@@ -1,7 +1,7 @@
 import { docdulieuLocalStorage, ghidulieuLocalStorage } from "./readandwrite.js";
-import {showalert} from "../../JS/alert.js";
+
 let dsdonhang = [];
-const divContainer = document.querySelector(".dh-table-container");
+
 const formSearch = document.querySelector(".dh-search-form");
 
 // Tải dữ liệu đơn hàng khi trang load
@@ -28,15 +28,10 @@ function updateTable(data) {
     return;
   }
 
-  data.forEach((donhang, index) => {
+  data.forEach((donhang) => {
     const row = document.createElement("tr");
 
-    // Định dạng trạng thái hiển thị và tạo select option
-    const statusOptions = `
-      <option value="pending" ${donhang.status === "pending" ? "selected" : ""}>Chờ xử lý</option>
-      <option value="shipping" ${donhang.status === "shipping" ? "selected" : ""}>Đang giao</option>
-      <option value="delivered" ${donhang.status === "delivered" ? "selected" : ""}>Đã giao</option>
-    `;
+    
 
     row.innerHTML = `
       <td>${new Date(donhang.date).toLocaleDateString("vi-VN")}</td>
@@ -44,15 +39,8 @@ function updateTable(data) {
       <td>${donhang.total.toLocaleString("vi-VN")}₫</td>
       <td>${donhang.deliveryAddress}</td>
       <td>
-        <select class="dh-status-select" data-index="${index}">
-          ${statusOptions}
-        </select>
-      </td>
-      <td>
         <div class="dh-actions">
-          <button class="dh-edit" data-index="${index}">Chi tiết</button>
-          <button class="dh-update" data-index="${index}">Sửa</button>
-          <button class="dh-del" data-index="${index}">Xóa</button>
+          <button class="dh-details" data-id="${donhang.id}">Chi tiết</button>
         </div>
       </td>
     `;
@@ -130,12 +118,10 @@ function capNhatTonKhoKhiGiaoHang(order, isDelivery) {
 // Thêm sự kiện các nút + xử lý đổi trạng thái
 // =======================
 function addRowEvents() {
-  const btnDelete = document.querySelectorAll(".dh-del");
-  const btnDetail = document.querySelectorAll(".dh-edit");
-  const btnUpdate = document.querySelectorAll(".dh-update");
-  const selects = document.querySelectorAll(".dh-status-select");
+  const btnDetail = document.querySelectorAll(".dh-details");
+  
 
-  // ====== XỬ LÝ ĐỔI TRẠNG THÁI (CÓ TRỪ/CỘNG KHO) ======
+  /*// ====== XỬ LÝ ĐỔI TRẠNG THÁI (CÓ TRỪ/CỘNG KHO) ======
   selects.forEach((select) => {
     select.addEventListener("change", () => {
       const index = select.dataset.index;
@@ -197,25 +183,16 @@ function addRowEvents() {
       // Trường hợp 4: Đổi từ Đã giao -> Đã giao (không làm gì)
       // Trường hợp 5: Đổi từ Khác -> Khác (đã xử lý ở trường hợp 3)
     });
-  });
+  });*/
 
-  // ====== XÓA ======
-  btnDelete.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const index = btn.dataset.index;
-      if (confirm("Bạn có chắc muốn xóa đơn hàng này?")) {
-        dsdonhang.splice(index, 1);
-        ghidulieuLocalStorage("orders", dsdonhang);
-        updateTable(dsdonhang);
-      }
-    });
-  });
+  
 
   // ====== CHI TIẾT ======
   btnDetail.forEach((btn) => {
     btn.addEventListener("click", () => {
-      const index = btn.dataset.index;
-      const dh = dsdonhang[index];
+      const id = btn.dataset.id;
+      const dh = dsdonhang.find(d => d.id === id);
+      if(!dh) return;
 
       let productList = "";
       if (dh.products && Array.isArray(dh.products) && dh.products.length > 0) {
@@ -231,14 +208,154 @@ function addRowEvents() {
         productList = "(Không có sản phẩm)";
       }
 
-      let statusText =
-        dh.status === "pending"
-          ? "Chờ xử lý"
-          : dh.status === "shipping"
-          ? "Đang giao"
-          : "Đã giao";
+      console.log(productList);
 
-      showalert(
+      const popup = document.createElement('div');
+      
+      popup.classList.add('dh-details-popup');
+      popup.innerHTML = `
+        <div class="popup-header">
+          <p>🧾 Chi tiết đơn hàng</p>
+          <button class="close-popup">X</button>
+        </div>
+        <div class="popup-body">
+        Mã đơn: ${dh.id || "(Không có)"}<br>
+        Khách hàng: ${dh.customer}<br>
+        Email: ${dh.customerEmail || "(Không có)"}<br>
+        Ngày đặt: ${new Date(dh.date).toLocaleString("vi-VN")}<br>
+        Địa chỉ giao hàng: ${dh.deliveryAddress}<br>
+        Phương thức thanh toán: ${dh.paymentMethod || "(Không có)"}<br>
+        <br>📦 Sản phẩm:<br>${productList.replace(/\n/g, '<br>')}<br>
+        ───────────────────────────────<br>
+        Tổng tiền: ${Number(dh.total).toLocaleString("vi-VN")}₫<br>
+        <br>
+      
+            
+          <div>
+            Trạng thái đơn hàng: 
+            <span id="current-status">${dh.status || "Mới đặt"}</span>
+            <button id="edit-status" type="button">Chỉnh sửa</button>
+          </div>
+
+          
+          <form id="order-status-form" style="display:none;">
+            <select id="status" name="status">
+              <option value="mới đặt">Mới đặt</option>
+              <option value="đã xử lý">Đã xử lý</option>
+              <option value="đã giao">Đã giao</option>
+              <option value="đã hủy">Đã hủy</option>
+            </select>
+            <button type="submit">Cập nhật trạng thái</button>
+            <button type="button" id="cancel-status">Hủy</button>
+          </form>  
+           
+        </div>  
+
+
+      `;
+
+      document.body.appendChild(popup);
+
+      popup.querySelector('.close-popup').addEventListener('click', () => {
+        popup.remove();
+      });
+
+      let isDragging = false;
+      let offsetX, offsetY;
+
+      const header = popup.querySelector('.popup-header');
+
+      header.addEventListener('mousedown', (e) => {
+          isDragging = true;
+          offsetX = e.clientX - popup.getBoundingClientRect().left;
+          offsetY = e.clientY - popup.getBoundingClientRect().top;
+          popup.style.cursor = 'grabbing';
+      });
+
+
+      // Khi di chuột
+      document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      popup.style.left = e.clientX - offsetX + 'px';
+      popup.style.top = e.clientY - offsetY + 'px';
+      popup.style.transform = 'none'; // bỏ transform khi di chuyển
+      });
+
+      // Khi thả chuột
+      document.addEventListener('mouseup', () => {
+      if (isDragging) {
+          isDragging = false;
+          popup.style.cursor = 'grab';
+      }
+      });  
+
+      
+
+      const currentStatusSpan = popup.querySelector('#current-status');
+      const editBtn = popup.querySelector('#edit-status');
+      const statusForm = popup.querySelector('#order-status-form');
+      const statusSelect = popup.querySelector('#status');
+      const cancelBtn = popup.querySelector('#cancel-status');
+
+      
+
+      // Khi nhấn "Chỉnh sửa"
+      editBtn.addEventListener('click', () => {
+        statusForm.style.display = 'block';       // hiển thị form
+        editBtn.style.display = 'none';           // ẩn nút "Chỉnh sửa"
+        
+        // chọn giá trị hiện tại trong select
+        statusSelect.value = dh.status;
+      });
+
+      // Khi nhấn "Hủy"
+      cancelBtn.addEventListener('click', () => {
+        statusForm.style.display = 'none';        // ẩn form
+        editBtn.style.display = 'inline-block';   // hiện lại nút "Chỉnh sửa"
+      });
+
+      statusForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newStatus = statusSelect.value;
+      if(newStatus==="đã giao"){
+        const check = "Bạn có chắc chắn là đã giao hàng chưa?";
+        if(!confirm(check)) return;
+        capNhatTonKhoKhiGiaoHang(dh,true);
+      }
+      else if(newStatus==="đã hủy"){
+        const check = "Bạn có chắc chắn là hủy đơn hàng không?";
+        if(!confirm(check)) return;
+        capNhatTonKhoKhiGiaoHang(dh,false);
+      }
+      // Cập nhật object đơn hàng
+      dh.status = newStatus;
+
+      // Cập nhật localStorage nếu bạn lưu ở đó
+      ghidulieuLocalStorage('orders',dsdonhang);
+
+      // Cập nhật giao diện
+      currentStatusSpan.textContent = newStatus;
+
+      // Ẩn form, hiện lại nút "Chỉnh sửa"
+      statusForm.style.display = 'none';
+      if(dh.status==='đã giao'||dh.status==='đã hủy'){
+        editBtn.style.display = "none";
+      }
+      else{
+        editBtn.style.display='inline-block';
+      }
+
+
+    });
+      //tiếp tục làm tìm kiếm
+
+
+      
+      
+
+      
+
+      /*showalert(
         `🧾 Chi tiết đơn hàng\n` +
           `───────────────────────────────\n` +
           `Mã đơn: ${dh.id || "(Không có)"}\n` +
@@ -251,11 +368,11 @@ function addRowEvents() {
           `───────────────────────────────\n` +
           `Tổng tiền: ${Number(dh.total).toLocaleString("vi-VN")}₫\n` +
           `Trạng thái: ${statusText}`
-      );
+      );*/
     });
   });
 
-  // ====== SỬA (ngoại trừ trạng thái) ======
+  /*// ====== SỬA (ngoại trừ trạng thái) ======
   btnUpdate.forEach((btn) => {
     btn.addEventListener("click", () => {
       const index = btn.dataset.index;
@@ -293,43 +410,58 @@ function addRowEvents() {
       showalert("✅ Cập nhật đơn hàng thành công!","success");
       updateTable(dsdonhang);
     });
-  });
+  });*/
 }
+const select = document.querySelector(".dh-search-options select");
+const search = document.querySelector(".dh-search");
+const datesearch = document.querySelector(".dh-search #date-search");
+const statussearch = document.querySelector(".dh-search #status-search");
 
 
 
-// =======================
-// TÌM KIẾM
-formSearch.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const inputs = formSearch.querySelectorAll("input");
-  const select = formSearch.querySelector("select");
-
-  const keyword = inputs[0].value.trim().toLowerCase();
-  const dateFrom = inputs[1].value ? new Date(inputs[1].value) : null;
-  const dateTo = inputs[2].value ? new Date(inputs[2].value) : null;
-  const status = select.value;
-
-  const filtered = dsdonhang.filter((dh) => {
-    const nameMatch = dh.customer.toLowerCase().includes(keyword);
-    const date = new Date(dh.date);
-    const inDateRange =
-      (!dateFrom || date >= dateFrom) && (!dateTo || date <= dateTo);
-
-    // So sánh trạng thái theo value chuẩn
-    const statusMatch =
-      !status || dh.status === status;
-
-    return nameMatch && inDateRange && statusMatch;
-  });
-
-  updateTable(filtered);
+datesearch.style.display = 'none';
+statussearch.style.display = 'none';
+select.addEventListener("click", e => {
+  if(select.value === 'Date'){
+    datesearch.style.display = 'flex';
+    statussearch.style.display = 'none';
+  }
+  else if(select.value ==='Status'){
+    datesearch.style.display = 'none';
+    statussearch.style.display = 'block';
+  }
+  else{
+    datesearch.style.display = 'flex';
+    statussearch.style.display = 'block';
+  }
 });
 
+search.addEventListener("submit", e => {
+  e.preventDefault();
+  const dateInputs = search.querySelectorAll('input[type="date"]');
+  const statusSelect = search.querySelector('select');
+
+  const dateFrom = dateInputs[0].value ? new Date(dateInputs[0].value) : null;
+  const dateTo = dateInputs[1].value ? new Date(dateInputs[1].value) : null;
+  const status = statusSelect.value;
+
+  const filtered = dsdonhang.filter(dh => {
+    const date = new Date(dh.date);
+    const inDateRange = (!dateFrom || date >= dateFrom) && (!dateTo || date <= dateTo);
+    const statusMatch = !status || dh.status === status;
+
+    if(select.value === 'Date') return inDateRange;
+    if(select.value === 'Status') return statusMatch;
+    if(select.value === 'Both') return inDateRange && statusMatch;
+
+    return true;
+  });
+  updateTable(filtered);
+});
 // RESET BỘ LỌC
 const btnReset = document.getElementById("resetFilter");
 btnReset.addEventListener("click", () => {
-  formSearch.reset(); // Xóa hết dữ liệu trong form
+  search.reset(); // Xóa hết dữ liệu trong form
   updateTable(dsdonhang); // Hiển thị lại toàn bộ đơn hàng
 });
 
