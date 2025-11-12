@@ -125,7 +125,21 @@ export function initThanhToanPage() {
     location.hash = "home"; // Đẩy về trang chủ
     return;
   }
+  // *** KIỂM TRA SẢN PHẨM ẨN TRƯỚC KHI TIẾP TỤC ***
+  const validation = validateCartItems(data.items);
+  if (!validation.valid) {
+    showalert(validation.message, "warning");
 
+    // Xóa dữ liệu thanh toán và quay về trang trước đó
+    ghidulieuLocalStorage("paymentData", []);
+
+    if (data.type === "cart") {
+      location.hash = "cartDetailPage"; // Quay về giỏ hàng
+    } else {
+      location.hash = "home"; // Quay về trang chủ
+    }
+    return;
+  }
   // 3. *** Logic quan trọng: Xóa ngay lập tức ***
   ghidulieuLocalStorage("paymentData", []); // Ghi mảng rỗng
 
@@ -197,7 +211,12 @@ function saveOrderAndCheckout() {
     showalert("Lỗi: Không có sản phẩm nào để thanh toán.", "error");
     return;
   }
-
+  // KIỂM TRA LẠI SẢN PHẨM ẨN (phòng trường hợp có thay đổi sau khi vào trang)
+  const validation = validateCartItems(currentPaymentData.items);
+  if (!validation.valid) {
+    showalert(validation.message, "warning");
+    return;
+  }
   // 2. Lấy thông tin từ Form
   const selectedPaymentBtn = document.querySelector(".payment-button.active");
   if (!selectedPaymentBtn) {
@@ -324,6 +343,25 @@ function hideConfirmModal() {
 function completeOrderProcessing(newOrder) {
   // 1. Ẩn modal
   hideConfirmModal();
+   //KIỂM TRA LẦN CUỐI SẢN PHẨM ẨN (trước khi lưu đơn hàng)
+  const products = docdulieuLocalStorage("dataProducts");
+  const hiddenProductsInOrder = [];
+  for (let item of newOrder.products) {
+    const productInDB = products.find(p => 
+      p.ten === item.name || (p.id === item.id && p.hidden)
+    );
+    if (productInDB && productInDB.hidden) {
+      hiddenProductsInOrder.push(item.name);
+    }
+  }
+  
+  if (hiddenProductsInOrder.length > 0) {
+    showalert(
+      `Không thể hoàn tất đơn hàng. Các sản phẩm sau hiện không khả dụng: ${hiddenProductsInOrder.join(", ")}.`,
+      "error"
+    );
+    return;
+  }
 
   // 2. Lưu đơn hàng vào localStorage
   const orders = docdulieuLocalStorage("orders");
@@ -737,4 +775,24 @@ function handleAddNewAddressSubmit() {
   updatePaymentAddressDisplay(newAddress);
 
   closeCheckoutAddressModal();
+}
+function validateCartItems(items) {
+  const products = docdulieuLocalStorage("dataProducts");
+  const hiddenProducts = [];
+  
+  for (let item of items) {
+    const productInDB = products.find(p => p.id === item.id);
+    if (productInDB && productInDB.hidden) {
+      hiddenProducts.push(item.name);
+    }
+  }
+  
+  if (hiddenProducts.length > 0) {
+    return {
+      valid: false,
+      message: `Các sản phẩm sau hiện không khả dụng: ${hiddenProducts.join(", ")}. Vui lòng xóa khỏi giỏ hàng trước khi thanh toán.`
+    };
+  }
+  
+  return { valid: true };
 }

@@ -6,8 +6,9 @@ import { docdulieuLocalStorage } from "./readandwrite.js";
 //Tải lại sản phẩm
 export function renderData(){
     const products = docdulieuLocalStorage("dataProducts");
-    if(products.length > 0) displayProducts(products);
-
+     // Lọc chỉ hiển thị sản phẩm không bị ẩn
+    const visibleProducts = products.filter(product => !product.hidden);
+    if(visibleProducts.length > 0) displayProducts(visibleProducts);
 }
 //Tải lại người dùng
 export function renderUser() {

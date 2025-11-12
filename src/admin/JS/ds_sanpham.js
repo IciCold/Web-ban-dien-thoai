@@ -35,6 +35,12 @@ window.addEventListener("DOMContentLoaded", async () => {
   datalist = docdulieuLocalStorage("dataProducts");
   if (!datalist || datalist.length === 0){
     datalist = await docJSONvaLuuLocalStorage("dataProducts", "../../asset/data/dienthoai.json");
+    datalist.forEach(product => {
+      if (product.hidden === undefined) {
+        product.hidden = false;
+      }
+    });
+    ghidulieuLocalStorage("dataProducts", datalist);
   }
 
   if (datalist.length) {
@@ -44,7 +50,16 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 
   updateBang();
+  // Khởi tạo form ở chế độ thêm mới
+  setFormMode('add');
+  
+  // Thêm các hàm gợi ý
+  populateDatalists();
+  setupProductNameAutocomplete();
+  setupAutoFillOnProductSelect();
+  updateSearchDatalists();
 });
+
 
 // ==============================
 //  XỬ LÝ NÚT THÊM / SỬA
@@ -54,7 +69,6 @@ themsanpham.addEventListener("click", function (e) {
   const ten = tenspinp.value.trim();
   const brand = thuonghieuinp.value.trim();
   const kich_thuoc = kichthuocinp.value.trim();
-  const loai = loaiinp.value.trim();
   const anhFile = image.files[0];
 
   if (!ten || !brand) {
@@ -67,18 +81,18 @@ themsanpham.addEventListener("click", function (e) {
     reader.onload = function (e) {
       const base64 = e.target.result;
       preview.src = base64;
-      saveProduct({ten, brand, kich_thuoc, loai, base64});
+      saveProduct({ten, brand, kich_thuoc, base64});
     };
     reader.readAsDataURL(anhFile);
   } else {
-    saveProduct({ten, brand, kich_thuoc, loai, base64: currentEditingId ? null : ""});
+    saveProduct({ten, brand, kich_thuoc, base64: currentEditingId ? null : ""});
   }
 });
 
 // ==============================
 //  HÀM SAVE PRODUCT
 // ==============================
-function saveProduct({ten, brand, mau_sac = "", camera = "", cpu = "", bo_nho = "", ram = "", dung_luong_pin = "", kich_thuoc = "", loai = "", base64 = ""}) {
+function saveProduct({ten, brand, mau_sac = "", camera = "", cpu = "", bo_nho = "", ram = "", dung_luong_pin = "", kich_thuoc = "", base64 = ""}) {
   mau_sac = document.getElementById("color").value.trim() || mau_sac;
   camera = document.getElementById("camera").value.trim() || camera;
   cpu = document.getElementById("cpu").value.trim() || cpu;
@@ -96,10 +110,16 @@ function saveProduct({ten, brand, mau_sac = "", camera = "", cpu = "", bo_nho = 
     }
 
     if (productToUpdate) {
-      const oldGia = productToUpdate.gia; 
-      const oldGiaBan = productToUpdate.giaBan;
-      Object.assign(productToUpdate, {ten, brand, gia:oldGia,giaBan:oldGiaBan, mau_sac, kich_thuoc, bo_nho, ram, cpu, camera, dung_luong_pin, loai});
-      if (base64) productToUpdate.src = base64;
+      const preservedFields = {gia: productToUpdate.gia, giaBan: productToUpdate.giaBan, so_luong: productToUpdate.so_luong, id: productToUpdate.id, hidden: productToUpdate.hidden};
+      // Cập nhật thông tin từ form
+      const updatedFields = {ten, brand, mau_sac, kich_thuoc, bo_nho, ram, cpu, camera, dung_luong_pin, hidden: false};
+      // Xử lý ảnh: nếu có ảnh mới dùng ảnh mới, nếu không giữ ảnh cũ
+      if (base64 !== null) { 
+        preservedFields.src = base64 || ""; 
+      } else {
+        preservedFields.src = productToUpdate.src; 
+      }
+      Object.assign(productToUpdate, updatedFields, preservedFields);
       showalert(`Đã cập nhật sản phẩm "${ten}" thành công!`, "success");
     }
 
@@ -124,21 +144,32 @@ function saveProduct({ten, brand, mau_sac = "", camera = "", cpu = "", bo_nho = 
 
     id++;
     const newId = "S" + String(id).padStart(3, "0");
-    datalist.push({id: newId, src: base64 || "", ten, brand, gia:0, so_luong: 0, mau_sac, kich_thuoc, bo_nho, ram, cpu, camera, dung_luong_pin, loai});
+    datalist.push({id: newId, src: base64 || "", ten, brand, gia:0, so_luong: 0, mau_sac, kich_thuoc, bo_nho, ram, cpu, camera, dung_luong_pin});
     showalert(`Đã thêm sản phẩm "${ten}" thành công!`, "success");
   }
 
   ghidulieuLocalStorage("dataProducts", datalist);
 
   // Reset form
-  ["tensp","brand","color","camera","cpu","memory","ram","battery","size","type"].forEach(id => document.getElementById(id).value = "");
+  ["tensp","brand","color","camera","cpu","memory","ram","battery","size"].forEach(id => document.getElementById(id).value = "");
   image.value = "";
   preview.src = "";
   themsanpham.textContent = "Thêm";
 
   resetProductForm();
-  updateBang();
+  const tenSearch = timten.value.trim();
+  const brandSearch = timbrand.value.trim();
+  
+  if (tenSearch || brandSearch) {
+    // Nếu đang trong chế độ tìm kiếm, cập nhật bảng tìm kiếm
+    timkiem();
+  } else {
+    // Nếu không, cập nhật bảng đầy đủ
+    updateBang();
+  }
+
   populateDatalists();
+  updateSearchDatalists();
 }
 
 // ==============================
@@ -162,25 +193,34 @@ function updateBang() {
     <th>Thương hiệu</th>
     <th>Giá</th>
     <th>Số lượng</th>
+    <th>Trạng thái</th>
     <th>Hành động</th>
   `;
   table.appendChild(headerRow);
 
   datalist.forEach(item => {
     const row = document.createElement("tr");
+    if (item.hidden) {
+      row.classList.add("product-hidden");
+    }
+    
+    const statusBadge = item.hidden 
+      ? '<span class="status-badge status-hidden">Đã ẩn</span>'
+      : '<span class="status-badge status-visible">Đang hiện</span>';
+    
     row.innerHTML = `
       <td>${item.id}</td>
       <td><img src="${item.src || ""}" width="50" height="50" alt="${item.ten}"></td>
-      <td>${item.ten}</td>
+      <td>${item.ten} ${item.hidden ? '(Đã ẩn)' : ''}</td>
       <td>${item.brand}</td>
-      <td>${ item.giaBan 
-      ? item.giaBan.toLocaleString("vi-VN") + "₫" 
-      : "không có giá bán"}</td>
+      <td>${ item.giaBan ? item.giaBan.toLocaleString("vi-VN") + "₫" : "không có giá bán"}</td>
       <td>${item.so_luong || 0}</td>
+      <td>${statusBadge}</td>
       <td>
         <button class="sp-edit">Sửa</button>
-        <button class="sp-del">X</button>
         <button class="sp-view">Chi tiết</button>
+        <button class="sp-hide">${item.hidden ? 'Hiện' : 'Ẩn'}</button>
+        <button class="sp-del">X</button>
       </td>
     `;
     table.appendChild(row);
@@ -197,7 +237,7 @@ function updateBang() {
       document.getElementById("cpu").value = item.cpu || "";
       document.getElementById("camera").value = item.camera || "";
       document.getElementById("battery").value = item.dung_luong_pin || "";
-      document.getElementById("type").value = item.loai || "";
+
       preview.src = item.src || "";
 
       setFormMode('edit', item);
@@ -206,6 +246,14 @@ function updateBang() {
       window.scrollTo({ top: 0, behavior: "smooth" });
 
       showalert(`Đang chỉnh sửa sản phẩm: "${item.ten}"`, "info");
+    });
+
+    // --- Nút ẩn/hiện ---
+    row.querySelector(".sp-hide").addEventListener("click", () => {
+      const action = item.hidden ? "hiện" : "ẩn";
+      if (confirm(`Bạn có chắc muốn ${action} sản phẩm "${item.ten}"?`)) {
+        toggleProductVisibility(item.id, !item.hidden);
+      }
     });
 
     // --- Nút xóa ---
@@ -231,13 +279,13 @@ RAM: ${item.ram || "-"}
 CPU: ${item.cpu || "-"}
 Camera: ${item.camera || "-"}
 Pin: ${item.dung_luong_pin || "-"}
-Loại: ${item.loai || "-"}
       `);
     });
   });
 
   divContainer.appendChild(table);
   populateDatalists();
+  updateSearchDatalists();
 }
 
 // ==============================
@@ -259,7 +307,7 @@ function timkiem() {
 
   const filtered = datalist.filter(sp => {
     const matchTen = ten ? sp.ten.toLowerCase().includes(ten) : true;
-    const matchBrand = brand ? sp.brand.toLowerCase().includes(brand) : true;
+    const matchBrand = brand ? (sp.brand || "").toLowerCase().includes(brand) : true;
     return matchTen && matchBrand;
   });
 
@@ -287,32 +335,41 @@ function displayFilteredTable(filteredList) {
     <th>Thương hiệu</th>
     <th>Giá</th>
     <th>Số lượng</th>
+    <th>Trạng thái</th>
     <th>Hành động</th>
   `;
   table.appendChild(headerRow);
 
   filteredList.forEach(item => {
     const row = document.createElement("tr");
+    if (item.hidden) {
+      row.classList.add("product-hidden");
+    }
+    
+    const statusBadge = item.hidden 
+      ? '<span class="status-badge status-hidden">Đã ẩn</span>'
+      : '<span class="status-badge status-visible">Đang hiện</span>';
+    
     row.innerHTML = `
       <td>${item.id}</td>
       <td><img src="${item.src || ""}" width="50" height="50" alt="${item.ten}"></td>
-      <td>${item.ten}</td>
+      <td>${item.ten} ${item.hidden ? '(Đã ẩn)' : ''}</td>
       <td>${item.brand}</td>
-      <td>${item.gia.toLocaleString("vi-VN")}₫</td>
+      <td>${ item.giaBan ? item.giaBan.toLocaleString("vi-VN") + "₫" : "không có giá bán"}</td>
       <td>${item.so_luong || 0}</td>
+      <td>${statusBadge}</td>
       <td>
         <button class="sp-edit">Sửa</button>
-        <button class="sp-del">X</button>
         <button class="sp-view">Chi tiết</button>
+        <button class="sp-hide">${item.hidden ? 'Hiện' : 'Ẩn'}</button>
+        <button class="sp-del">X</button>
       </td>
     `;
     table.appendChild(row);
-
+    // --- Nút sửa ---
     row.querySelector(".sp-edit").addEventListener("click", () => {
       tenspinp.value = item.ten;
-      thuonghieuinp.value = item.brand;
-      giainp.value = item.gia;
-     
+      thuonghieuinp.value = item.brand;    
 
       document.getElementById("color").value = item.mau_sac || "";
       document.getElementById("size").value = item.kich_thuoc || "";
@@ -321,27 +378,41 @@ function displayFilteredTable(filteredList) {
       document.getElementById("cpu").value = item.cpu || "";
       document.getElementById("camera").value = item.camera || "";
       document.getElementById("battery").value = item.dung_luong_pin || "";
-      document.getElementById("type").value = item.loai || "";
+      //document.getElementById("type").value = item.loai || "";
       preview.src = item.src || "";
 
+      setFormMode('edit', item);
       currentEditingId = item.id;
-      themsanpham.textContent = "Cập nhật sản phẩm";
+
       window.scrollTo({ top: 0, behavior: "smooth" });
+
+      showalert(`Đang chỉnh sửa sản phẩm: "${item.ten}"`, "info");
     });
 
+    // --- Nút ẩn/hiện ---
+    row.querySelector(".sp-hide").addEventListener("click", () => {
+      const action = item.hidden ? "hiện" : "ẩn";
+      if (confirm(`Bạn có chắc muốn ${action} sản phẩm "${item.ten}"?`)) {
+        toggleProductVisibility(item.id, !item.hidden);
+      }
+    });
+
+     // --- Nút xóa ---
     row.querySelector(".sp-del").addEventListener("click", () => {
       if (confirm(`Bạn có chắc muốn xóa "${item.ten}"?`)) {
         datalist = datalist.filter(sp => sp.id !== item.id);
         ghidulieuLocalStorage("dataProducts", datalist);
         timkiem();
+        showalert(`Đã xóa sản phẩm "${item.ten}"`, "success");
       }
     });
 
+    // --- Nút xem chi tiết ---
     row.querySelector(".sp-view").addEventListener("click", () => {
       showalert(`
 Tên: ${item.ten}
 Thương hiệu: ${item.brand}
-Giá: ${item.gia.toLocaleString("vi-VN")}₫
+Giá: ${item.giaBan ? item.giaBan.toLocaleString("vi-VN") + "₫" : "không có giá bán"}
 Số lượng: ${item.so_luong}
 Màu: ${item.mau_sac || "-"}
 Kích thước: ${item.kich_thuoc || "-"}
@@ -350,12 +421,14 @@ RAM: ${item.ram || "-"}
 CPU: ${item.cpu || "-"}
 Camera: ${item.camera || "-"}
 Pin: ${item.dung_luong_pin || "-"}
-Loại: ${item.loai || "-"}
+
       `);
     });
   });
 
   divContainer.appendChild(table);
+  populateDatalists();
+  updateSearchDatalists();
 }
 // ==============================
 //  HÀM ĐIỀN DỮ LIỆU GỢI Ý (AUTOCOMPLETE)
@@ -366,7 +439,7 @@ function populateDatalists() {
   // Lấy tất cả các giá trị duy nhất từ danh sách sản phẩm
   const brands = [...new Set(datalist.map(sp => sp.brand).filter(Boolean))];
   const sizes = [...new Set(datalist.map(sp => sp.kich_thuoc).filter(Boolean))];
-  const types = [...new Set(datalist.map(sp => sp.loai).filter(Boolean))];
+  //const types = [...new Set(datalist.map(sp => sp.loai).filter(Boolean))];
   const colors = [...new Set(datalist.map(sp => sp.mau_sac).filter(Boolean))];
   const cameras = [...new Set(datalist.map(sp => sp.camera).filter(Boolean))];
   const cpus = [...new Set(datalist.map(sp => sp.cpu).filter(Boolean))];
@@ -390,13 +463,16 @@ function populateDatalists() {
   // Điền dữ liệu vào các datalist
   populateList('brand-list', brands);
   populateList('size-list', sizes);
-  populateList('type-list', types);
+  //populateList('type-list', types);
   populateList('color-list', colors);
   populateList('camera-list', cameras);
   populateList('cpu-list', cpus);
   populateList('memory-list', memories);
   populateList('ram-list', rams);
   populateList('battery-list', batteries);
+  
+  // Cập nhật datalist cho ô tìm kiếm
+  updateSearchDatalists();
 }
 // ==============================
 //  HÀM GỢI Ý TỰ ĐỘNG CHO TÊN SẢN PHẨM
@@ -473,7 +549,7 @@ function autofillProductForm(product) {
   // Điền thông tin vào các trường
   document.getElementById('brand').value = product.brand || '';
   document.getElementById('size').value = product.kich_thuoc || '';
-  document.getElementById('type').value = product.loai || '';
+  //document.getElementById('type').value = product.loai || '';
   document.getElementById('color').value = product.mau_sac || '';
   document.getElementById('camera').value = product.camera || '';
   document.getElementById('cpu').value = product.cpu || '';
@@ -489,63 +565,8 @@ function autofillProductForm(product) {
   // Thông báo cho người dùng
   showalert(`Đã tự động điền thông tin từ sản phẩm "${product.ten}"`, "info");
 }
-// ==============================
-//  CẬP NHẬT HÀM KHỞI TẠO
-// ==============================
 
-window.addEventListener("DOMContentLoaded", async () => {
-  datalist = docdulieuLocalStorage("dataProducts");
-  if (!datalist || datalist.length === 0){
-    datalist = await docJSONvaLuuLocalStorage("dataProducts", "../../asset/data/dienthoai.json");
-  }
 
-  if (datalist.length) {
-    const nums = datalist.map(sp => parseInt(String(sp.id).slice(1), 10));
-    const validNums = nums.filter(n => !isNaN(n));
-    if (validNums.length > 0) id = Math.max(...validNums);
-  }
-
-  updateBang();
-  // Khởi tạo form ở chế độ thêm mới
-  setFormMode('add');
-  
-  // Thêm các hàm gợi ý
-  populateDatalists();
-  setupProductNameAutocomplete();
-  setupAutoFillOnProductSelect();
-  setupSmartAutocomplete();
-});
-
-// ==============================
-//  GỢI Ý THÔNG MINH THEO THƯƠNG HIỆU
-// ==============================
-
-function setupSmartAutocomplete() {
-  const brandInput = document.getElementById('brand');
-  const typeInput = document.getElementById('type');
-  
-  if (!brandInput || !typeInput) return;
-  
-  // Khi thương hiệu thay đổi, gợi ý loại sản phẩm phù hợp
-  brandInput.addEventListener('change', function(e) {
-    const selectedBrand = e.target.value;
-    if (!selectedBrand) return;
-    
-    const brandProducts = datalist.filter(sp => sp.brand === selectedBrand);
-    const brandTypes = [...new Set(brandProducts.map(sp => sp.loai).filter(Boolean))];
-    
-    // Cập nhật datalist cho loại sản phẩm
-    const typeDatalist = document.getElementById('type-list');
-    if (typeDatalist) {
-      typeDatalist.innerHTML = '';
-      brandTypes.forEach(type => {
-        const option = document.createElement('option');
-        option.value = type;
-        typeDatalist.appendChild(option);
-      });
-    }
-  });
-}
 // ==============================
 //  HÀM THAY ĐỔI TRẠNG THÁI FORM (THÊM/ SỬA)
 // ==============================
@@ -576,6 +597,8 @@ function setFormMode(mode, product = null) {
     }
     // Thêm nút "Hủy" nếu chưa có
     addCancelButton();
+    //Thêm nút quản lý trạng thái
+    addStatusToggleToForm(product);
     
   } else {
     // Chế độ thêm mới
@@ -598,6 +621,8 @@ function setFormMode(mode, product = null) {
     }
     // Xóa nút "Hủy" nếu có
     removeCancelButton();
+    // Xóa nút quản lý trạng thái
+    removeStatusToggle();
   }
 }
 // ==============================
@@ -655,7 +680,7 @@ function resetProductForm() {
   // Reset các trường input
   const fieldsToReset = [
     "tensp", "brand", "color", "camera", "cpu", 
-    "memory", "ram", "battery", "size", "type"
+    "memory", "ram", "battery", "size"
   ];
   
   fieldsToReset.forEach(id => {
@@ -670,8 +695,10 @@ function resetProductForm() {
   if (preview) preview.src = "";
   
   // Reset trạng thái form
-  setFormMode('add');
   currentEditingId = null;
+  setFormMode('add');
+
+  removeStatusToggle();
   
   // Focus vào ô đầu tiên
   const firstInput = document.getElementById("tensp");
@@ -693,3 +720,118 @@ function debugButtonHeights() {
 
 // Gọi hàm debug khi cần
 // debugButtonHeights();
+// ==============================
+//  CẬP NHẬT DATALIST CHO Ô TÌM KIẾM
+// ==============================
+function updateSearchDatalists() {
+  if (!datalist || datalist.length === 0) return;
+  
+  // Lấy danh sách các THƯƠNG HIỆU (brand) duy nhất cho ô tìm kiếm
+  const searchBrands = [...new Set(datalist.map(sp => sp.brand).filter(Boolean))];
+  
+  // Cập nhật datalist cho ô tìm kiếm thương hiệu
+  const searchTypeDatalist = document.getElementById('search-type-list');
+  if (searchTypeDatalist) {
+    searchTypeDatalist.innerHTML = '';
+    searchBrands.forEach(brand => {
+      const option = document.createElement('option');
+      option.value = brand;
+      searchTypeDatalist.appendChild(option);
+    });
+  }
+}
+// ==============================
+//  HÀM QUẢN LÝ TRẠNG THÁI ẨN/HIỆN
+// ==============================
+// Hàm chuyển đổi trạng thái ẩn/hiện
+function toggleProductVisibility(productId, hide) {
+  const product = datalist.find(item => item.id === productId);
+  if (product) {
+    product.hidden = hide;
+    ghidulieuLocalStorage("dataProducts", datalist);
+    
+    const action = hide ? "ẩn" : "hiện";
+    showalert(`Đã ${action} sản phẩm "${product.ten}"`, "success");
+    
+    // Cập nhật bảng
+    const tenSearch = timten.value.trim();
+    const brandSearch = timbrand.value.trim();
+    
+    if (tenSearch || brandSearch) {
+      timkiem();
+    } else {
+      updateBang();
+    }
+  }
+}
+
+// Hàm thêm nút ẩn/hiện vào form chi tiết
+function addStatusToggleToForm(product) {
+  const form = document.getElementById('product-form');
+  let statusGroup = document.getElementById('status-toggle-group');
+  
+  // Nếu chưa có, tạo mới
+  if (!statusGroup) {
+    statusGroup = document.createElement('div');
+    statusGroup.id = 'status-toggle-group';
+    statusGroup.className = 'status-toggle-group';
+    
+    const hideButton = document.createElement('button');
+    hideButton.type = 'button';
+    hideButton.className = 'btn-toggle-status btn-hide';
+    hideButton.textContent = 'Ẩn sản phẩm';
+    hideButton.onclick = function() {
+      if (confirm(`Bạn có chắc muốn ẩn sản phẩm "${product.ten}"? Sản phẩm sẽ không hiển thị cho khách hàng.`)) {
+        toggleProductVisibility(product.id, true);
+        updateStatusButtons(product.id, true);
+      }
+    };
+    
+    const showButton = document.createElement('button');
+    showButton.type = 'button';
+    showButton.className = 'btn-toggle-status btn-show';
+    showButton.textContent = 'Hiện sản phẩm';
+    showButton.onclick = function() {
+      toggleProductVisibility(product.id, false);
+      updateStatusButtons(product.id, false);
+    };
+    
+    statusGroup.appendChild(hideButton);
+    statusGroup.appendChild(showButton);
+    
+    // Chèn vào trước nút submit
+    const buttonsContainer = form.querySelector('.form-buttons-container');
+    form.insertBefore(statusGroup, buttonsContainer);
+  }
+  
+  updateStatusButtons(product.id, product.hidden);
+}
+
+// Cập nhật trạng thái nút
+function updateStatusButtons(productId, isHidden) {
+  const statusGroup = document.getElementById('status-toggle-group');
+  if (!statusGroup) return;
+  
+  const hideButton = statusGroup.querySelector('.btn-hide');
+  const showButton = statusGroup.querySelector('.btn-show');
+  
+  if (isHidden) {
+    hideButton.disabled = true;
+    hideButton.style.opacity = '0.5';
+    showButton.disabled = false;
+    showButton.style.opacity = '1';
+  } else {
+    hideButton.disabled = false;
+    hideButton.style.opacity = '1';
+    showButton.disabled = true;
+    showButton.style.opacity = '0.5';
+  }
+}
+
+// Xóa nút quản lý trạng thái khi reset form
+function removeStatusToggle() {
+  const statusGroup = document.getElementById('status-toggle-group');
+  if (statusGroup) {
+    statusGroup.remove();
+  }
+}

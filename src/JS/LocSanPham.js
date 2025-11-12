@@ -293,7 +293,9 @@ function updateDisplay() {
   }
 
   let filtered = docdulieuLocalStorage("dataProducts");
-
+   // Lọc bỏ sản phẩm bị ẩn (chỉ hiển thị cho khách hàng)
+    filtered = filtered.filter(product => !product.hidden);
+    
   // Lọc theo tên
   if (searchKeyword) {
     console.log("Đang tìm với từ khóa:", searchKeyword);

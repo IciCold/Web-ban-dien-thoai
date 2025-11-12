@@ -3,8 +3,8 @@
 // ==============================
 import { showalert } from "../../JS/alert.js";
 import {
-  docdulieuLocalStorage, //
-  ghidulieuLocalStorage //
+  docdulieuLocalStorage,
+  ghidulieuLocalStorage
 } from "./readandwrite.js";
 
 // ==============================
@@ -12,13 +12,19 @@ import {
 // ==============================
 let dataProducts = [];
 let dataPhieuNhap = [];
-let currentPhieu = null; // Phiếu đang được chọn để sửa
+let currentPhieu = null;
 let phieuIdCounter = 0;
 
-// Các phần tử HTML của trang Nhập Hàng
+// Các phần tử HTML
 const btnTaoPhieuMoi = document.getElementById("btnTaoPhieuMoi");
 const nhSearch = document.getElementById("nh-search");
-const nhTableContainer = document.querySelector("#ds_nhapHang .nh-table-container");
+const nhLeftContainer = document.querySelector("#nh-left .nh-table-container");
+const nhRightContainer = document.querySelector("#nh-right .nh-table-container");
+
+// Popup elements
+const popupOverlay = document.querySelector(".nh-popup-overlay");
+const popup = document.querySelector(".nh-popup");
+const popupClose = document.querySelector(".nh-popup-close");
 
 const formChiTiet = document.getElementById("nh-form-chitiet");
 const nhId = document.getElementById("nh-id");
@@ -40,138 +46,188 @@ const btnXoaPhieu = document.getElementById("btnXoaPhieu");
 //  KHỞI TẠO KHI TẢI TRANG
 // ==============================
 window.addEventListener("DOMContentLoaded", () => {
-  // Chỉ chạy code này nếu các phần tử tồn tại (tức là đang ở trang admin)
   if (!btnTaoPhieuMoi) return;
 
-  dataProducts = docdulieuLocalStorage("dataProducts"); //
-  dataPhieuNhap = docdulieuLocalStorage("dataPhieuNhap"); //
+  dataProducts = docdulieuLocalStorage("dataProducts");
+  dataPhieuNhap = docdulieuLocalStorage("dataPhieuNhap");
 
-  // Lấy ID phiếu lớn nhất để đếm tiếp
   if (dataPhieuNhap.length > 0) {
     const nums = dataPhieuNhap.map(pn => parseInt(String(pn.id).slice(2), 10));
     phieuIdCounter = Math.max(...nums);
   }
 
   populateProductSelect();
-  renderPhieuNhapTable();
-  resetFormChiTiet();
+  renderPhieuDangTao();
+  renderPhieuHoanThanh();
 
   // Gán sự kiện
   btnTaoPhieuMoi.addEventListener("click", handleTaoPhieuMoi);
   btnThemSPVaoPhieu.addEventListener("click", handleThemSPVaoPhieu);
   btnHoanThanhPhieu.addEventListener("click", handleHoanThanhPhieu);
   btnXoaPhieu.addEventListener("click", handleXoaPhieu);
-  nhSearch.addEventListener("input", renderPhieuNhapTable);
+  nhSearch.addEventListener("input", renderPhieuHoanThanh);
+  
+  // Đóng popup
+  popupClose.addEventListener("click", closePopup);
+  popupOverlay.addEventListener("click", closePopup);
 });
 
 // ==============================
-//  HÀM HIỂN THỊ DANH SÁCH PHIẾU NHẬP (Bên trái)
+//  HÀM HIỂN THỊ PHIẾU ĐANG TẠO
 // ==============================
-function renderPhieuNhapTable() {
-  nhTableContainer.innerHTML = "";
+function renderPhieuDangTao() {
+  nhLeftContainer.innerHTML = "";
   
-  const keyword = nhSearch.value.trim().toLowerCase();
-  const filteredList = dataPhieuNhap.filter(pn => pn.id.toLowerCase().includes(keyword));
+  const phieuDangTao = dataPhieuNhap.filter(pn => pn.trangThai === 'dangTao');
 
-  if (filteredList.length === 0) {
-    nhTableContainer.innerHTML = "<p>Chưa có phiếu nhập nào.</p>";
+  if (phieuDangTao.length === 0) {
+    nhLeftContainer.innerHTML = '<div class="nh-empty-message">Chưa có phiếu đang tạo</div>';
     return;
   }
 
   const table = document.createElement("table");
-  table.className = "nh-table"; // Dùng class này để CSS
+  table.className = "nh-table";
   table.innerHTML = `
     <thead>
       <tr>
         <th>ID Phiếu</th>
         <th>Ngày Nhập</th>
-        <th>Trạng Thái</th>
         <th>Tổng Tiền</th>
-        <th>Sửa</th>
+        <th>Thao tác</th>
       </tr>
     </thead>
     <tbody>
-      ${filteredList.slice().reverse().map(pn => `
-        <tr class="nh-row ${pn.id === currentPhieu?.id ? 'selected' : ''}" data-id="${pn.id}">
+      ${phieuDangTao.slice().reverse().map(pn => `
+        <tr data-id="${pn.id}">
           <td>${pn.id}</td>
           <td>${pn.ngayNhap}</td>
-          <td>${pn.trangThai === 'hoanThanh' ? '✅ Hoàn thành' : '📝 Đang tạo'}</td>
           <td>${tinhTongTien(pn).toLocaleString("vi-VN")}₫</td>
-          <td><button class="nh-edit">Chọn</button></td>
+          <td><button class="nh-edit" data-id="${pn.id}">Sửa</button></td>
         </tr>
       `).join("")}
     </tbody>
   `;
   
-  // Thêm sự kiện cho các nút "Chọn"
   table.querySelectorAll(".nh-edit").forEach(btn => {
     btn.addEventListener("click", (e) => {
-      const id = e.target.closest("tr").dataset.id;
+      const id = e.target.dataset.id;
       loadPhieuDeSua(id);
     });
   });
 
-  nhTableContainer.appendChild(table);
+  nhLeftContainer.appendChild(table);
 }
 
 // ==============================
-//  HÀM HIỂN THỊ CHI TIẾT PHIẾU (Bên phải)
+//  HÀM HIỂN THỊ PHIẾU ĐÃ HOÀN THÀNH
 // ==============================
-function renderChiTietPhieu() {
-  if (!currentPhieu) {
-    resetFormChiTiet();
+function renderPhieuHoanThanh() {
+  nhRightContainer.innerHTML = "";
+  
+  const keyword = nhSearch.value.trim().toLowerCase();
+  const phieuHoanThanh = dataPhieuNhap.filter(pn => 
+    pn.trangThai === 'hoanThanh' && 
+    pn.id.toLowerCase().includes(keyword)
+  );
+
+  if (phieuHoanThanh.length === 0) {
+    nhRightContainer.innerHTML = '<div class="nh-empty-message">Chưa có phiếu hoàn thành</div>';
     return;
   }
 
-  // Cập nhật thông tin phiếu
+  const table = document.createElement("table");
+  table.className = "nh-table";
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th>ID Phiếu</th>
+        <th>Ngày Nhập</th>
+        <th>Tổng Tiền</th>
+        <th>Xem</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${phieuHoanThanh.slice().reverse().map(pn => `
+        <tr data-id="${pn.id}">
+          <td>${pn.id}</td>
+          <td>${pn.ngayNhap}</td>
+          <td>${tinhTongTien(pn).toLocaleString("vi-VN")}₫</td>
+          <td><button class="nh-edit" data-id="${pn.id}">Xem</button></td>
+        </tr>
+      `).join("")}
+    </tbody>
+  `;
+  
+  table.querySelectorAll(".nh-edit").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const id = e.target.dataset.id;
+      loadPhieuDeSua(id);
+    });
+  });
+
+  nhRightContainer.appendChild(table);
+}
+
+// ==============================
+//  HÀM HIỂN THỊ CHI TIẾT PHIẾU TRONG POPUP
+// ==============================
+function renderChiTietPhieu() {
+  if (!currentPhieu) {
+    closePopup();
+    return;
+  }
+
   nhId.value = currentPhieu.id;
   nhNgayNhap.value = currentPhieu.ngayNhap;
   nhTrangThai.value = currentPhieu.trangThai === 'hoanThanh' ? 'Đã hoàn thành' : 'Đang tạo';
   nhTongTien.textContent = tinhTongTien(currentPhieu).toLocaleString("vi-VN");
 
-  // Hiển thị bảng chi tiết sản phẩm
   chiTietTableContainer.innerHTML = "";
-  const table = document.createElement("table");
-  table.className = "nh-chitiet-table"; // Dùng class này để CSS
-  table.innerHTML = `
-    <thead>
-      <tr>
-        <th>ID SP</th>
-        <th>Tên SP</th>
-        <th>Số Lượng</th>
-        <th>Giá Nhập</th>
-        <th>Thành Tiền</th>
-        <th>Xóa</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${currentPhieu.chiTiet.map(item => `
-        <tr>
-          <td>${item.idSP}</td>
-          <td>${item.tenSP}</td>
-          <td>${item.soLuong}</td>
-          <td>${item.giaNhap.toLocaleString("vi-VN")}₫</td>
-          <td>${(item.soLuong * item.giaNhap).toLocaleString("vi-VN")}₫</td>
-          <td>
-            ${currentPhieu.trangThai !== 'hoanThanh' ? 
-              `<button class="nh-del-item" data-idsp="${item.idSP}">X</button>` : 
-              '--'}
-          </td>
-        </tr>
-      `).join("")}
-    </tbody>
-  `;
   
-  // Sự kiện xóa item khỏi phiếu
-  table.querySelectorAll(".nh-del-item").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const idSP = e.target.dataset.idsp;
-      handleXoaSPKhoiPhieu(idSP);
+  if (currentPhieu.chiTiet.length === 0) {
+    chiTietTableContainer.innerHTML = "<p>Chưa có sản phẩm nào trong phiếu.</p>";
+  } else {
+    const table = document.createElement("table");
+    table.className = "nh-chitiet-table";
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th>ID SP</th>
+          <th>Tên SP</th>
+          <th>Số Lượng</th>
+          <th>Giá Nhập</th>
+          <th>Thành Tiền</th>
+          <th>Xóa</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${currentPhieu.chiTiet.map(item => `
+          <tr>
+            <td>${item.idSP}</td>
+            <td>${item.tenSP}</td>
+            <td>${item.soLuong}</td>
+            <td>${item.giaNhap.toLocaleString("vi-VN")}₫</td>
+            <td>${(item.soLuong * item.giaNhap).toLocaleString("vi-VN")}₫</td>
+            <td>
+              ${currentPhieu.trangThai !== 'hoanThanh' ? 
+                `<button class="nh-del-item" data-idsp="${item.idSP}">X</button>` : 
+                '--'}
+            </td>
+          </tr>
+        `).join("")}
+      </tbody>
+    `;
+    
+    table.querySelectorAll(".nh-del-item").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const idSP = e.target.dataset.idsp;
+        handleXoaSPKhoiPhieu(idSP);
+      });
     });
-  });
-  chiTietTableContainer.appendChild(table);
+    chiTietTableContainer.appendChild(table);
+  }
 
-  // Cập nhật trạng thái form (Yêu cầu: chỉ sửa/hoàn thành khi chưa hoàn thành)
+  // Cập nhật trạng thái form
   if (currentPhieu.trangThai === 'hoanThanh') {
     fieldsetAddSP.disabled = true;
     btnHoanThanhPhieu.style.display = 'none';
@@ -181,13 +237,30 @@ function renderChiTietPhieu() {
     btnHoanThanhPhieu.style.display = 'inline-block';
     btnXoaPhieu.style.display = 'inline-block';
   }
+
+  // Hiển thị popup
+  popup.classList.add('active');
+  popupOverlay.classList.add('active');
 }
 
 // ==============================
-//  CÁC HÀM TIỆN ÍCH (RENDER)
+//  HÀM ĐÓNG POPUP
 // ==============================
+function closePopup() {
+  popup.classList.remove('active');
+  popupOverlay.classList.remove('active');
+  currentPhieu = null;
+  
+  // Reset form
+  formChiTiet.reset();
+  spSelect.value = "";
+  spSoLuong.value = 1;
+  spGiaNhap.value = "";
+}
 
-// Đổ danh sách sản phẩm vào <select>
+// ==============================
+//  CÁC HÀM TIỆN ÍCH
+// ==============================
 function populateProductSelect() {
   spSelect.innerHTML = '<option value="">-- Chọn sản phẩm --</option>';
   dataProducts.forEach(sp => {
@@ -195,27 +268,6 @@ function populateProductSelect() {
   });
 }
 
-// Reset form chi tiết
-function resetFormChiTiet() {
-  formChiTiet.reset();
-  nhId.value = "[PHIẾU MỚI]";
-  nhNgayNhap.value = "";
-  nhTrangThai.value = "";
-  chiTietTableContainer.innerHTML = "<p>Chưa có sản phẩm nào trong phiếu.</p>";
-  nhTongTien.textContent = "0";
-  
-  fieldsetAddSP.disabled = true;
-  btnHoanThanhPhieu.style.display = 'none';
-  btnXoaPhieu.style.display = 'none';
-  currentPhieu = null;
-  
-  // Bỏ highlight
-  if (document.querySelector(".nh-row.selected")) {
-    document.querySelector(".nh-row.selected").classList.remove("selected");
-  }
-}
-
-// Tính tổng tiền
 function tinhTongTien(phieu) {
   return phieu.chiTiet.reduce((total, item) => total + (item.soLuong * item.giaNhap), 0);
 }
@@ -231,50 +283,47 @@ function handleTaoPhieuMoi() {
   const newPhieu = {
     id: newID,
     ngayNhap: new Date().toLocaleDateString("vi-VN"),
-    trangThai: "dangTao", // 'dangTao' hoặc 'hoanThanh'
-    chiTiet: [] // Mảng chứa { idSP, tenSP, soLuong, giaNhap }
+    trangThai: "dangTao",
+    chiTiet: []
   };
   
   dataPhieuNhap.push(newPhieu);
-  ghidulieuLocalStorage("dataPhieuNhap", dataPhieuNhap); //
+  ghidulieuLocalStorage("dataPhieuNhap", dataPhieuNhap);
   
   currentPhieu = newPhieu;
-  renderPhieuNhapTable();
+  renderPhieuDangTao();
   renderChiTietPhieu();
+  
+  showalert("Đã tạo phiếu nhập mới: " + newID, "success");
 }
 
-// (2) Load phiếu đã có lên form
+// (2) Load phiếu đã có lên popup
 function loadPhieuDeSua(id) {
   const phieu = dataPhieuNhap.find(pn => pn.id === id);
   if (phieu) {
     currentPhieu = phieu;
-    renderPhieuNhapTable(); // để highlight
     renderChiTietPhieu();
   }
 }
 
-// (3) Thêm SP vào phiếu (chưa lưu vào kho)
+// (3) Thêm SP vào phiếu
 function handleThemSPVaoPhieu() {
   const idSP = spSelect.value;
   const soLuong = parseInt(spSoLuong.value);
   const giaNhap = parseInt(spGiaNhap.value);
 
   if (!idSP || !soLuong || isNaN(giaNhap) || soLuong <= 0 || giaNhap < 0) {
-    showalert("Vui lòng chọn sản phẩm, nhập số lượng và giá nhập hợp lệ.","warning");
+    showalert("Vui lòng chọn sản phẩm, nhập số lượng và giá nhập hợp lệ.", "warning");
     return;
   }
   
   const spData = dataProducts.find(sp => sp.id === idSP);
-  
-  // Kiểm tra xem SP đã có trong phiếu chưa
   const existingItem = currentPhieu.chiTiet.find(item => item.idSP === idSP);
   
   if (existingItem) {
-    // Nếu đã có, chỉ cập nhật
     existingItem.soLuong += soLuong;
-    existingItem.giaNhap = giaNhap; // Cập nhật giá nhập mới
+    existingItem.giaNhap = giaNhap;
   } else {
-    // Nếu chưa, thêm mới
     currentPhieu.chiTiet.push({
       idSP: spData.id,
       tenSP: spData.ten,
@@ -283,14 +332,16 @@ function handleThemSPVaoPhieu() {
     });
   }
   
-  ghidulieuLocalStorage("dataPhieuNhap", dataPhieuNhap); //
+  ghidulieuLocalStorage("dataPhieuNhap", dataPhieuNhap);
   renderChiTietPhieu();
-  renderPhieuNhapTable(); // Cập nhật tổng tiền
+  renderPhieuDangTao();
   
   // Reset form thêm SP
   spSelect.value = "";
   spSoLuong.value = 1;
   spGiaNhap.value = "";
+  
+  showalert("Đã thêm sản phẩm vào phiếu", "success");
 }
 
 // (4) Xóa SP khỏi phiếu
@@ -299,59 +350,62 @@ function handleXoaSPKhoiPhieu(idSP) {
   
   currentPhieu.chiTiet = currentPhieu.chiTiet.filter(item => item.idSP !== idSP);
   
-  ghidulieuLocalStorage("dataPhieuNhap", dataPhieuNhap); //
+  ghidulieuLocalStorage("dataPhieuNhap", dataPhieuNhap);
   renderChiTietPhieu();
-  renderPhieuNhapTable(); // Cập nhật tổng tiền
+  renderPhieuDangTao();
+  
+  showalert("Đã xóa sản phẩm khỏi phiếu", "success");
 }
 
-// (5) Hoàn Thành Phiếu (Cập nhật số lượng vào kho)
+// (5) Hoàn Thành Phiếu
 function handleHoanThanhPhieu() {
   if (!currentPhieu || currentPhieu.chiTiet.length === 0) {
-    showalert("Phiếu đang trống, không thể hoàn thành.","warning");
+    showalert("Phiếu đang trống, không thể hoàn thành.", "warning");
     return;
   }
   
   if (confirm(`Bạn có chắc muốn hoàn thành phiếu ${currentPhieu.id}? Hành động này sẽ cập nhật số lượng tồn kho và không thể sửa phiếu này nữa.`)) {
-    // 1. Cập nhật số lượng vào dataProducts
+    // Cập nhật số lượng vào dataProducts
     currentPhieu.chiTiet.forEach(item => {
       const spIndex = dataProducts.findIndex(sp => sp.id === item.idSP);
       if (spIndex !== -1) {
         dataProducts[spIndex].so_luong = (dataProducts[spIndex].so_luong || 0) + item.soLuong;
-        dataProducts[spIndex].gia = item.giaNhap; // Gán giá nhập làm GIÁ VỐN (sp.gia)
+        dataProducts[spIndex].gia = item.giaNhap;
 
-    // Nếu sản phẩm chưa có giá bán, tạm gán giá bán = giá vốn
-    if (!dataProducts[spIndex].giaBan) {
-       dataProducts[spIndex].giaBan = item.giaNhap;
-    }
+        if (!dataProducts[spIndex].giaBan) {
+          dataProducts[spIndex].giaBan = item.giaNhap;
+        }
       }
     });
     
-    // 2. Cập nhật trạng thái phiếu
     currentPhieu.trangThai = "hoanThanh";
     
-    // 3. Lưu cả hai mảng dữ liệu
-    ghidulieuLocalStorage("dataProducts", dataProducts); //
-    ghidulieuLocalStorage("dataPhieuNhap", dataPhieuNhap); //
+    ghidulieuLocalStorage("dataProducts", dataProducts);
+    ghidulieuLocalStorage("dataPhieuNhap", dataPhieuNhap);
     
-    // 4. Reset form
-    resetFormChiTiet();
-    showalert("Đã hoàn thành phiếu và cập nhật tồn kho!","success");
-    // 5. Cập nhật lại select
+    closePopup();
+    renderPhieuDangTao();
+    renderPhieuHoanThanh();
     populateProductSelect();
+    
+    showalert("Đã hoàn thành phiếu và cập nhật tồn kho!", "success");
   }
 }
 
 // (6) Xóa phiếu (chỉ khi đang tạo)
 function handleXoaPhieu() {
   if (!currentPhieu || currentPhieu.trangThai === 'hoanThanh') {
-    showalert("Không thể xóa phiếu đã hoàn thành.","error");
+    showalert("Không thể xóa phiếu đã hoàn thành.", "error");
     return;
   }
   
   if (confirm(`Bạn có chắc muốn xóa vĩnh viễn phiếu ${currentPhieu.id}?`)) {
     dataPhieuNhap = dataPhieuNhap.filter(pn => pn.id !== currentPhieu.id);
-    ghidulieuLocalStorage("dataPhieuNhap", dataPhieuNhap); //
-    resetFormChiTiet();
-    renderPhieuNhapTable();
+    ghidulieuLocalStorage("dataPhieuNhap", dataPhieuNhap);
+    
+    closePopup();
+    renderPhieuDangTao();
+    
+    showalert("Đã xóa phiếu", "success");
   }
 }

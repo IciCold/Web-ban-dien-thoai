@@ -216,8 +216,15 @@ document.addEventListener('DOMContentLoaded', () => { //
     // Lấy ID từ data-attribute của section
     const productId = productSection.dataset.currentId; //
     // Dùng hàm tiện ích để lấy số tiền
-    const productPrice = parseVNDPrice(productPriceText); //
-    
+    const productPrice = parseVNDPrice(productPriceText); 
+    // Kiểm tra xem sản phẩm có bị ẩn không
+    const products = docdulieuLocalStorage("dataProducts");
+    const productInDB = products.find(p => p.id === productId);
+  
+    if (productInDB && productInDB.hidden) {
+      showalert("Sản phẩm này hiện không khả dụng.", "warning");
+      return;
+    }
     // Lấy giỏ hàng hiện tại ra.
     let cart = getUserCart(); //
     // Tìm xem sản phẩm này (dựa vào ID) đã có trong giỏ hàng chưa.

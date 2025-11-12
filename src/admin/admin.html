@@ -175,7 +175,7 @@
         <h1>Chào mừng tới giao diện admin</h1>
         <h2>Hãy chọn các nút bên trái để bắt đầu</h2>
       </section>
-
+  <!--DANH SÁCH SẢN PHẨM-->
       <section id="ds_sanPham" class="page-section">
         <div id="sp-wrapper">
           <div id="sp-left">
@@ -189,6 +189,7 @@
                     <th>Tên sản phẩm</th>
                     <th>Thương hiệu</th>
                     <th>Giá</th>
+                    <th>Số lượng</th>
                     <th>Thao tác</th>
                   </tr>
                 </thead>
@@ -199,7 +200,8 @@
               <h2 class="sp-subtitle">Tìm kiếm sản phẩm</h2>
               <form class="sp-search-form">
                 <input id="timten" type="text" placeholder="Tên sản phẩm">
-                <input id="timbrand" type="text" placeholder="Thương hiệu">
+                <input id="timbrand" type="text" placeholder="Thương hiệu" list="search-type-list">
+                <datalist id="search-type-list"></datalist>
                 <button id="timbtn">Tìm</button>
               </form>
             </div>
@@ -214,8 +216,6 @@
                 <datalist id="brand-list"></datalist>
                 <input id="size" type="text" placeholder="Kích thước" list="size-list">
                 <datalist id="size-list"></datalist>
-                <input id="type" type="text" placeholder="Loại" list="type-list">
-                <datalist id="type-list"></datalist>
                 <input id="color" type="text" placeholder="Màu" list="color-list">
                 <datalist id="color-list"></datalist>
                 <input id="camera" type="text" placeholder="Camera" list="camera-list">
@@ -383,17 +383,37 @@
       <!-- Nhập hàng -->
       <section id="ds_nhapHang" class="page-section">
         <div id="nh-wrapper">
-          <div id="nh-left">
-            <h1 class="nh-title">Danh sách Phiếu Nhập Hàng</h1>
-            <div class="nh-actions">
-              <button id="btnTaoPhieuMoi">Tạo Phiếu Nhập Mới</button>
-              <input type="text" id="nh-search" placeholder="Tìm theo ID phiếu...">
-            </div>
-            <div class="nh-table-container"></div>
+          <div class="nh-header">
+            <h1 class="nh-title">Quản Lý Nhập Sản Phẩm</h1>
+            <button id="btnTaoPhieuMoi">+ Tạo Phiếu Nhập Mới</button>
           </div>
 
-          <div id="nh-right">
-            <h2 class="nh-subtitle">Chi Tiết Phiếu Nhập</h2>
+          <div class="nh-sections-container">
+            <!-- Phần trái: Phiếu đang tạo -->
+            <div id="nh-left">
+              <h2 class="nh-section-title">📝 Phiếu Đang Tạo</h2>
+              <div class="nh-table-container"></div>
+            </div>
+
+            <!-- Phần phải: Phiếu đã hoàn thành -->
+            <div id="nh-right">
+              <h2 class="nh-section-title-completed">✅ Phiếu Đã Hoàn Thành</h2>
+              <div class="nh-search-container">
+                <input type="text" id="nh-search" placeholder="🔍 Tìm theo ID phiếu...">
+              </div>
+              <div class="nh-table-container"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- POPUP CHI TIẾT PHIẾU -->
+        <div class="nh-popup-overlay"></div>
+        <div class="nh-popup">
+          <div class="nh-popup-header">
+            <h2>Chi Tiết Phiếu Nhập</h2>
+            <button class="nh-popup-close">&times;</button>
+          </div>
+          <div class="nh-popup-body">
             <form id="nh-form-chitiet">
               <div class="input-group">
                 <label for="nh-id">ID Phiếu:</label>
@@ -418,7 +438,7 @@
                 </div>
                 <div class="input-group">
                   <label for="nh-sp-soluong">Số lượng nhập:</label>
-                  <input type="number" id="nh-sp-soluong" min="1" value="">
+                  <input type="number" id="nh-sp-soluong" min="1" value="1">
                 </div>
                 <div class="input-group">
                   <label for="nh-sp-gianhap">Giá nhập (VNĐ):</label>
@@ -440,7 +460,7 @@
           </div>
         </div>
       </section>
-
+      
       <!--QUẢN LÍ GIÁ BÁN-->
       <section id="ds_giaBan" class="page-section">
         <div class="price-management-wrapper">
