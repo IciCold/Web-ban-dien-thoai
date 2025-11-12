@@ -269,7 +269,7 @@ function saveOrderAndCheckout() {
       image: item.image || "",
     })),
     total: currentPaymentData.total,
-    status: "pending",
+    status: "mới đặt",
     date: new Date().toISOString(),
     paymentMethod: selectedPayment,
     deliveryAddress: deliveryAddressString,
