@@ -1,16 +1,22 @@
 /* File: cart.css */
 
-/* Wrapper chứa icon và popup */
+/* ======================================================== */
+/* === GIAO DIỆN 1: POPUP GIỎ HÀNG NHỎ (TRÊN HEADER) === */
+/* ======================================================== */
+
+/* Khung bọc (wrapper) chứa cả icon giỏ hàng và popup */
 .cart-wrapper {
   position: relative; /* Làm mốc cho popup */
   display: inline-block;
 }
 
-/* Định dạng popup giỏ hàng */
+/* * Đây là cái HỘP POPUP GIỎ HÀNG chính
+ * (Nó được ẩn mặc định) 
+ */
 .cart-popup {
   display: none; /* Ẩn popup mặc định */
   position: absolute;
-  top: 150%; /* Vị trí dưới icon (điều chỉnh nếu cần) */
+  top: 180%; /* Vị trí dưới icon (điều chỉnh nếu cần) */
   right: 0;
   width: 320px;
   background-color: #fff;
@@ -18,21 +24,15 @@
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
   z-index: 1001;
-  overflow: hidden; /* Để bo góc cho đẹp */
+  overflow: hidden;
 }
 
-/* Ẩn popup mặc định */
-.cart-popup {
-  display: none; 
-  /* ... (giữ nguyên các thuộc tính khác của bạn như position, width, v.v...) */
-}
-
-/* Lớp .show này sẽ được JS thêm/xóa để bật/tắt popup */
+/* Lớp .show này sẽ được JS thêm/xóa để *HIỆN* popup lên */
 .cart-popup.show {
   display: block;
 }
 
-/* Header của popup */
+/* Tiêu đề của popup (chữ 'Sản phẩm đã thêm') */
 .cart-header {
   font-weight: 600;
   padding: 12px 15px;
@@ -41,13 +41,13 @@
   color: #333;
 }
 
-/* Danh sách sản phẩm trong giỏ hàng */
+/* Khu vực chứa DANH SÁCH các sản phẩm, có thể cuộn */
 .cart-items-list {
   max-height: 300px; /* Giới hạn chiều cao, tự cuộn */
   overflow-y: auto;
 }
 
-/* Tin nhắn khi giỏ hàng trống */
+/* Dòng chữ 'Giỏ hàng của bạn trống' khi không có sản phẩm */
 .cart-empty-msg {
   text-align: center;
   color: #888;
@@ -55,7 +55,7 @@
   font-size: 0.9rem;
 }
 
-/* Kiểu cho mỗi sản phẩm trong popup */
+/* Kiểu dáng cho *MỘT HÀNG* sản phẩm trong danh sách */
 .cart-item {
   display: flex;
   align-items: center;
@@ -67,6 +67,7 @@
   border-bottom: none;
 }
 
+/* Hình ảnh nhỏ của sản phẩm trong popup */
 .cart-item img {
   width: 50px;
   height: 50px;
@@ -76,14 +77,15 @@
   border: 1px solid #eee;
 }
 
+/* Khung chứa thông tin text (tên, giá) */
 .cart-item .item-info {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  /* Ngăn text quá dài */
-  min-width: 0; 
+  min-width: 0; /* Ngăn text quá dài */
 }
 
+/* Tên sản phẩm trong popup */
 .cart-item .item-name {
   font-size: 0.9rem;
   font-weight: 600;
@@ -93,12 +95,14 @@
   text-overflow: ellipsis;
 }
 
+/* Giá sản phẩm trong popup */
 .cart-item .item-price {
   font-size: 0.85rem;
   color: #e74c3c;
   margin-top: 4px;
 }
 
+/* Số lượng sản phẩm (ví dụ: x1) */
 .cart-item .item-quantity {
   font-size: 0.9rem;
   color: #555;
@@ -106,17 +110,18 @@
   font-weight: 500;
 }
 
-/* Footer của popup (chứa nút xem giỏ hàng) */
+/* Phần chân (footer) của popup (chứa nút) */
 .cart-footer {
   padding: 12px;
   border-top: 1px solid #f0f0f0;
   background-color: #f9f9f9;
 }
 
+/* Nút 'Xem giỏ hàng' màu xanh */
 .view-cart-btn {
   width: 100%;
   padding: 10px;
-  background-color: #3498db; /* Màu nút (thay đổi) */
+  background-color: #3498db;
   color: white;
   border: none;
   border-radius: 5px;
@@ -127,18 +132,18 @@
 }
 
 .view-cart-btn:hover {
-  background-color: #2980b9; /* Màu khi hover */
+  background-color: #2980b9;
 }
 
-/* File: cart.css (Thêm vào cuối file) */
+/* ============================================================= */
+/* === GIAO DIỆN 2: THÔNG BÁO "THÊM THÀNH CÔNG" (TOAST) === */
+/* ============================================================= */
 
-/* === CSS CHO THÔNG BÁO POPUP (TOAST) === */
-
+/* * Đây là LỚP PHỦ MỜ *TOÀN MÀN HÌNH* * (Nó nằm đằng sau hộp thông báo) 
+ */
 .toast-overlay {
-  /* Ẩn mặc định */
   opacity: 0;
   pointer-events: none; /* Không thể click khi đang ẩn */
-  
   position: fixed;
   top: 0;
   left: 0;
@@ -146,56 +151,55 @@
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.6); /* Lớp nền mờ */
   z-index: 1000;
-  
-  /* Dùng flex để căn giữa popup */
   display: flex;
   align-items: center;
   justify-content: center;
-  
   transition: opacity 0.2s ease-in-out;
 }
 
-/* Lớp .active (được thêm bằng JS) để hiển thị */
+/* Lớp .active này được JS thêm vào để *HIỆN* thông báo */
 .toast-overlay.active {
   opacity: 1;
   pointer-events: auto; /* Cho phép click khi hiển thị */
 }
 
+/* * Đây là cái *HỘP THÔNG BÁO MÀU TRẮNG* * (Nằm ở giữa màn hình) 
+ */
 .toast-message {
   background-color: white;
   border-radius: 12px;
   padding: 25px 35px;
   text-align: center;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-  
-  /* Hiệu ứng scale khi xuất hiện */
-  transform: scale(0.9);
+  transform: scale(0.9); /* Hiệu ứng scale khi xuất hiện */
   transition: transform 0.2s ease-in-out;
 }
 
+/* Hiệu ứng phóng to khi hộp thông báo xuất hiện */
 .toast-overlay.active .toast-message {
   transform: scale(1);
 }
 
+/* Vòng tròn *MÀU XANH LÁ* bao quanh icon check */
 .toast-icon {
   width: 60px;
   height: 60px;
-  background-color: #27ae60; /* Màu xanh lá (giống ảnh) */
+  background-color: #27ae60;
   border-radius: 50%;
   margin: 0 auto 15px auto;
-  
-  /* Căn giữa icon check */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/* Icon dấu *CHECK MÀU TRẮNG* bên trong vòng tròn xanh */
 .toast-icon i.fa-check {
   color: white;
-  font-size: 1.8rem; /* Kích thước icon check */
+  font-size: 1.8rem;
   font-weight: 600;
 }
 
+/* Dòng chữ thông báo (ví dụ: 'Sản phẩm đã được thêm...') */
 .toast-text {
   font-size: 1.05rem;
   font-weight: 600;
