@@ -53,7 +53,7 @@ function updateTable(data) {
       change.style.color = "red";
     }
     else if(donhang.status==="mới đặt"){
-      change.style.color = "yellow";
+      change.style.color = "#c9a401";
     }
     else{
       change.style.color = "orange";
@@ -313,6 +313,15 @@ function addRowEvents() {
       const statusSelect = popup.querySelector('#status');
       const cancelBtn = popup.querySelector('#cancel-status');
 
+      // Ẩn form, hiện lại nút "Chỉnh sửa"
+      statusForm.style.display = 'none';
+      if(dh.status==='đã giao'||dh.status==='đã hủy'){
+        editBtn.style.display = "none";
+      }
+      else{
+        editBtn.style.display='inline-block';
+      }
+
       
 
       // Khi nhấn "Chỉnh sửa"
@@ -352,14 +361,8 @@ function addRowEvents() {
       // Cập nhật giao diện
       currentStatusSpan.textContent = newStatus;
 
-      // Ẩn form, hiện lại nút "Chỉnh sửa"
-      statusForm.style.display = 'none';
-      if(dh.status==='đã giao'||dh.status==='đã hủy'){
-        editBtn.style.display = "none";
-      }
-      else{
-        editBtn.style.display='inline-block';
-      }
+      
+      updateTable(dsdonhang);
 
 
     });
