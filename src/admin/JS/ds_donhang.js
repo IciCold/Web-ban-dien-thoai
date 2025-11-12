@@ -38,13 +38,25 @@ function updateTable(data) {
       <td>${donhang.customer}</td>
       <td>${donhang.total.toLocaleString("vi-VN")}₫</td>
       <td>${donhang.deliveryAddress}</td>
-       <td>${donhang.status}</td>
+      <td class = "statuscell">${donhang.status}</td>
       <td>
         <div class="dh-actions">
           <button class="dh-details" data-id="${donhang.id}">Chi tiết</button>
         </div>
       </td>
     `;
+        const change = row.querySelector(".statuscell"); // row works but document doesnt, maybe scope error?
+        if (donhang.status === "đã giao") {
+          change.style.color = "green";
+        } else if (donhang.status === "đã hủy") {
+          change.style.color = "red";
+        } else if (donhang.status === "mới đặt") {
+          change.style.color = "yellow";
+        } else {
+          change.style.color = "orange";
+        }
+
+ 
     tbody.appendChild(row);
   });
 
