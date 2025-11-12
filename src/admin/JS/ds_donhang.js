@@ -1,3 +1,4 @@
+import { showalert } from "../../JS/alert.js";
 import { docdulieuLocalStorage, ghidulieuLocalStorage } from "./readandwrite.js";
 
 let dsdonhang = [];
@@ -359,7 +360,7 @@ function addRowEvents() {
         editBtn.style.display = "none";
       }
       // Cập nhật object đơn hàng
-      updateTable(dsdonhang);
+      
       dh.status = newStatus;
 
       // Cập nhật localStorage nếu bạn lưu ở đó
@@ -368,9 +369,9 @@ function addRowEvents() {
       // Cập nhật giao diện
       currentStatusSpan.textContent = newStatus;
 
+      updateTable(dsdonhang);
       
-      
-
+      showalert("Cập nhật thành công!","success");
 
     });
       //tiếp tục làm tìm kiếm
