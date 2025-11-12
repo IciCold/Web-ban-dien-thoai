@@ -221,7 +221,7 @@ function filterStatistics(originalStats, allOrders, productFilter, timeFilter, m
         // Lọc orders thực (không phải mẫu)
         let filteredOrders = allOrders.filter(order => !order.isSample);
         
-        // Filter theo thời gian
+        // Bước 1: Lọc đơn hàng theo thời gian (giữ nguyên)
         if (timeFilter !== 'all') {
             const now = new Date();
             filteredOrders = filteredOrders.filter(order => {
@@ -244,28 +244,32 @@ function filterStatistics(originalStats, allOrders, productFilter, timeFilter, m
             });
         }
         
-        // Filter theo doanh thu tối thiểu
-        if (minRevenue) {
-            const minAmount = parseInt(minRevenue);
-            if (!isNaN(minAmount)) {
-                // Lọc trên tổng tiền của đơn, bất kể trạng thái
-                filteredOrders = filteredOrders.filter(order => order.total >= minAmount);
-            }
-        }
+        // (Chúng ta đã XÓA bộ lọc doanh thu đơn hàng ở đây)
         
-        // Tính lại thống kê với orders đã lọc
-        // Đã thay thế bằng docdulieuLocalStorage
+        // Bước 2: Tính lại thống kê (bao gồm popularProducts)
+        // dựa trên các đơn hàng đã lọc theo thời gian
         const products = docdulieuLocalStorage('dataProducts');
         const users = docdulieuLocalStorage('users');
         
-        // Hàm calculateStatistics sẽ tự động xử lý logic "đã giao"
         let filteredStats = calculateStatistics(filteredOrders, products, users);
         
-        // Filter theo loại sản phẩm (best/worst)
+        // Bước 3: (THAY ĐỔI QUAN TRỌNG)
+        // Lọc doanh thu TỐI THIỂU trên danh sách SẢN PHẨM (popularProducts)
+        if (minRevenue) {
+            const minAmount = parseInt(minRevenue);
+            if (!isNaN(minAmount)) {
+                // Lọc trên 'product.revenue' thay vì 'order.total'
+                filteredStats.popularProducts = filteredStats.popularProducts.filter(
+                    product => product.revenue >= minAmount
+                );
+            }
+        }
+
+        // Bước 4: Lọc theo loại sản phẩm (best/worst)
+        // (Áp dụng sau khi đã lọc theo doanh thu)
         if (productFilter === 'best') {
             filteredStats.popularProducts = filteredStats.popularProducts.slice(0, 5);
         } else if (productFilter === 'worst') {
-            // Lọc sản phẩm có doanh thu thấp nhất nhưng vẫn có bán (từ đơn đã giao)
             filteredStats.popularProducts = filteredStats.popularProducts
                 .filter(p => p.quantity > 0)
                 .slice(-5)

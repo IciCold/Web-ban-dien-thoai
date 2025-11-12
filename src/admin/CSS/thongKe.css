@@ -105,8 +105,8 @@
     border-radius: 10px;
     border: 1px solid #dee2e6;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-    max-height: 300px;
-    overflow: hidden;
+    max-height: 360px;
+    overflow-y: auto;
 }
 
 .stats-filter-section label {
