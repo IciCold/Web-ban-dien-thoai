@@ -214,12 +214,19 @@
   font-weight: 600;
   font-size: 14px;
 }
-.filter-group input {
-  width: 100%; /* Input chiếm 100% chiều rộng của pop-up */
+
+/* SỬA 2: CSS cho cặp input "Từ" - "Đến" */
+.filter-range-inputs {
+  display: flex;
+  gap: 10px; /* Khoảng cách giữa 2 ô */
+}
+.filter-range-inputs input {
+  width: 50%; /* Chia đôi chiều rộng */
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
+
 
 .modal-actions {
   display: flex;

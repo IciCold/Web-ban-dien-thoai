@@ -488,7 +488,6 @@
               <select id="categoryFilter">
                 <option value="all">Tất cả hãng</option>
               </select>
-
               <div class="batch-update-group">
                 <input type="number" id="batchProfitInput" placeholder="Nhập % lợi nhuận">
                 <button type="button" id="btnApplyBatchProfit">Áp dụng cho toàn hãng</button>
@@ -522,25 +521,34 @@
             </div>
             <div class="modal-body">
               <div class="filter-group">
-                <label for="costFilterInput">Giá vốn từ (VNĐ):</label>
-                <input type="number" id="costFilterInput" placeholder="VD: 1000000" min="0">
+                <label for="costFilterInputMin">Giá vốn (VNĐ):</label>
+                <div class="filter-range-inputs">
+                  <input type="number" id="costFilterInputMin" placeholder="Từ" min="0">
+                  <input type="number" id="costFilterInputMax" placeholder="Đến" min="0">
+                </div>
               </div>
               <div class="filter-group">
-                <label for="profitFilter">Lợi nhuận từ (%):</label>
-                <input type="number" id="profitFilter" placeholder="VD: 0" min="0">
+                <label for="profitFilterMin">Lợi nhuận (%):</label>
+                <div class="filter-range-inputs">
+                  <input type="number" id="profitFilterMin" placeholder="Từ" min="0">
+                  <input type="number" id="profitFilterMax" placeholder="Đến" min="0">
+                </div>
               </div>
               <div class="filter-group">
-                <label for="priceFilterInput">Giá bán từ (VNĐ):</label>
-                <input type="number" id="priceFilterInput" placeholder="VD: 2000000" min="0">
+                <label for="priceFilterInputMin">Giá bán (VNĐ):</label>
+                <div class="filter-range-inputs">
+                  <input type="number" id="priceFilterInputMin" placeholder="Từ" min="0">
+                  <input type="number" id="priceFilterInputMax" placeholder="Đến" min="0">
+                </div>
               </div>
-            </div>
-            <div class="modal-actions">
-              <button type="button" id="btnResetSearchPopup" class="btn-reset">Xóa bộ lọc</button>
-              <button type="button" id="btnApplySearchPopup" class="btn-apply">Áp dụng</button>
+              <div class="modal-actions">
+                <button type="button" id="btnResetSearchPopup" class="btn-reset">Xóa bộ lọc</button>
+                <button type="button" id="btnApplySearchPopup" class="btn-apply">Áp dụng</button>
+              </div>
             </div>
           </div>
-        </div>
       </section>
+
       <!--QUẢN LÍ SỐ LƯỢNG TỒN-->
       <section id="ds_soLuongTon" class="page-section">
         <div class="inventory-wrapper">

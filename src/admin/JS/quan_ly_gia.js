@@ -7,11 +7,16 @@ import {
 let dsSanPham = [];
 const tableBody = document.querySelector("#ds_giaBan .price-table tbody");
 const categoryFilter = document.getElementById("categoryFilter");
-const costFilterInput = document.getElementById("costFilterInput");
-const profitFilter = document.getElementById("profitFilter");
-const priceFilterInput = document.getElementById("priceFilterInput");
 const batchProfitInput = document.getElementById("batchProfitInput");
 const btnApplyBatchProfit = document.getElementById("btnApplyBatchProfit");
+
+// SỬA 1: Lấy 6 ô input (Min và Max)
+const costFilterInputMin = document.getElementById("costFilterInputMin");
+const costFilterInputMax = document.getElementById("costFilterInputMax");
+const profitFilterMin = document.getElementById("profitFilterMin");
+const profitFilterMax = document.getElementById("profitFilterMax");
+const priceFilterInputMin = document.getElementById("priceFilterInputMin");
+const priceFilterInputMax = document.getElementById("priceFilterInputMax");
 
 // Lấy các phần tử của Pop-up
 const btnOpenSearchPopup = document.getElementById("btnOpenSearchPopup");
@@ -197,11 +202,12 @@ function addEventListeners() {
   });
 }
 
-// Xử lý lọc và tìm kiếm (Phiên bản Pop-up)
+// SỬA 2: Cập nhật khối xử lý sự kiện
 if (
   categoryFilter &&
   btnApplyBatchProfit &&
-  btnOpenSearchPopup
+  btnOpenSearchPopup &&
+  costFilterInputMin // Kiểm tra 1 ô đại diện là đủ
 ) {
   // Lọc hãng (vẫn như cũ, lọc ngay)
   categoryFilter.addEventListener("change", filterData);
@@ -235,29 +241,47 @@ if (
     togglePopup(false); // Đóng pop-up
   });
 
-  // Nút "Xóa bộ lọc" trong Pop-up
+  // SỬA 3: Cập nhật nút "Xóa bộ lọc"
   btnResetSearchPopup.addEventListener("click", () => {
-    costFilterInput.value = "";
-    profitFilter.value = "";
-    priceFilterInput.value = "";
+    costFilterInputMin.value = "";
+    costFilterInputMax.value = "";
+    profitFilterMin.value = "";
+    profitFilterMax.value = "";
+    priceFilterInputMin.value = "";
+    priceFilterInputMax.value = "";
+    
     filterData(); // Lọc lại với các ô trống
-    // Giữ pop-up mở để người dùng xem
   });
 }
 
-// Hàm filterData
+// SỬA 4: Cập nhật hàm filterData
 function filterData() {
   const category = categoryFilter.value;
-  const minCost = Number(costFilterInput.value) || 0;
-  const minProfit = Number(profitFilter.value) || 0;
-  const minPrice = Number(priceFilterInput.value) || 0;
+
+  // Lấy giá trị Min (nếu rỗng, mặc định là 0)
+  const minCost = Number(costFilterInputMin.value) || 0;
+  const minProfit = Number(profitFilterMin.value) || 0;
+  const minPrice = Number(priceFilterInputMin.value) || 0;
+
+  // Lấy giá trị Max (nếu rỗng, mặc định là Vô hạn)
+  const maxCost = costFilterInputMax.value === "" ? Infinity : Number(costFilterInputMax.value);
+  const maxProfit = profitFilterMax.value === "" ? Infinity : Number(profitFilterMax.value);
+  const maxPrice = priceFilterInputMax.value === "" ? Infinity : Number(priceFilterInputMax.value);
+
 
   const filteredData = dsSanPham.filter((sp) => {
+    // 1. Lọc Hãng
     const matchCategory = category === "all" || sp.brand === category;
-    const matchCost = sp.gia >= minCost;
+
+    // 2. Lọc Giá Vốn (trong khoảng Min - Max)
+    const matchCost = sp.gia >= minCost && sp.gia <= maxCost;
+
+    // 3. Lọc % Lợi nhuận
     const currentProfit = calculateProfit(sp.gia, sp.giaBan);
-    const matchProfit = currentProfit >= minProfit;
-    const matchPrice = sp.giaBan >= minPrice;
+    const matchProfit = currentProfit >= minProfit && currentProfit <= maxProfit;
+
+    // 4. Lọc Giá Bán
+    const matchPrice = sp.giaBan >= minPrice && sp.giaBan <= maxPrice;
 
     return matchCategory && matchCost && matchProfit && matchPrice;
   });
@@ -265,7 +289,7 @@ function filterData() {
   renderTable(filteredData);
 }
 
-// Thêm hàm mới để xử lý cập nhật hàng loạt
+// Hàm applyBatchProfit (GIỮ NGUYÊN)
 function applyBatchProfit() {
   const selectedBrand = categoryFilter.value;
   const newProfit = Number(batchProfitInput.value);
