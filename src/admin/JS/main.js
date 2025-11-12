@@ -1,7 +1,7 @@
 import "./ds_sanpham.js";
 import "./nhaphang.js";
 import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
-import { loadStatistics, seedOrderData } from "./thongke.js";
+import { loadStatistics } from "./thongke.js";
 import "./login.js";
 import "./logout.js";
 import "./ds_donhang.js";
@@ -79,7 +79,6 @@ function showPage() {
         }
         if (subPage.id === "thongKe") {
           console.log("Loading statistics data...");
-          seedOrderData();
           loadStatistics();
         }
       }, 100);

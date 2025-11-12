@@ -1,6 +1,8 @@
 // thongKe.js
 
 import { showalert } from "../../JS/alert.js";
+// Thêm import cho các hàm đọc/ghi
+import { docdulieuLocalStorage, ghidulieuLocalStorage } from "./readandwrite.js";
 
 export function loadStatistics() {
     const statsSection = document.getElementById('thongKe');
@@ -9,9 +11,10 @@ export function loadStatistics() {
     // Lấy dữ liệu từ localStorage với error handling
     let orders, products, users;
     try {
-        orders = JSON.parse(localStorage.getItem('orders')) || [];
-        products = JSON.parse(localStorage.getItem('products')) || [];
-        users = JSON.parse(localStorage.getItem('users')) || [];
+        // Đã thay thế bằng docdulieuLocalStorage
+        orders = docdulieuLocalStorage('orders');
+        products = docdulieuLocalStorage('dataProducts');
+        users = docdulieuLocalStorage('users');
     } catch (error) {
         console.error('Lỗi khi đọc dữ liệu từ localStorage:', error);
         orders = [];
@@ -31,52 +34,54 @@ export function loadStatistics() {
 
 function calculateStatistics(orders, products, users) {
     try {
-        // Lọc orders thực (bỏ qua dữ liệu mẫu)
+        // Lọc orders thực (bỏ qua dữ liệu mẫu) - Dùng cho thống kê chung
         const realOrders = orders.filter(order => !order.isSample);
         
-        // Tổng doanh thu từ orders thực
-        const totalRevenue = realOrders.reduce((sum, order) => {
-            // Đảm bảo order.total là số
+        // Lọc orders ĐÃ GIAO để tính doanh thu
+        const deliveredOrders = realOrders.filter(order => order.status === "đã giao");
+
+        // Tổng doanh thu TỪ ĐƠN ĐÃ GIAO
+        const totalRevenue = deliveredOrders.reduce((sum, order) => {
             const orderTotal = typeof order.total === 'number' ? order.total : 0;
             return sum + orderTotal;
         }, 0);
         
-        // Tổng số đơn hàng thực
+        // Tổng số đơn hàng thực (TẤT CẢ TRẠNG THÁI)
         const totalOrders = realOrders.length;
         
-        // Tổng số khách hàng đã mua hàng (từ orders thực)
+        // Tổng số khách hàng đã mua hàng (TẤT CẢ TRẠNG THÁI)
         const uniqueCustomers = [...new Set(realOrders.map(order => order.customer))];
         const totalCustomers = uniqueCustomers.length;
         
         // Tổng số sản phẩm trong hệ thống
         const totalProducts = Array.isArray(products) ? products.length : 0;
         
-        // Đơn hàng theo trạng thái
+        // Đơn hàng theo trạng thái (TỪ TẤT CẢ ĐƠN)
         const ordersByStatus = realOrders.reduce((acc, order) => {
-            const status = order.status || 'unknown';
+            const status = order.status || 'mới đặt'; 
             acc[status] = (acc[status] || 0) + 1;
             return acc;
         }, {});
         
-        // Sản phẩm bán chạy
-        const popularProducts = calculatePopularProducts(realOrders);
+        // Sản phẩm bán chạy (TỪ ĐƠN ĐÃ GIAO)
+        const popularProducts = calculatePopularProducts(deliveredOrders);
         
-        // Doanh thu theo tháng
-        const revenueByMonth = calculateRevenueByMonth(realOrders);
+        // Doanh thu theo tháng (TỪ ĐƠN ĐÃ GIAO)
+        const revenueByMonth = calculateRevenueByMonth(deliveredOrders);
         
         // Thêm số liệu về user đăng ký
         const registeredUsers = Array.isArray(users) ? users.filter(user => user.role !== 'admin').length : 0;
         
         return {
-            totalRevenue,
-            totalOrders,
-            totalCustomers,
+            totalRevenue,      // (Chỉ từ đơn đã giao)
+            totalOrders,       // (Tổng)
+            totalCustomers,    // (Tổng)
             totalProducts,
             registeredUsers,
-            ordersByStatus,
-            popularProducts,
-            revenueByMonth,
-            realOrders // Thêm realOrders để filter
+            ordersByStatus,    // (Tổng)
+            popularProducts,   // (Chỉ từ đơn đã giao)
+            revenueByMonth,    // (Chỉ từ đơn đã giao)
+            realOrders         // (Tổng, dùng cho filter)
         };
     } catch (error) {
         console.error('Lỗi khi tính toán thống kê:', error);
@@ -84,6 +89,7 @@ function calculateStatistics(orders, products, users) {
     }
 }
 
+// Hàm này nhận vào danh sách orders (đã được lọc, vd: chỉ đơn đã giao)
 function calculatePopularProducts(orders) {
     const productSales = {};
     
@@ -114,6 +120,7 @@ function calculatePopularProducts(orders) {
         .slice(0, 10);
 }
 
+// Hàm này nhận vào danh sách orders (đã được lọc, vd: chỉ đơn đã giao)
 function calculateRevenueByMonth(orders) {
     const monthlyRevenue = {};
     
@@ -145,14 +152,14 @@ function displayStatistics(stats) {
     
     if (!tableBody || !statsResult) return;
     
-    // Hiển thị bảng thống kê
+    // Hiển thị bảng thống kê (sản phẩm bán chạy từ đơn đã giao)
     tableBody.innerHTML = '';
     
     if (stats.popularProducts.length === 0) {
         tableBody.innerHTML = `
             <tr>
                 <td colspan="5" style="text-align: center; padding: 20px; color: #666;">
-                    Chưa có dữ liệu thống kê. Hãy thực hiện một vài giao dịch!
+                    Chưa có đơn hàng nào được giao thành công.
                 </td>
             </tr>
         `;
@@ -170,17 +177,20 @@ function displayStatistics(stats) {
         });
     }
     
-    // Hiển thị kết quả tổng quan
+    // Cập nhật nhãn trạng thái và làm rõ các số liệu
     statsResult.innerHTML = `
         <h3 class="stats-subtitle">📊 Tổng quan hệ thống</h3>
-        <p><strong>💰 Tổng doanh thu:</strong> ${formatVND(stats.totalRevenue)}</p>
-        <p><strong>📦 Tổng đơn hàng:</strong> ${stats.totalOrders}</p>
-        <p><strong>👥 Khách hàng đã mua:</strong> ${stats.totalCustomers}</p>
+        <p><strong>💰 Tổng doanh thu (từ đơn đã giao):</strong> ${formatVND(stats.totalRevenue)}</p>
+        <p><strong>📦 Tổng đơn hàng (mọi trạng thái):</strong> ${stats.totalOrders}</p>
+        <p><strong>👥 Khách hàng (đã đặt hàng):</strong> ${stats.totalCustomers}</p>
         <p><strong>👤 Tổng user đăng ký:</strong> ${stats.registeredUsers}</p>
         <p><strong>📱 Tổng sản phẩm:</strong> ${stats.totalProducts}</p>
-        <p><strong>✅ Đơn hàng thành công:</strong> ${stats.ordersByStatus.completed || 0}</p>
-        <p><strong>⏳ Đang xử lý:</strong> ${stats.ordersByStatus.pending || 0}</p>
-        <p><strong>❌ Đơn hủy:</strong> ${stats.ordersByStatus.cancelled || 0}</p>
+        <br>
+        <p><strong>Trạng thái đơn hàng:</strong></p>
+        <p><strong>✅ Đã giao:</strong> ${stats.ordersByStatus["đã giao"] || 0}</p>
+        <p><strong>⏳ Mới đặt:</strong> ${stats.ordersByStatus["mới đặt"] || 0}</p>
+        <p><strong>🚚 Đã xử lý (đang giao):</strong> ${stats.ordersByStatus["đã xử lý"] || 0}</p>
+        <p><strong>❌ Đã hủy:</strong> ${stats.ordersByStatus["đã hủy"] || 0}</p>
     `;
     
     // Gắn sự kiện cho nút chi tiết
@@ -208,7 +218,7 @@ function setupFilterForm(originalStats, allOrders) {
 
 function filterStatistics(originalStats, allOrders, productFilter, timeFilter, minRevenue) {
     try {
-        // Lọc orders thực
+        // Lọc orders thực (không phải mẫu)
         let filteredOrders = allOrders.filter(order => !order.isSample);
         
         // Filter theo thời gian
@@ -238,20 +248,24 @@ function filterStatistics(originalStats, allOrders, productFilter, timeFilter, m
         if (minRevenue) {
             const minAmount = parseInt(minRevenue);
             if (!isNaN(minAmount)) {
+                // Lọc trên tổng tiền của đơn, bất kể trạng thái
                 filteredOrders = filteredOrders.filter(order => order.total >= minAmount);
             }
         }
         
         // Tính lại thống kê với orders đã lọc
-        const products = JSON.parse(localStorage.getItem('products')) || [];
-        const users = JSON.parse(localStorage.getItem('users')) || [];
+        // Đã thay thế bằng docdulieuLocalStorage
+        const products = docdulieuLocalStorage('dataProducts');
+        const users = docdulieuLocalStorage('users');
+        
+        // Hàm calculateStatistics sẽ tự động xử lý logic "đã giao"
         let filteredStats = calculateStatistics(filteredOrders, products, users);
         
         // Filter theo loại sản phẩm (best/worst)
         if (productFilter === 'best') {
             filteredStats.popularProducts = filteredStats.popularProducts.slice(0, 5);
         } else if (productFilter === 'worst') {
-            // Lọc sản phẩm có doanh thu thấp nhất nhưng vẫn có bán
+            // Lọc sản phẩm có doanh thu thấp nhất nhưng vẫn có bán (từ đơn đã giao)
             filteredStats.popularProducts = filteredStats.popularProducts
                 .filter(p => p.quantity > 0)
                 .slice(-5)
@@ -276,8 +290,12 @@ function attachDetailsEvents() {
 }
 
 function showProductDetails(productName) {
-    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    // Đã thay thế bằng docdulieuLocalStorage
+    const orders = docdulieuLocalStorage('orders');
+    
+    // Chi tiết cũng chỉ nên tính trên các đơn ĐÃ GIAO
     const productOrders = orders.filter(order => 
+        order.status === "đã giao" &&
         order.products && order.products.some(p => p.name === productName)
     );
     
@@ -291,14 +309,17 @@ function showProductDetails(productName) {
         return sum + ((product?.price || 0) * (product?.quantity || 0));
     }, 0);
     
-    showalert(`📊 Chi tiết sản phẩm: ${productName}
-📦 Số đơn hàng: ${productOrders.length}
-🛒 Số lượng bán: ${totalSold}
-💰 Doanh thu: ${formatVND(totalRevenue)}
+    showalert(`📊 Chi tiết sản phẩm (Đã giao): ${productName}
+📦 Số đơn hàng (đã giao): ${productOrders.length}
+🛒 Số lượng bán (đã giao): ${totalSold}
+💰 Doanh thu (đã giao): ${formatVND(totalRevenue)}
 👥 Khách hàng: ${[...new Set(productOrders.map(order => order.customer))].length}`);
 }
 
 function formatVND(amount) {
+    if (typeof amount !== 'number') {
+        amount = 0;
+    }
     return new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND'
@@ -317,18 +338,4 @@ function getDefaultStats() {
         revenueByMonth: {},
         realOrders: []
     };
-}
-
-export function seedOrderData() {
-    if (localStorage.getItem('orders')) return;
-    localStorage.setItem('orders', JSON.stringify(sampleOrders));
-    console.log('Đã tạo dữ liệu đơn hàng mẫu!');
-}
-
-// Hàm để xóa dữ liệu mẫu (dùng cho testing)
-export function clearSampleData() {
-    const orders = JSON.parse(localStorage.getItem('orders')) || [];
-    const realOrders = orders.filter(order => !order.isSample);
-    localStorage.setItem('orders', JSON.stringify(realOrders));
-    console.log('Đã xóa dữ liệu mẫu!');
 }
