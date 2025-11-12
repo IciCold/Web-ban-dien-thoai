@@ -200,8 +200,7 @@
               <h2 class="sp-subtitle">Tìm kiếm sản phẩm</h2>
               <form class="sp-search-form">
                 <input id="timten" type="text" placeholder="Tên sản phẩm">
-                <input id="timbrand" type="text" placeholder="Thương hiệu" list="search-type-list">
-                <datalist id="search-type-list"></datalist>
+                <select id="timbrand"><option value="">-- Tất cả thương hiệu --</option></select>
                 <button id="timbtn">Tìm</button>
               </form>
             </div>
@@ -212,8 +211,8 @@
               <form class="sp-add-form" id="product-form">
                 <input id="tensp" type="text" placeholder="Tên sản phẩm" required list="product-names">
                 <datalist id="product-names"></datalist>
-                <input type="text" id="brand" placeholder="Thương hiệu" required list="brand-list">
-                <datalist id="brand-list"></datalist>
+                <select id="brand" required>
+                <option value="">Thương hiệu</option></select>
                 <input id="size" type="text" placeholder="Kích thước" list="size-list">
                 <datalist id="size-list"></datalist>
                 <input id="color" type="text" placeholder="Màu" list="color-list">

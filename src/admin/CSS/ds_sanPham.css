@@ -515,3 +515,28 @@
 .btn-show:hover {
   background-color: #218838;
 }
+
+/* Style cho select */
+.sp-add-form select,
+.sp-search-form select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 440px;
+    margin-bottom: 15px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.sp-search-form select {
+    width: 610px;
+}
+
+/* Hiệu ứng focus */
+.sp-add-form select:focus,
+.sp-search-form select:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 5px rgba(78, 115, 223, 0.3);
+    outline: none;
+}

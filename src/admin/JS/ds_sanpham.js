@@ -42,6 +42,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     });
     ghidulieuLocalStorage("dataProducts", datalist);
   }
+  updateBrandSelects();
 
   if (datalist.length) {
     const nums = datalist.map(sp => parseInt(String(sp.id).slice(1), 10));
@@ -151,7 +152,10 @@ function saveProduct({ten, brand, mau_sac = "", camera = "", cpu = "", bo_nho = 
   ghidulieuLocalStorage("dataProducts", datalist);
 
   // Reset form
-  ["tensp","brand","color","camera","cpu","memory","ram","battery","size"].forEach(id => document.getElementById(id).value = "");
+  ["tensp","color","camera","cpu","memory","ram","battery","size"].forEach(id => document.getElementById(id).value = "");
+  // Reset select thương hiệu
+  const brandSelect = document.getElementById('brand');
+  if (brandSelect) brandSelect.value = "";
   image.value = "";
   preview.src = "";
   themsanpham.textContent = "Thêm";
@@ -228,7 +232,10 @@ function updateBang() {
     // --- Nút sửa ---
     row.querySelector(".sp-edit").addEventListener("click", () => {
       tenspinp.value = item.ten;
-      thuonghieuinp.value = item.brand;
+      const brandSelect = document.getElementById('brand');
+      if (brandSelect) {
+          brandSelect.value = item.brand || '';
+      }
     
       document.getElementById("color").value = item.mau_sac || "";
       document.getElementById("size").value = item.kich_thuoc || "";
@@ -298,7 +305,8 @@ tim.addEventListener("click", e => {
 
 function timkiem() {
   const ten = timten.value.trim().toLowerCase();
-  const brand = timbrand.value.trim().toLowerCase();
+  const brandSelect = document.getElementById('timbrand');
+  const brand = brandSelect ? brandSelect.value : '';
 
   if (!ten && !brand) {
     updateBang();
@@ -307,7 +315,7 @@ function timkiem() {
 
   const filtered = datalist.filter(sp => {
     const matchTen = ten ? sp.ten.toLowerCase().includes(ten) : true;
-    const matchBrand = brand ? (sp.brand || "").toLowerCase().includes(brand) : true;
+    const matchBrand = brand ? (sp.brand || "") === brand : true;
     return matchTen && matchBrand;
   });
 
@@ -369,7 +377,10 @@ function displayFilteredTable(filteredList) {
     // --- Nút sửa ---
     row.querySelector(".sp-edit").addEventListener("click", () => {
       tenspinp.value = item.ten;
-      thuonghieuinp.value = item.brand;    
+      const brandSelect = document.getElementById('brand');
+      if (brandSelect) {
+          brandSelect.value = item.brand || '';
+      }    
 
       document.getElementById("color").value = item.mau_sac || "";
       document.getElementById("size").value = item.kich_thuoc || "";
@@ -435,9 +446,10 @@ Pin: ${item.dung_luong_pin || "-"}
 // ==============================
 function populateDatalists() {
   if (!datalist || datalist.length === 0) return;
-  
+  updateBrandSelects();
+
   // Lấy tất cả các giá trị duy nhất từ danh sách sản phẩm
-  const brands = [...new Set(datalist.map(sp => sp.brand).filter(Boolean))];
+  //const brands = [...new Set(datalist.map(sp => sp.brand).filter(Boolean))];
   const sizes = [...new Set(datalist.map(sp => sp.kich_thuoc).filter(Boolean))];
   //const types = [...new Set(datalist.map(sp => sp.loai).filter(Boolean))];
   const colors = [...new Set(datalist.map(sp => sp.mau_sac).filter(Boolean))];
@@ -461,7 +473,7 @@ function populateDatalists() {
   };
   
   // Điền dữ liệu vào các datalist
-  populateList('brand-list', brands);
+  //populateList('brand-list', brands);
   populateList('size-list', sizes);
   //populateList('type-list', types);
   populateList('color-list', colors);
@@ -679,7 +691,7 @@ function removeCancelButton() {
 function resetProductForm() {
   // Reset các trường input
   const fieldsToReset = [
-    "tensp", "brand", "color", "camera", "cpu", 
+    "tensp", "color", "camera", "cpu", 
     "memory", "ram", "battery", "size"
   ];
   
@@ -687,7 +699,11 @@ function resetProductForm() {
     const element = document.getElementById(id);
     if (element) element.value = "";
   });
-  
+  // Reset select thương hiệu
+  const brandSelect = document.getElementById('brand');
+  if (brandSelect) {
+      brandSelect.value = "";
+  }
   // Reset ảnh
   const imageInput = document.getElementById("revenue1");
   const preview = document.getElementById("preview");
@@ -730,14 +746,38 @@ function updateSearchDatalists() {
   const searchBrands = [...new Set(datalist.map(sp => sp.brand).filter(Boolean))];
   
   // Cập nhật datalist cho ô tìm kiếm thương hiệu
-  const searchTypeDatalist = document.getElementById('search-type-list');
-  if (searchTypeDatalist) {
-    searchTypeDatalist.innerHTML = '';
+  const searchBrandSelect = document.getElementById('timbrand');
+  if (searchBrandSelect) {
+    // Lưu giá trị đang được chọn (nếu có)
+    const currentValue = searchBrandSelect.value;
+    
+    // Xóa tất cả options trừ option đầu tiên
+    const firstOption = searchBrandSelect.querySelector('option[value=""]');
+    searchBrandSelect.innerHTML = '';
+    
+    // Thêm lại option đầu tiên (Tất cả thương hiệu)
+    if (firstOption) {
+      searchBrandSelect.appendChild(firstOption);
+    } else {
+      // Nếu không có option đầu tiên, tạo mới
+      const defaultOption = document.createElement('option');
+      defaultOption.value = "";
+      defaultOption.textContent = "-- Tất cả thương hiệu --";
+      searchBrandSelect.appendChild(defaultOption);
+    }
+    
+    // Thêm các thương hiệu vào select
     searchBrands.forEach(brand => {
       const option = document.createElement('option');
       option.value = brand;
-      searchTypeDatalist.appendChild(option);
+      option.textContent = brand;
+      searchBrandSelect.appendChild(option);
     });
+    
+    // Khôi phục giá trị đang được chọn (nếu vẫn tồn tại)
+    if (currentValue && searchBrands.includes(currentValue)) {
+      searchBrandSelect.value = currentValue;
+    }
   }
 }
 // ==============================
@@ -834,4 +874,47 @@ function removeStatusToggle() {
   if (statusGroup) {
     statusGroup.remove();
   }
+}
+// ==============================
+//  HÀM CẬP NHẬT SELECT THƯƠNG HIỆU
+// ==============================
+function updateBrandSelects() {
+    if (!datalist || datalist.length === 0) return;
+    
+    // Lấy danh sách thương hiệu duy nhất
+    const brands = [...new Set(datalist.map(sp => sp.brand).filter(Boolean))];
+    
+    // Cập nhật select thêm/sửa sản phẩm
+    const brandSelect = document.getElementById('brand');
+    if (brandSelect) {
+        // Giữ lại option đầu tiên
+        const firstOption = brandSelect.querySelector('option[value=""]');
+        brandSelect.innerHTML = '';
+        if (firstOption) brandSelect.appendChild(firstOption);
+        
+        // Thêm các thương hiệu
+        brands.forEach(brand => {
+            const option = document.createElement('option');
+            option.value = brand;
+            option.textContent = brand;
+            brandSelect.appendChild(option);
+        });
+    }
+    
+    // Cập nhật select tìm kiếm
+    const searchBrandSelect = document.getElementById('timbrand');
+    if (searchBrandSelect) {
+        // Giữ lại option đầu tiên
+        const firstSearchOption = searchBrandSelect.querySelector('option[value=""]');
+        searchBrandSelect.innerHTML = '';
+        if (firstSearchOption) searchBrandSelect.appendChild(firstSearchOption);
+        
+        // Thêm các thương hiệu
+        brands.forEach(brand => {
+            const option = document.createElement('option');
+            option.value = brand;
+            option.textContent = brand;
+            searchBrandSelect.appendChild(option);
+        });
+    }
 }
