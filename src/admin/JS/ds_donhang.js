@@ -4,11 +4,6 @@ let dsdonhang = [];
 
 const formSearch = document.querySelector(".dh-search-form");
 
-//Tải dữ liệu khi có sự thay đổi localStorage
-window.addEventListener("storage",(e) => {
-  if(e.key === "orders") dsdonhang = docdulieuLocalStorage("orders");
-  return;
-})
 // Tải dữ liệu đơn hàng khi trang load
 window.addEventListener("DOMContentLoaded", () => {
   dsdonhang = docdulieuLocalStorage("orders") || [];
@@ -36,6 +31,7 @@ export function updateTable(data) {
   data.forEach((donhang) => {
     const row = document.createElement("tr");
 
+    
 
     row.innerHTML = `
       <td>${new Date(donhang.date).toLocaleDateString("vi-VN")}</td>
@@ -209,8 +205,7 @@ function addRowEvents() {
 
   // ====== CHI TIẾT ======
   btnDetail.forEach((btn) => {
-      btn.addEventListener("click", () => {
-      
+    btn.addEventListener("click", () => {
       const id = btn.dataset.id;
       const dh = dsdonhang.find(d => d.id === id);
       if(!dh) return;
@@ -351,13 +346,18 @@ function addRowEvents() {
         const check = "Bạn có chắc chắn là đã giao hàng chưa?";
         if(!confirm(check)) return;
         capNhatTonKhoKhiGiaoHang(dh,true);
+        statusForm.style.display = 'none';
+        editBtn.style.display = "none";
       }
       else if(newStatus==="đã hủy"){
         const check = "Bạn có chắc chắn là hủy đơn hàng không?";
         if(!confirm(check)) return;
         capNhatTonKhoKhiGiaoHang(dh,false);
+        statusForm.style.display = 'none';
+        editBtn.style.display = "none";
       }
       // Cập nhật object đơn hàng
+      updateTable(dsdonhang);
       dh.status = newStatus;
 
       // Cập nhật localStorage nếu bạn lưu ở đó
@@ -367,7 +367,7 @@ function addRowEvents() {
       currentStatusSpan.textContent = newStatus;
 
       
-      updateTable(dsdonhang);
+      
 
 
     });
@@ -482,6 +482,7 @@ search.addEventListener("submit", e => {
   });
   updateTable(filtered);
 });
+
 // RESET BỘ LỌC
 const btnReset = document.getElementById("resetFilter");
 btnReset.addEventListener("click", () => {
