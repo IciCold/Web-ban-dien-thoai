@@ -72,8 +72,11 @@
   border-radius: 5px;
 }
 
+/* Style này sẽ tự động áp dụng cho các bộ lọc mới */
 .inventory-filters input[type="text"],
 .inventory-filters select,
+.report-filters input[type="text"], 
+.report-filters select,
 .report-filters input[type="date"] {
   padding: 8px 10px;
   border: 1px solid #ccc;
@@ -88,16 +91,40 @@
   border-radius: 4px;
 }
 
-.report-filters button,
-#btn-generate-report {
+/* Style cho nút icon cái phễu (nếu còn dùng) */
+.filter-icon-btn {
+  padding: 8px 12px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.filter-icon-btn:hover {
+  background-color: #eee;
+}
+
+/* Style cho nút mở popup báo cáo */
+#btnOpenReportDatePopup {
   padding: 8px 15px;
-  background-color: var(--color-success);
+  background-color: var(--color-primary);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-weight: 600;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
+#btnOpenReportDatePopup:hover {
+  background-color: #0056b3;
+}
+
 
 /* --- Tables --- */
 .inventory-table-container,
@@ -151,4 +178,140 @@
   padding: 30px;
   color: #888;
   font-style: italic;
+}
+
+/* CSS cho nút sắp xếp */
+.sortable-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+}
+
+.sort-buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.sort-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  color: #ccc; /* Màu mờ mặc định */
+  line-height: 1;
+  font-size: 1.2em; /* Tăng kích thước icon */
+}
+
+.sort-btn:hover {
+  color: #888; /* Màu khi hover */
+}
+
+.sort-btn.active {
+  color: var(--color-primary); /* Màu khi được chọn */
+}
+
+
+/* --- CSS CHO POP-UP MỚI (Dùng cho Báo Cáo) --- */
+.modal-overlay {
+  display: none; /* Ẩn mặc định */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-popup {
+  display: none; /* Ẩn mặc định */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 400px; /* Tăng chiều rộng 1 chút cho input date */
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  overflow: hidden;
+}
+
+/* Lớp 'show' để hiện pop-up (sẽ được thêm bằng JS) */
+.modal-overlay.show,
+.modal-popup.show {
+  display: block;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+}
+.modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.modal-body {
+  padding: 20px;
+}
+.filter-group {
+  margin-bottom: 15px;
+}
+.filter-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.filter-group input {
+  width: 100%; /* Input chiếm 100% chiều rộng của pop-up */
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px 20px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #eee;
+  gap: 10px;
+}
+.modal-actions button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-reset {
+  background-color: #ddd;
+  color: #333;
+}
+.btn-reset:hover {
+  background-color: #ccc;
+}
+.btn-apply {
+  background-color: var(--color-primary); /* Sử dụng màu primary */
+  color: white;
+}
+.btn-apply:hover {
+  background-color: #0056b3;
 }

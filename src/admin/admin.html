@@ -175,7 +175,7 @@
         <h1>Chào mừng tới giao diện admin</h1>
         <h2>Hãy chọn các nút bên trái để bắt đầu</h2>
       </section>
-  <!--DANH SÁCH SẢN PHẨM-->
+      <!--DANH SÁCH SẢN PHẨM-->
       <section id="ds_sanPham" class="page-section">
         <div id="sp-wrapper">
           <div id="sp-left">
@@ -200,7 +200,9 @@
               <h2 class="sp-subtitle">Tìm kiếm sản phẩm</h2>
               <form class="sp-search-form">
                 <input id="timten" type="text" placeholder="Tên sản phẩm">
-                <select id="timbrand"><option value="">-- Tất cả thương hiệu --</option></select>
+                <select id="timbrand">
+                  <option value="">-- Tất cả thương hiệu --</option>
+                </select>
                 <button id="timbtn">Tìm</button>
               </form>
             </div>
@@ -212,7 +214,8 @@
                 <input id="tensp" type="text" placeholder="Tên sản phẩm" required list="product-names">
                 <datalist id="product-names"></datalist>
                 <select id="brand" required>
-                <option value="">Thương hiệu</option></select>
+                  <option value="">Thương hiệu</option>
+                </select>
                 <input id="size" type="text" placeholder="Kích thước" list="size-list">
                 <datalist id="size-list"></datalist>
                 <input id="color" type="text" placeholder="Màu" list="color-list">
@@ -265,37 +268,37 @@
           <div id="dh-right">
             <div class="dh-search-box">
               <h2 class="dh-subtitle">Tìm kiếm đơn hàng</h2>
-              <form class = "dh-search-options">
+              <form class="dh-search-options">
                 <select>
-                  <option value = "Date">Tìm kiếm theo ngày</option>
-                  <option value = "Status">Tìm kiếm theo trạng thái</option>
-                  <option value = "Both">Tìm kiếm theo ngày và trạng thái</option>
+                  <option value="Date">Tìm kiếm theo ngày</option>
+                  <option value="Status">Tìm kiếm theo trạng thái</option>
+                  <option value="Both">Tìm kiếm theo ngày và trạng thái</option>
                 </select>
               </form>
-              
+
               <form class="dh-search">
 
-                <div id = "date-search">
-                <p>Từ ngày:</p>
-                <input type="date" placeholder="Từ ngày" />
-                <p>Đến ngày:</p>
-                <input type="date" placeholder="Đến ngày" />
+                <div id="date-search">
+                  <p>Từ ngày:</p>
+                  <input type="date" placeholder="Từ ngày" />
+                  <p>Đến ngày:</p>
+                  <input type="date" placeholder="Đến ngày" />
                 </div>
-                
-                <div id = "status-search">
-                <select>
-                  <option value="" id='blank'>— Chọn trạng thái —</option>
-                  <option value="mới đặt">Mới đặt</option>
-                  <option value="đã xử lý">Đã xử lý</option>
-                  <option value="đã giao">Đã giao</option>
-                  <option value="đã hủy">Đã Hủy</option>
-                </select>
+
+                <div id="status-search">
+                  <select>
+                    <option value="" id='blank'>— Chọn trạng thái —</option>
+                    <option value="mới đặt">Mới đặt</option>
+                    <option value="đã xử lý">Đã xử lý</option>
+                    <option value="đã giao">Đã giao</option>
+                    <option value="đã hủy">Đã Hủy</option>
+                  </select>
                 </div>
-              
+
                 <button type="submit">Tìm</button>
                 <button type="button" id="resetFilter">Reset bộ lọc</button>
               </form>
-              
+
 
             </div>
           </div>
@@ -336,7 +339,7 @@
           </div>
         </div>
       </section>
-      
+
       <!--=============THỐNG KÊ===============-->
       <section id="thongKe" class="page-section">
         <div class="stats-wrapper">
@@ -478,7 +481,7 @@
           </div>
         </div>
       </section>
-      
+
       <!--QUẢN LÍ GIÁ BÁN-->
       <section id="ds_giaBan" class="page-section">
         <div class="price-management-wrapper">
@@ -565,20 +568,35 @@
           <div id="inventory-current-stock" class="inventory-view view-active">
             <div class="inventory-filters">
               <input type="text" id="inv-search" placeholder="Tìm theo tên sản phẩm..." />
-              <select id="inv-category-filter">
-                <option value="all">Tất cả loại</option>
+
+              <select id="inv-brand-filter">
+                <option value="all">Tất cả hãng</option>
               </select>
-              <label for="inv-threshold">Ngưỡng cảnh báo (sắp hết):</label>
+
+              <label for="inv-threshold">Ngưỡng cảnh báo:</label>
               <input type="number" id="inv-threshold" value="5" min="0" />
             </div>
+
             <div class="inventory-table-container">
               <table class="inventory-table">
                 <thead>
                   <tr>
                     <th>ID</th>
                     <th>Tên Sản Phẩm</th>
-                    <th>Loại</th>
-                    <th>Số Lượng Tồn</th>
+                    <th>Hãng</th>
+                    <th>
+                      <div class="sortable-header">
+                        <span>Số Lượng Tồn</span>
+                        <div class="sort-buttons">
+                          <button id="btn-sort-stock-asc" class="sort-btn" title="Sắp xếp tăng dần">
+                            <i class="fas fa-sort-up"></i>
+                          </button>
+                          <button id="btn-sort-stock-desc" class="sort-btn" title="Sắp xếp giảm dần">
+                            <i class="fas fa-sort-down"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </th>
                     <th>Trạng Thái</th>
                   </tr>
                 </thead>
@@ -590,11 +608,16 @@
 
           <div id="inventory-report" class="inventory-view">
             <div class="report-filters">
-              <label for="report-start-date">Từ ngày:</label>
-              <input type="date" id="report-start-date" />
-              <label for="report-end-date">Đến ngày:</label>
-              <input type="date" id="report-end-date" />
-              <button id="btn-generate-report">Xem Báo Cáo</button>
+
+              <input type="text" id="report-search-product" placeholder="Tìm theo tên sản phẩm...">
+
+              <select id="report-brand-filter">
+                <option value="all">Tất cả hãng</option>
+              </select>
+
+              <button id="btnOpenReportDatePopup" class="btn-apply">
+                <i class="fas fa-calendar-alt"></i> Lọc theo ngày
+              </button>
             </div>
             <div class="report-table-container">
               <table class="report-table">
@@ -613,10 +636,32 @@
             </div>
           </div>
         </div>
+
+
+        <div id="reportDateFilterOverlay" class="modal-overlay"></div>
+        <div id="reportDateFilterPopup" class="modal-popup">
+          <div class="modal-header">
+            <h2>Lọc Báo Cáo Theo Ngày</h2>
+            <button id="btnCloseReportDatePopup" class="modal-close">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="filter-group">
+              <label for="report-start-date">Từ ngày:</label>
+              <input type="date" id="report-start-date">
+            </div>
+            <div class="filter-group">
+              <label for="report-end-date">Đến ngày:</label>
+              <input type="date" id="report-end-date">
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" id="btnResetReportDateFilter" class="btn-reset">Xóa lọc</button>
+            <button type="button" id="btnApplyReportDateFilter" class="btn-apply">Xem Báo Cáo</button>
+          </div>
+        </div>
+
       </section>
-    </div>
-  </section>
-  <div id="alert-normal"></div>
+      <div id="alert-normal"></div>
 </body>
 
 </html>
