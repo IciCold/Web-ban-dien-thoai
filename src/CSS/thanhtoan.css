@@ -1,14 +1,19 @@
+/* =================================================================== */
+/* === PHẦN 1: GIAO DIỆN CHÍNH CỦA TRANG THANH TOÁN === */
+/* =================================================================== */
+
+/* Khung lớn nhất bao bọc toàn bộ trang thanh toán */
 .container.payment-section {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    min-height: 100vh; /* Chiều cao tối thiểu bằng màn hình */
     color: black;
     width: auto;
-    /* Thêm padding để form không dính sát mép khi zoom */
-    padding: 20px;
+    padding: 20px; /* Thêm padding để không dính mép */
 }
 
+/* Đây là cái FORM màu xanh nhạt (d5ddfc) chứa toàn bộ nội dung */
 .payment-form {
     display: flex;
     flex-direction: column;
@@ -21,7 +26,7 @@
     box-shadow: 0px 10px 30px #0000001a;
 }
 
-/* Tiêu đề lớn "Thanh toán" */
+/* Tiêu đề lớn "Thanh toán" ở trên cùng */
 .payment-title {
     width: 100%;
     text-align: center;
@@ -31,16 +36,16 @@
     letter-spacing: 1px;
 }
 
-/* Khung lưới chính chứa tóm tắt và thông tin thanh toán */
+/* Khung LƯỚI CHÍNH chia trang thành 2 cột */
 .payment-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    grid-template-columns: 1fr 1fr; /* Chia 2 cột bằng nhau */
+    gap: 80px; /* Khoảng cách giữa 2 cột */
     text-align: left;
     width: 100%;
 }
 
-/* --- Tóm Tắt Đơn Hàng (Order Summary) --- */
+/* --- CỘT 1: Tóm Tắt Đơn Hàng (Order Summary) --- */
 
 .order-summary {
     display: flex;
@@ -48,6 +53,7 @@
     padding-right: 40px;
 }
 
+/* Tiêu đề "Đơn hàng của bạn:" */
 .order-title {
     font-size: 1.5rem;
     font-weight: 600;
@@ -56,12 +62,14 @@
     padding-bottom: 10px;
 }
 
+/* Mỗi dòng sản phẩm trong tóm tắt đơn hàng */
 .order-item {
     font-size: 1.1rem;
     margin-bottom: 10px;
     opacity: 0.9;
 }
 
+/* Khối chứa tổng tiền (ở cuối cột 1) */
 .total-box {
     margin-top: 30px;
     padding-top: 20px;
@@ -82,13 +90,14 @@
     letter-spacing: 0.5px;
 }
 
-/* --- Thông Tin Thanh Toán (Payment Info) --- */
+/* --- CỘT 2: Thông Tin Thanh Toán (Payment Info) --- */
 
 .payment-info {
     display: flex;
     flex-direction: column;
 }
 
+/* Nhãn (label) cho các ô input (Tên, Số thẻ...) */
 .info-label {
     font-size: 1rem;
     font-weight: 600;
@@ -100,7 +109,7 @@
     margin-top: 0;
 }
 
-
+/* Các ô nhập liệu (input) như Tên, Số thẻ */
 .text-input {
     width: 100%;
     padding: 12px 15px;
@@ -113,6 +122,7 @@
     transition: box-shadow 0.2s;
 }
 
+/* Hiệu ứng khi click vào ô input (viền xanh) */
 .text-input:focus {
     outline: none;
     box-shadow: 0 0 0 3px #5f7df5;
@@ -123,7 +133,7 @@
     opacity: 1;
 }
 
-/* Các phương thức thanh toán (buttons) */
+/* Khối chứa các nút chọn phương thức thanh toán (Cash, Visa, Momo) */
 .payment-methods {
     display: flex;
     gap: 15px;
@@ -131,8 +141,9 @@
     flex-wrap: wrap;
 }
 
+/* Định dạng chung cho 1 nút (Cash, Visa, Momo) */
 .payment-button {
-    flex: 1;
+    flex: 1; /* Tự động co dãn để lấp đầy hàng */
     padding: 12px 15px;
     border: none;
     font-weight: 700;
@@ -143,29 +154,33 @@
 }
 
 .payment-button:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px); /* Nhấc nút lên 1 chút */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+/* Nút "Cash" (màu xanh lá) */
 .cash {
     background-color: #4CAF50;
 }
 
+/* Nút "Visa" (màu xanh dương) */
 .visa {
     background: linear-gradient(to right, #0A2A6C, #1E3A8A, #2F55D1);
     color: white;
 }
 
+/* Nút "Momo" (màu hồng) */
 .momo {
     background-color: rgba(176, 0, 106, 1);
 }
 
+/* Lớp .active (thêm bằng JS) để ĐÁNH DẤU nút đang được chọn */
 .payment-button.active {
     box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px rgba(0, 0, 0, 0.2);
     transform: scale(1.05);
 }
 
-/* Nút Mua Ngay */
+/* Nút "Mua Ngay" (nút lớn màu xám ở cuối) */
 .buy-now-button-large {
     width: 100%;
     padding: 18px 20px;
@@ -186,6 +201,7 @@
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
 }
 
+/* Logo Momo nhỏ bên trong nút Momo */
 .momo-logo {
     width: 20px;
     height: 20px;
@@ -194,10 +210,10 @@
 }
 
 /* =================================================================== */
-/* === CSS MỚI CHO KHỐI ĐỊA CHỈ VÀ MODAL (THÊM TỪ ĐÂY TRỞ XUỐNG) === */
+/* === PHẦN 2: CSS CHO MODAL (POPUP) CHỌN/THÊM ĐỊA CHỈ & XÁC NHẬN === */
 /* =================================================================== */
 
-/* --- 1. CSS CHO KHỐI HIỂN THỊ ĐỊA CHỈ TRÊN TRANG THANH TOÁN --- */
+/* --- 1. CSS CHO KHỐI HIỂN THỊ ĐỊA CHỈ (TRÊN TRANG THANH TOÁN) --- */
 .payment-address-section {
     width: 100%;
     background-color: rgba(255, 255, 255, 0.6);
@@ -207,6 +223,7 @@
     border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
+/* Tiêu đề "Địa Chỉ Nhận Hàng" (có icon) */
 .payment-address-header {
     display: flex;
     align-items: center;
@@ -217,6 +234,7 @@
     margin-bottom: 10px;
 }
 
+/* Khung chứa dòng địa chỉ và nút "Thay Đổi" */
 .payment-address-details-wrapper {
     display: flex;
     justify-content: space-between;
@@ -224,34 +242,21 @@
     min-height: 40px;
 }
 
+/* Nơi hiển thị địa chỉ đã chọn */
 #payment-address-details {
     flex-grow: 1;
     padding-right: 20px;
 }
 
-/* (ĐÃ XÓA) - Class này không còn được dùng ở đây, nhưng giữ lại để không ảnh hưởng chỗ khác */
-.address-display-line1 {
-    font-size: 1rem;
-    font-weight: 500;
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-/* (ĐÃ CẬP NHẬT) - Chỉnh lại style cho đẹp hơn khi chỉ có 1 dòng */
+/* Dòng hiển thị địa chỉ (đã cập nhật) */
 .address-display-line2 {
     font-size: 1rem;
-    /* Tăng kích thước font */
     color: #333;
     opacity: 1;
-    /* Hiển thị rõ hơn */
     line-height: 1.4;
-    /* Thêm chiều cao dòng */
-    /* margin-top: 4px; */
-    /* Bỏ margin-top */
 }
 
+/* Cảnh báo khi chưa chọn địa chỉ */
 .no-address-warning {
     color: red;
     font-weight: 600;
@@ -284,7 +289,7 @@
     color: #0056b3;
 }
 
-/* Nút cam (dùng chung) */
+/* Nút màu cam (dùng chung cho các nút "Xác nhận", "Hoàn thành") */
 .btn-orange {
     background-color: #EE4D2D;
     color: white;
@@ -301,12 +306,14 @@
     opacity: 0.85;
 }
 
-/* --- 2. CSS CHO MODAL CHUNG --- */
+/* --- 2. CSS CHO MODAL CHUNG (CÁC POPUP) --- */
 
+/* Lớp dùng để ẨN các modal/view */
 .hidden-view {
     display: none !important;
 }
 
+/* LỚP PHỦ MỜ (OVERLAY) nằm sau các popup */
 .bank-modal-overlay {
     position: fixed;
     top: 0;
@@ -317,6 +324,7 @@
     z-index: 1000;
 }
 
+/* Khung MODAL (POPUP) chung (màu trắng, nằm giữa màn hình) */
 .bank-modal {
     position: fixed;
     top: 50%;
@@ -325,20 +333,23 @@
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-    z-index: 1001;
+    z-index: 1001; /* Nằm trên lớp phủ mờ */
     width: 90%;
     max-width: 500px;
     color: #333;
 }
 
+/* Padding riêng cho modal địa chỉ */
 .checkout-address-modal {
     padding: 20px 24px 24px 24px;
 }
 
+/* Khung chứa các view bên trong modal (ví dụ: view danh sách, view thêm mới) */
 .checkout-address-view {
     width: 100%;
 }
 
+/* Tiêu đề của modal (ví dụ: "Địa Chỉ Của Tôi") */
 .view-title {
     font-size: 1.3rem;
     font-weight: 600;
@@ -347,12 +358,14 @@
     text-align: center;
 }
 
+/* Đường kẻ ngang trong modal */
 .bank-modal hr {
     border: none;
     border-top: 1px solid #eee;
     margin: 16px 0;
 }
 
+/* Nút X (đóng modal) */
 .modal-close-btn {
     position: absolute;
     top: 10px;
@@ -370,29 +383,32 @@
     color: #333;
 }
 
+/* Khung chứa các nút ở chân modal (ví dụ: Hủy, Xác nhận) */
 .form-actions {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-end; /* Đẩy nút về bên phải */
     gap: 10px;
     margin-top: 16px;
     padding-top: 16px;
     border-top: 1px solid #eee;
 }
 
-/* --- 3. CSS CHO VIEW 1: DANH SÁCH ĐỊA CHỈ --- */
+/* --- 3. CSS CHO VIEW 1: DANH SÁCH ĐỊA CHỈ (TRONG MODAL) --- */
 .checkout-address-list {
-    max-height: 350px;
+    max-height: 350px; /* Giới hạn chiều cao và cho phép cuộn */
     overflow-y: auto;
     margin: 0 -24px;
     padding: 0 24px;
 }
 
+/* Thông báo khi không có địa chỉ nào */
 .address-empty-state {
     text-align: center;
     padding: 20px;
     color: #777;
 }
 
+/* Định dạng cho một hàng địa chỉ (bao gồm nút radio) */
 .address-radio-item {
     display: flex;
     align-items: flex-start;
@@ -401,24 +417,25 @@
     border-bottom: 1px solid #eee;
     cursor: pointer;
 }
-
 .address-radio-item:last-child {
     border-bottom: none;
 }
-
 .address-radio-item:hover {
     background-color: #fcfcfc;
 }
 
+/* Nút radio để chọn địa chỉ */
 .address-radio-item input[type="radio"] {
     margin-top: 2px;
     transform: scale(1.1);
 }
 
+/* Khung chứa Tên và Địa chỉ chi tiết */
 .address-radio-details {
     flex-grow: 1;
 }
 
+/* Dòng chứa Tên + SĐT + Thẻ "Mặc định" */
 .address-radio-header {
     display: flex;
     align-items: baseline;
@@ -427,16 +444,15 @@
     font-size: 1rem;
     margin-bottom: 5px;
 }
-
 .address-radio-header strong {
     font-weight: 600;
 }
-
 .address-radio-header span:not(.address-card-default) {
     font-size: 0.9rem;
     color: #555;
 }
 
+/* Dòng hiển thị địa chỉ chi tiết */
 .address-radio-details p {
     font-size: 0.9rem;
     color: #666;
@@ -444,10 +460,12 @@
     line-height: 1.4;
 }
 
+/* Khung chứa nút "+ Thêm Địa Chỉ Mới" */
 .checkout-address-actions {
     margin-top: 16px;
 }
 
+/* Nút "+ Thêm Địa Chỉ Mới" (nút viền đứt) */
 .btn-add-new-address {
     width: 100%;
     padding: 12px;
@@ -460,34 +478,34 @@
     cursor: pointer;
     transition: background-color 0.2s, border-color 0.2s;
 }
-
 .btn-add-new-address:hover {
     background-color: #f5f5f5;
     border-color: #aaa;
 }
-
 .btn-add-new-address .fa-solid {
     margin-right: 8px;
     color: #007bff;
 }
 
 
-/* --- 4. CSS CHO VIEW 2: FORM THÊM MỚI (ĐÃ ĐƠN GIẢN HÓA) --- */
+/* --- 4. CSS CHO VIEW 2: FORM THÊM MỚI (TRONG MODAL) --- */
 
+/* Các nhóm input (ví dụ: Tên + SĐT trên 1 hàng) */
 .bank-form .form-group-inline {
     display: flex;
     gap: 15px;
     margin-bottom: 16px;
 }
-
 .bank-form .form-group-inline input {
     flex: 1;
 }
 
+/* Nhóm input (ví dụ: Địa chỉ cụ thể 1 hàng) */
 .bank-form .form-group-stacked {
     margin-bottom: 16px;
 }
 
+/* Input và Textarea chung trong form modal */
 .bank-form input[type="text"],
 .bank-form input[type="tel"],
 .bank-form textarea {
@@ -499,6 +517,7 @@
     box-sizing: border-box;
 }
 
+/* Hiệu ứng focus cho input/textarea */
 .bank-form input[type="text"]:focus,
 .bank-form input[type="tel"]:focus,
 .bank-form textarea:focus {
@@ -508,52 +527,52 @@
 }
 
 .bank-form textarea {
-    resize: vertical;
+    resize: vertical; /* Cho phép kéo dãn chiều dọc */
     min-height: 80px;
-    /* Chiều cao tối thiểu cho textarea */
 }
 
+/* Checkbox "Đặt làm mặc định" */
 .bank-form .form-group-checkbox {
     display: flex;
     align-items: center;
     gap: 8px;
     margin: 16px 0;
 }
-
 .bank-form .form-group-checkbox input[type="checkbox"] {
     transform: scale(1.1);
 }
-
 .bank-form .form-group-checkbox label {
     font-size: 0.9rem;
     color: #333;
     cursor: pointer;
 }
 
+/* --- 5. CSS CHO MODAL XÁC NHẬN ĐƠN HÀNG --- */
 .confirm-modal-body {
     padding: 10px 0;
 }
 
+/* Mỗi nhóm thông tin (Khách hàng, Giao đến,...) */
 .confirm-group {
     margin-bottom: 12px;
     font-size: 0.9rem;
 }
-
 .confirm-group strong {
     display: block;
     margin-bottom: 4px;
     color: #555;
 }
-
 .confirm-group span {
     color: #000;
-    word-break: break-word;
+    word-break: break-word; /* Tự động xuống dòng nếu quá dài */
 }
 
+/* Danh sách sản phẩm trong modal xác nhận */
 .confirm-product-list {
     font-size: 0.85rem;
 }
 
+/* Khối tổng tiền trong modal xác nhận */
 .confirm-total {
     display: flex;
     justify-content: space-between;
@@ -561,19 +580,21 @@
     font-size: 1.1rem;
 }
 
-/* --- 5. ĐIỀU CHỈNH RESPONSIVE --- */
-
+/* --- 6. CSS ĐIỀU CHỈNH RESPONSIVE (CHO MÀN HÌNH NHỎ) --- */
 @media (max-width: 768px) {
+    /* Chuyển từ 2 cột thành 1 cột */
     .payment-grid {
         grid-template-columns: 1fr;
         gap: 40px;
     }
 
+    /* Đảo ngược thứ tự: Đơn hàng ở dưới */
     .order-summary {
         padding-right: 0;
         order: 2;
     }
 
+    /* Đảo ngược thứ tự: Thông tin thanh toán ở trên */
     .payment-info {
         order: 1;
     }
