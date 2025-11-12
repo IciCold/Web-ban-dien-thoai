@@ -273,6 +273,7 @@ function updateDisplay() {
   // **BƯỚC QUAN TRỌNG:** Reset về trang 1 khi lọc
   resetToFirstPage();
 
+  
   const price_min = document.getElementById("price-min-input");
   const price_max = document.getElementById("price-max-input");
   let Min = 0;
@@ -292,7 +293,9 @@ function updateDisplay() {
   }
 
   let filtered = docdulieuLocalStorage("dataProducts");
-
+   // Lọc bỏ sản phẩm bị ẩn (chỉ hiển thị cho khách hàng)
+    filtered = filtered.filter(product => !product.hidden);
+    
   // Lọc theo tên
   if (searchKeyword) {
     console.log("Đang tìm với từ khóa:", searchKeyword);

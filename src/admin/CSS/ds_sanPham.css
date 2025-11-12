@@ -71,40 +71,90 @@
     object-fit: cover;
 }
 
-/* Nút thao tác (Xóa, Sửa, Chi tiết) */
-.sp-del, .sp-edit, .sp-view {
-    padding: 6px 10px;
-    border: none;
-    border-radius: 5px;
-    color: #fff;
-    cursor: pointer;
-    font-size: 13px;
-    transition: background-color 0.2s ease, transform 0.1s ease;
+.sp-table td:last-child {
+  display: flex;
+  flex-direction: column; 
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  min-height: 120px;
+  padding: 10px;
+}
+
+.sp-table td:last-child button {
+  flex: 0 0 auto;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Nút thao tác (Sửa, Xóa, Chi tiết, Ẩn/Hiện) */
+.sp-edit, .sp-del, .sp-view, .sp-hide {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  min-width: 80px; 
+  text-align: center;
+  width: 100%; 
+  box-sizing: border-box;
+  margin: 2px 0;
 }
 
 /* Màu nền của từng nút */
-.sp-del {
-    background-color: #dc3545;
-}
 .sp-edit {
-    background-color: #007bff;
+  background-color: #007bff;
 }
 .sp-view {
-    background-color: #28a745;
+  background-color: #28a745;
+}
+.sp-del {
+  background-color: #dc3545;
+}
+.sp-hide {
+  background-color: #ffc107;
+  color: #212529 !important;
 }
 
 /* Hiệu ứng hover cho từng nút */
-.sp-del:hover {
-    background-color: #c82333;
-    transform: scale(1.05);
-}
 .sp-edit:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
+  background-color: #0056b3;
+  transform: scale(1.05);
 }
 .sp-view:hover {
-    background-color: #218838;
-    transform: scale(1.05);
+  background-color: #218838;
+  transform: scale(1.05);
+}
+.sp-del:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+.sp-hide:hover {
+  background-color: #e0a800;
+  transform: scale(1.05);
+}
+
+.sp-table td {
+  vertical-align: middle;
+}
+
+/* Responsive cho màn hình nhỏ */
+@media (max-width: 768px) {
+  .sp-table td:last-child {
+    min-height: 100px;
+  }
+  
+  .sp-edit, .sp-del, .sp-view, .sp-hide {
+    min-width: 70px;
+    font-size: 12px;
+    padding: 5px 8px;
+    height: 28px;
+  }
 }
 
 /* --- Phần phải: Thêm sản phẩm --- */
@@ -234,4 +284,259 @@
 /* Hiệu ứng khi di chuột vào nút */
 .sp-search-form button:hover {
     background-color: #375aeb; 
+}
+
+/* Thêm vào file CSS */
+.sp-add-form input[list] {
+  position: relative;
+}
+
+.sp-add-form datalist {
+  position: absolute;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.sp-add-form option {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.sp-add-form option:hover {
+  background-color: #f5f5f5;
+}
+
+/* Style cho input khi có gợi ý */
+.sp-add-form input:focus {
+  border-color: #4e73df;
+  box-shadow: 0 0 5px rgba(78, 115, 223, 0.3);
+}
+
+/* Thêm vào file CSS */
+/* Style cho form khi ở chế độ sửa */
+.form-edit-mode .sp-subtitle {
+  color: #4e73df !important;
+  font-weight: 700;
+}
+
+.cancel-button {
+  background-color: #6c757d !important;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.cancel-button:hover {
+  background-color: #5a6268 !important;
+}
+
+/* Hiệu ứng cho form khi chuyển chế độ */
+.sp-add-box {
+  transition: all 0.3s ease;
+}
+
+.form-edit-mode {
+  border-left: 4px solid #4e73df;
+  padding-left: 15px;
+}
+
+/* Style cho nút ở chế độ sửa */
+#themsanphambtn.edit-mode {
+  background-color: #4e73df !important;
+}
+
+#themsanphambtn.add-mode {
+  background-color: #28a745 !important;
+}
+/* Style cho tiêu đề khi đang sửa */
+.editing-title {
+  color: #4e73df !important;
+  font-weight: 700;
+  border-bottom: 2px solid #4e73df;
+  padding-bottom: 5px;
+}
+
+/* Style cho nút trong các chế độ */
+#themsanphambtn.edit-mode {
+  background: linear-gradient(135deg, #4e73df 0%, #3a56c4 100%) !important;
+}
+
+#themsanphambtn.add-mode {
+  background: linear-gradient(135deg, #28a745 0%, #218838 100%) !important;
+}
+
+/* Hiệu ứng hover cho nút */
+#themsanphambtn.edit-mode:hover {
+  background: linear-gradient(135deg, #3a56c4 0%, #2e4998 100%) !important;
+  transform: translateY(-2px);
+}
+
+#themsanphambtn.add-mode:hover {
+  background: linear-gradient(135deg, #218838 0%, #1e7e34 100%) !important;
+  transform: translateY(-2px);
+}
+
+/* Badge hiển thị trạng thái */
+.form-status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.7em;
+  margin-left: 10px;
+  font-weight: 600;
+}
+
+.status-editing {
+  background-color: #4e73df;
+  color: white;
+}
+
+.status-adding {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Style cho datalist trong ô tìm kiếm */
+.sp-search-form input[list] {
+  position: relative;
+}
+
+.sp-search-form datalist {
+  position: absolute;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.sp-search-form option {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.sp-search-form option:hover {
+  background-color: #f5f5f5;
+}
+
+/* Style cho input tìm kiếm khi có gợi ý */
+.sp-search-form input:focus {
+  border-color: #4e73df;
+  box-shadow: 0 0 5px rgba(78, 115, 223, 0.3);
+}
+
+/* Hiệu ứng chuyển đổi mượt mà */
+.sp-table tr {
+  transition: all 0.3s ease;
+}
+
+/* Style cho nút ẩn/hiện sản phẩm */
+.sp-hide {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.sp-hide:hover {
+  background-color: #e0a800 !important;
+  transform: scale(1.05);
+}
+
+/* Style cho sản phẩm bị ẩn */
+.product-hidden {
+  background-color: #f8f9fa !important;
+  opacity: 0.7;
+}
+
+.product-hidden td {
+  color: #6c757d !important;
+  font-style: italic;
+}
+
+/* Badge trạng thái ẩn/hiện */
+.status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.7em;
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+.status-hidden {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.status-visible {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Nút trong form quản lý trạng thái */
+.status-toggle-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-toggle-status {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.btn-hide {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.btn-hide:hover {
+  background-color: #e0a800;
+}
+
+.btn-show {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-show:hover {
+  background-color: #218838;
+}
+
+/* Style cho select */
+.sp-add-form select,
+.sp-search-form select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 440px;
+    margin-bottom: 15px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.sp-search-form select {
+    width: 610px;
+}
+
+/* Hiệu ứng focus */
+.sp-add-form select:focus,
+.sp-search-form select:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 5px rgba(78, 115, 223, 0.3);
+    outline: none;
 }

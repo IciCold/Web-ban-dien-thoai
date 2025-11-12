@@ -35,18 +35,24 @@ export async function initChiTietPage() {
   }
 
   //Tìm sản phẩm đang được chọn
-  const selectedProduct = Products.find(p => p.id === selectedId);
+  const selectedProduct = Products.find((p) => p.id === selectedId);
   if (!selectedProduct) {
     console.error("Không tìm thấy sản phẩm với ID:", selectedId);
+    location.hash = "home";
+    return;
+  }
+  // Kiểm tra nếu sản phẩm bị ẩn
+  if (selectedProduct.hidden) {
+    showalert("Sản phẩm này hiện không khả dụng.", "warning");
     location.hash = "home";
     return;
   }
 
   //Hiển thị thông tin
   renderProductDetails(selectedProduct);
-  
+
   //KÍCH HOẠT NÚT SỐ LƯỢNG
-  setupQuantityControls(); 
+  setupQuantityControls();
 }
 
 // ===================================

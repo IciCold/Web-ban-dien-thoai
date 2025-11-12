@@ -175,7 +175,7 @@
         <h1>Chào mừng tới giao diện admin</h1>
         <h2>Hãy chọn các nút bên trái để bắt đầu</h2>
       </section>
-
+  <!--DANH SÁCH SẢN PHẨM-->
       <section id="ds_sanPham" class="page-section">
         <div id="sp-wrapper">
           <div id="sp-left">
@@ -189,6 +189,7 @@
                     <th>Tên sản phẩm</th>
                     <th>Thương hiệu</th>
                     <th>Giá</th>
+                    <th>Số lượng</th>
                     <th>Thao tác</th>
                   </tr>
                 </thead>
@@ -199,32 +200,41 @@
               <h2 class="sp-subtitle">Tìm kiếm sản phẩm</h2>
               <form class="sp-search-form">
                 <input id="timten" type="text" placeholder="Tên sản phẩm">
-                <input id="timbrand" type="text" placeholder="Thương hiệu">
+                <select id="timbrand"><option value="">-- Tất cả thương hiệu --</option></select>
                 <button id="timbtn">Tìm</button>
               </form>
             </div>
           </div>
           <div id="sp-right">
             <div class="sp-add-box">
-              <h2 class="sp-subtitle">Thêm sản phẩm</h2>
-              <form class="sp-add-form">
-                <input id="tensp" type="text" placeholder="Tên sản phẩm">
-                <input type="text" id="brand" placeholder="Thương hiệu">
-                <input id="size" type="text" placeholder="Kích thước">
-                <input id="type" type="text" placeholder="Loại">
-                <input id="color" type="text" placeholder="Màu">
-                <input id="camera" type="text" placeholder="Camera">
-                <input id="cpu" type="text" placeholder="CPU">
-                <input id="memory" type="text" placeholder="Bộ nhớ">
-                <input id="ram" type="text" placeholder="RAM">
-                <input id="battery" type="text" placeholder="Dung lượng pin">
+              <h2 class="sp-subtitle" id="form-product-title">Thêm sản phẩm</h2>
+              <form class="sp-add-form" id="product-form">
+                <input id="tensp" type="text" placeholder="Tên sản phẩm" required list="product-names">
+                <datalist id="product-names"></datalist>
+                <select id="brand" required>
+                <option value="">Thương hiệu</option></select>
+                <input id="size" type="text" placeholder="Kích thước" list="size-list">
+                <datalist id="size-list"></datalist>
+                <input id="color" type="text" placeholder="Màu" list="color-list">
+                <datalist id="color-list"></datalist>
+                <input id="camera" type="text" placeholder="Camera" list="camera-list">
+                <datalist id="camera-list"></datalist>
+                <input id="cpu" type="text" placeholder="CPU" list="cpu-list">
+                <datalist id="cpu-list"></datalist>
+                <input id="memory" type="text" placeholder="Bộ nhớ" list="memory-list">
+                <datalist id="memory-list"></datalist>
+                <input id="ram" type="text" placeholder="RAM" list="ram-list">
+                <datalist id="ram-list"></datalist>
+                <input id="battery" type="text" placeholder="Dung lượng pin" list="battery-list">
+                <datalist id="battery-list"></datalist>
                 <div class="sp-image-upload">
-                  <label>Ảnh</label>
-                  <input id="revenue1" type="file">
-                  <img id="preview" width="100">
+                  <label for="revenue1">Ảnh sản phẩm</label>
+                  <input id="revenue1" type="file" accept="image/*">
+                  <img id="preview" width="100" alt="Xem trước ảnh">
                 </div>
-                <button id="themsanphambtn">Thêm</button>
-
+                <div class="form-buttons-container">
+                  <button id="themsanphambtn" type="submit" class="add-mode">Thêm</button>
+                </div>
               </form>
             </div>
           </div>
@@ -255,19 +265,37 @@
           <div id="dh-right">
             <div class="dh-search-box">
               <h2 class="dh-subtitle">Tìm kiếm đơn hàng</h2>
-              <form class="dh-search-form">
-                <input type="text" placeholder="Tìm theo tên khách hàng..." />
+              <form class = "dh-search-options">
+                <select>
+                  <option value = "Date">Tìm kiếm theo ngày</option>
+                  <option value = "Status">Tìm kiếm theo trạng thái</option>
+                  <option value = "Both">Tìm kiếm theo ngày và trạng thái</option>
+                </select>
+              </form>
+              
+              <form class="dh-search">
+
+                <div id = "date-search">
+                <p>Từ ngày:</p>
                 <input type="date" placeholder="Từ ngày" />
+                <p>Đến ngày:</p>
                 <input type="date" placeholder="Đến ngày" />
+                </div>
+                
+                <div id = "status-search">
                 <select>
                   <option value="" id='blank'>— Chọn trạng thái —</option>
-                  <option value="pending">Chờ xử lý</option>
-                  <option value="shipping">Đang giao</option>
-                  <option value="delivered">Đã giao</option>
+                  <option value="mới đặt">Mới đặt</option>
+                  <option value="đã xử lý">Đã xử lý</option>
+                  <option value="đã giao">Đã giao</option>
+                  <option value="đã hủy">Đã Hủy</option>
                 </select>
+                </div>
+              
                 <button type="submit">Tìm</button>
                 <button type="button" id="resetFilter">Reset bộ lọc</button>
               </form>
+              
 
             </div>
           </div>
@@ -302,6 +330,7 @@
                 <input type="text" placeholder="Tên khách hàng">
                 <input type="text" placeholder="Tên đăng nhập">
                 <button type="submit">Tìm</button>
+                <button type="button" id="resettimkh">Reset Tìm kiếm</button>
               </form>
             </div>
           </div>
@@ -371,17 +400,37 @@
       <!-- Nhập hàng -->
       <section id="ds_nhapHang" class="page-section">
         <div id="nh-wrapper">
-          <div id="nh-left">
-            <h1 class="nh-title">Danh sách Phiếu Nhập Hàng</h1>
-            <div class="nh-actions">
-              <button id="btnTaoPhieuMoi">Tạo Phiếu Nhập Mới</button>
-              <input type="text" id="nh-search" placeholder="Tìm theo ID phiếu...">
-            </div>
-            <div class="nh-table-container"></div>
+          <div class="nh-header">
+            <h1 class="nh-title">Quản Lý Nhập Sản Phẩm</h1>
+            <button id="btnTaoPhieuMoi">+ Tạo Phiếu Nhập Mới</button>
           </div>
 
-          <div id="nh-right">
-            <h2 class="nh-subtitle">Chi Tiết Phiếu Nhập</h2>
+          <div class="nh-sections-container">
+            <!-- Phần trái: Phiếu đang tạo -->
+            <div id="nh-left">
+              <h2 class="nh-section-title">📝 Phiếu Đang Tạo</h2>
+              <div class="nh-table-container"></div>
+            </div>
+
+            <!-- Phần phải: Phiếu đã hoàn thành -->
+            <div id="nh-right">
+              <h2 class="nh-section-title-completed">✅ Phiếu Đã Hoàn Thành</h2>
+              <div class="nh-search-container">
+                <input type="text" id="nh-search" placeholder="🔍 Tìm theo ID phiếu...">
+              </div>
+              <div class="nh-table-container"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- POPUP CHI TIẾT PHIẾU -->
+        <div class="nh-popup-overlay"></div>
+        <div class="nh-popup">
+          <div class="nh-popup-header">
+            <h2>Chi Tiết Phiếu Nhập</h2>
+            <button class="nh-popup-close">&times;</button>
+          </div>
+          <div class="nh-popup-body">
             <form id="nh-form-chitiet">
               <div class="input-group">
                 <label for="nh-id">ID Phiếu:</label>
@@ -406,7 +455,7 @@
                 </div>
                 <div class="input-group">
                   <label for="nh-sp-soluong">Số lượng nhập:</label>
-                  <input type="number" id="nh-sp-soluong" min="1" value="">
+                  <input type="number" id="nh-sp-soluong" min="1" value="1">
                 </div>
                 <div class="input-group">
                   <label for="nh-sp-gianhap">Giá nhập (VNĐ):</label>
@@ -420,35 +469,39 @@
               </div>
               <p><strong>Tổng tiền nhập: <span id="nh-tongTien">0</span> VNĐ</strong></p>
 
-        <div id="nh-form-actions">
-          <button type="button" id="btnHoanThanhPhieu" class="btn-success">Hoàn Thành Phiếu</button>
-          <button type="button" id="btnXoaPhieu" class="btn-danger">Xóa Phiếu</button>
+              <div id="nh-form-actions">
+                <button type="button" id="btnHoanThanhPhieu" class="btn-success">Hoàn Thành Phiếu</button>
+                <button type="button" id="btnXoaPhieu" class="btn-danger">Xóa Phiếu</button>
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
-    </div>
-  </div>
-</section>
-<section id="ds_giaBan" class="page-section">
-  <div class="price-management-wrapper">
-    <div class="price-management-header">
-      <h1>Quản lý giá bán</h1>
-      <div class="price-filter">
-        <select id="categoryFilter">
-          <option value="all">Tất cả loại</option>
-          <option value="Smartphone">Điện thoại</option>
-          <option value="tablet">Máy tính bảng</option>
-        </select>
-        <input type="text" id="searchProduct" placeholder="Tìm kiếm sản phẩm...">
-      </div>
-    </div>
+      </section>
+      
+      <!--QUẢN LÍ GIÁ BÁN-->
+      <section id="ds_giaBan" class="page-section">
+        <div class="price-management-wrapper">
+          <div class="price-management-header">
+            <h1>Quản lý giá bán</h1>
+            <div class="price-filter">
+              <select id="categoryFilter">
+                <option value="all">Tất cả hãng</option>
+              </select>
 
+              <div class="batch-update-group">
+                <input type="number" id="batchProfitInput" placeholder="Nhập % lợi nhuận">
+                <button type="button" id="btnApplyBatchProfit">Áp dụng cho toàn hãng</button>
+              </div>
+              <button type="button" id="btnOpenSearchPopup">🔍 Tra cứu</button>
+            </div>
+          </div>
           <div class="price-table-container">
             <table class="price-table">
               <thead>
                 <tr>
                   <th>Mã SP</th>
                   <th>Tên sản phẩm</th>
-                  <th>Loại</th>
+                  <th>Hãng (Thương hiệu)</th>
                   <th>Giá vốn (VNĐ)</th>
                   <th>% Lợi nhuận</th>
                   <th>Giá bán (VNĐ)</th>
@@ -460,8 +513,34 @@
               </tbody>
             </table>
           </div>
+          <div id="priceSearchOverlay" class="modal-overlay"></div>
+          <div id="priceSearchPopup" class="modal-popup">
+            <div class="modal-header">
+              <h2>Tra cứu nâng cao</h2>
+              <button id="btnCloseSearchPopup" class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="filter-group">
+                <label for="costFilterInput">Giá vốn từ (VNĐ):</label>
+                <input type="number" id="costFilterInput" placeholder="VD: 1000000" min="0">
+              </div>
+              <div class="filter-group">
+                <label for="profitFilter">Lợi nhuận từ (%):</label>
+                <input type="number" id="profitFilter" placeholder="VD: 0" min="0">
+              </div>
+              <div class="filter-group">
+                <label for="priceFilterInput">Giá bán từ (VNĐ):</label>
+                <input type="number" id="priceFilterInput" placeholder="VD: 2000000" min="0">
+              </div>
+            </div>
+            <div class="modal-actions">
+              <button type="button" id="btnResetSearchPopup" class="btn-reset">Xóa bộ lọc</button>
+              <button type="button" id="btnApplySearchPopup" class="btn-apply">Áp dụng</button>
+            </div>
+          </div>
         </div>
       </section>
+      <!--QUẢN LÍ SỐ LƯỢNG TỒN-->
       <section id="ds_soLuongTon" class="page-section">
         <div class="inventory-wrapper">
           <div class="inventory-header">

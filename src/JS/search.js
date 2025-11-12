@@ -21,38 +21,38 @@ function handleSearch() {
 
   // Ẩn các yếu tố của trang chủ
   const carousel = document.querySelector(".carousel-container");
-  
+
   const filterbar = document.querySelector(".brand-filter");
-  
-  
+
   // Đổi tiêu đề
   const heading = document.querySelector(".products-section h2");
-  
 
   // Nếu không có từ khóa, ta có thể hiển thị lại TẤT CẢ sản phẩm
   if (!keyword) {
-    if (carousel)  carousel.style.display = 'block';
-    if (filterbar) filterbar.style.display = 'flex';
+    if (carousel) carousel.style.display = "block";
+    if (filterbar) filterbar.style.display = "flex";
     if (heading) heading.innerHTML = "Sản phẩm nổi bật"; // Trả lại tiêu đề
     resetToFirstPage();
     displayProducts(data); // Hiển thị lại tất cả
     return;
-  }else{
-    if(carousel) carousel.style.display = 'none';
-    if(filterbar) filterbar.style.display = 'none';
-    if(heading) heading.innerHTML = "Kết quả tìm kiếm";
+  } else {
+    if (carousel) carousel.style.display = "none";
+    if (filterbar) filterbar.style.display = "none";
+    if (heading) heading.innerHTML = "Kết quả tìm kiếm";
   }
 
+
+
   // 4. Lọc sản phẩm từ 'dataProducts' đã nhập từ Home.js
-  const result = data.filter((p) =>
-    p.ten.toLowerCase().includes(keyword)
-  );
+   const result = data.filter(
+     (p) => !p.hidden && p.ten.toLowerCase().includes(keyword)
+   );
 
   // 5. GỌI LOGIC CỦA HOME.JS
   // Reset về trang 1 cho kết quả tìm kiếm mới
   resetToFirstPage();
-  
-  // Dùng hàm 'displayProducts' của Home.js. 
+
+  // Dùng hàm 'displayProducts' của Home.js.
   // Hàm này đã bao gồm logic 4x4 (16 sản phẩm) và tự động tạo phân trang!
   displayProducts(result);
 }

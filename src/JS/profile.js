@@ -384,7 +384,7 @@ function renderHistoryList() {
     const statusCell = document.createElement("td");
     const statusBadge = document.createElement("span");
     statusBadge.className = `history-status-badge status-${order.status}`;
-    statusBadge.textContent = getStatusText(order.status);
+    statusBadge.textContent = order.status;
     statusCell.appendChild(statusBadge);
     row.appendChild(statusCell);
 
@@ -430,7 +430,7 @@ function showOrderDetail(order) {
                         <span class="history-status-badge status-${
                           order.status
                         }">
-                            ${getStatusText(order.status)}
+                            ${order.status}
                         </span>
                     </span>
                 </div>
@@ -528,16 +528,6 @@ function formatToVND(number) {
   return number.toLocaleString("vi-VN") + "₫";
 }
 
-// Hàm lấy text trạng thái
-function getStatusText(status) {
-  const statusMap = {
-    pending: "Chờ xử lý",
-    shipping: "Đang giao",
-    delivered: "Đã giao",
-    cancelled: "Đã hủy",
-  };
-  return statusMap[status] || "Không xác định";
-}
 // ===================================
 // --- (MỚI) TẤT CẢ EVENT LISTENERS (Global) ---
 // (Các trình nghe sự kiện được gắn 1 LẦN DUY NHẤT khi script tải)

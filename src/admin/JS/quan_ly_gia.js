@@ -7,7 +7,19 @@ import {
 let dsSanPham = [];
 const tableBody = document.querySelector("#ds_giaBan .price-table tbody");
 const categoryFilter = document.getElementById("categoryFilter");
-const searchInput = document.getElementById("searchProduct");
+const costFilterInput = document.getElementById("costFilterInput");
+const profitFilter = document.getElementById("profitFilter");
+const priceFilterInput = document.getElementById("priceFilterInput");
+const batchProfitInput = document.getElementById("batchProfitInput");
+const btnApplyBatchProfit = document.getElementById("btnApplyBatchProfit");
+
+// Lấy các phần tử của Pop-up
+const btnOpenSearchPopup = document.getElementById("btnOpenSearchPopup");
+const btnCloseSearchPopup = document.getElementById("btnCloseSearchPopup");
+const priceSearchOverlay = document.getElementById("priceSearchOverlay");
+const priceSearchPopup = document.getElementById("priceSearchPopup");
+const btnApplySearchPopup = document.getElementById("btnApplySearchPopup");
+const btnResetSearchPopup = document.getElementById("btnResetSearchPopup");
 
 // Load dữ liệu khi trang được tải
 window.addEventListener("DOMContentLoaded", () => {
@@ -30,8 +42,6 @@ function loadData() {
   dsSanPham = docdulieuLocalStorage("dataProducts") || [];
 
   // Chuẩn hóa dữ liệu:
-  // sp.gia (từ ds_sanpham.js) LÀ giá vốn.
-  // Cần một trường mới là sp.giaBan (giá bán).
   dsSanPham.forEach((sp) => {
     if (sp.giaBan === undefined) {
       sp.giaBan = sp.gia; // Khởi tạo giá bán = giá vốn nếu chưa có
@@ -39,7 +49,22 @@ function loadData() {
   });
 
   console.log("Loaded products from dataProducts:", dsSanPham);
+
+  populateBrandFilter();
   renderTable(dsSanPham);
+}
+
+// Hàm điền (populate) bộ lọc hãng
+function populateBrandFilter() {
+  if (!categoryFilter) return;
+  const brands = [...new Set(dsSanPham.map((sp) => sp.brand).filter(Boolean))];
+  categoryFilter.innerHTML = `<option value="all">Tất cả hãng</option>`;
+  brands.sort().forEach((brand) => {
+    const option = document.createElement("option");
+    option.value = brand;
+    option.textContent = brand;
+    categoryFilter.appendChild(option);
+  });
 }
 
 // Render bảng giá
@@ -55,13 +80,12 @@ function renderTable(data) {
 
   tableBody.innerHTML = data
     .map((sp, index) => {
-      // SỬA 1: Dùng sp.gia (giá vốn) và sp.giaBan (giá bán)
       const loiNhuan = calculateProfit(sp.gia, sp.giaBan);
       return `
       <tr>
         <td>${sp.id}</td>
         <td>${sp.ten}</td>
-        <td>${sp.loai}</td>
+        <td>${sp.brand || "N/A"}</td>
         <td>
           <input type="number" class="cost-input" value="${
             sp.gia
@@ -88,7 +112,6 @@ function renderTable(data) {
 
 // Tính % lợi nhuận
 function calculateProfit(giaVon, giaBan) {
-  // sp.gia là giá vốn
   if (!giaVon || giaVon <= 0) {
     return 0;
   }
@@ -110,12 +133,11 @@ function addEventListeners() {
       );
 
       if (giaVon < 0) {
-        showalert("Giá vốn không thể âm!","warning");
-        e.target.value = dsSanPham[index].gia; // Reset về giá trị cũ
+        showalert("Giá vốn không thể âm!", "warning");
+        e.target.value = dsSanPham[index].gia;
         return;
       }
 
-      // Tính lại giá bán dựa trên % lợi nhuận hiện tại
       const giaBan = giaVon * (1 + Number(profitInput.value) / 100);
       priceInput.value = Math.round(giaBan);
     });
@@ -133,7 +155,6 @@ function addEventListeners() {
         `#ds_giaBan .price-input[data-index="${index}"]`
       );
 
-      // Tính lại giá bán dựa trên giá vốn và % lợi nhuận mới
       const giaBan = Number(costInput.value) * (1 + loiNhuan / 100);
       priceInput.value = Math.round(giaBan);
     });
@@ -155,19 +176,19 @@ function addEventListeners() {
       );
 
       if (giaVon < 0 || giaBan <= 0) {
-        showalert("Giá trị không hợp lệ! Giá vốn không thể âm và giá bán phải lớn hơn 0.","error");
+        showalert(
+          "Giá trị không hợp lệ! Giá vốn không thể âm và giá bán phải lớn hơn 0.",
+          "error"
+        );
         return;
       }
 
-      // SỬA 2: Cập nhật 'gia' (giá vốn) và 'giaBan' (giá bán)
       dsSanPham[index].gia = giaVon;
       dsSanPham[index].giaBan = giaBan;
 
-      // Lưu lại vào "dataProducts"
       ghidulieuLocalStorage("dataProducts", dsSanPham);
-      showalert("Đã lưu thành công!","success");
+      showalert("Đã lưu thành công!", "success");
 
-      // Cập nhật lại % lợi nhuận trên UI
       const profitInput = document.querySelector(
         `#ds_giaBan .profit-input[data-index="${index}"]`
       );
@@ -176,21 +197,112 @@ function addEventListeners() {
   });
 }
 
-// Xử lý lọc và tìm kiếm
-if (categoryFilter && searchInput) {
+// Xử lý lọc và tìm kiếm (Phiên bản Pop-up)
+if (
+  categoryFilter &&
+  btnApplyBatchProfit &&
+  btnOpenSearchPopup
+) {
+  // Lọc hãng (vẫn như cũ, lọc ngay)
   categoryFilter.addEventListener("change", filterData);
-  searchInput.addEventListener("input", filterData);
+  
+  // Cập nhật lợi nhuận hàng loạt (vẫn như cũ)
+  btnApplyBatchProfit.addEventListener("click", applyBatchProfit);
+
+  // --- Logic Pop-up Mới ---
+
+  // Hàm bật/tắt pop-up
+  const togglePopup = (show) => {
+    if (show) {
+      priceSearchOverlay.classList.add("show");
+      priceSearchPopup.classList.add("show");
+    } else {
+      priceSearchOverlay.classList.remove("show");
+      priceSearchPopup.classList.remove("show");
+    }
+  };
+
+  // Mở Pop-up
+  btnOpenSearchPopup.addEventListener("click", () => togglePopup(true));
+  
+  // Đóng Pop-up
+  btnCloseSearchPopup.addEventListener("click", () => togglePopup(false));
+  priceSearchOverlay.addEventListener("click", () => togglePopup(false));
+
+  // Nút "Áp dụng" trong Pop-up
+  btnApplySearchPopup.addEventListener("click", () => {
+    filterData(); // Chỉ lọc khi nhấn nút này
+    togglePopup(false); // Đóng pop-up
+  });
+
+  // Nút "Xóa bộ lọc" trong Pop-up
+  btnResetSearchPopup.addEventListener("click", () => {
+    costFilterInput.value = "";
+    profitFilter.value = "";
+    priceFilterInput.value = "";
+    filterData(); // Lọc lại với các ô trống
+    // Giữ pop-up mở để người dùng xem
+  });
 }
 
+// Hàm filterData
 function filterData() {
   const category = categoryFilter.value;
-  const keyword = searchInput.value.toLowerCase().trim();
+  const minCost = Number(costFilterInput.value) || 0;
+  const minProfit = Number(profitFilter.value) || 0;
+  const minPrice = Number(priceFilterInput.value) || 0;
 
   const filteredData = dsSanPham.filter((sp) => {
-    const matchCategory = category === "all" || sp.loai === category;
-    const matchKeyword = sp.ten.toLowerCase().includes(keyword);
-    return matchCategory && matchKeyword;
+    const matchCategory = category === "all" || sp.brand === category;
+    const matchCost = sp.gia >= minCost;
+    const currentProfit = calculateProfit(sp.gia, sp.giaBan);
+    const matchProfit = currentProfit >= minProfit;
+    const matchPrice = sp.giaBan >= minPrice;
+
+    return matchCategory && matchCost && matchProfit && matchPrice;
   });
 
   renderTable(filteredData);
+}
+
+// Thêm hàm mới để xử lý cập nhật hàng loạt
+function applyBatchProfit() {
+  const selectedBrand = categoryFilter.value;
+  const newProfit = Number(batchProfitInput.value);
+
+  if (selectedBrand === "all") {
+    showalert("Vui lòng chọn một hãng cụ thể để áp dụng!", "warning");
+    return;
+  }
+  if (isNaN(newProfit) || batchProfitInput.value.trim() === "") {
+    showalert("Vui lòng nhập một % lợi nhuận hợp lệ!", "warning");
+    return;
+  }
+
+  if (
+    !confirm(
+      `Bạn có chắc muốn cập nhật % lợi nhuận thành ${newProfit}% cho TẤT CẢ sản phẩm của hãng "${selectedBrand}" không?`
+    )
+  ) {
+    return;
+  }
+
+  let updateCount = 0;
+  dsSanPham.forEach((sp) => {
+    if (sp.brand === selectedBrand) {
+      const giaVon = sp.gia;
+      sp.giaBan = Math.round(giaVon * (1 + newProfit / 100));
+      updateCount++;
+    }
+  });
+
+  ghidulieuLocalStorage("dataProducts", dsSanPham);
+
+  showalert(
+    `Đã cập nhật ${updateCount} sản phẩm của hãng "${selectedBrand}".`,
+    "success"
+  );
+  batchProfitInput.value = "";
+
+  filterData();
 }

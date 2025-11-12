@@ -9,6 +9,7 @@ import "./quan_ly_gia.js";
 import "./forgot.js";
 import "./quanLyTonKho.js";
 import "../../JS/alert.js";
+import { renderUser } from "./autoRender.js";
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
@@ -117,4 +118,14 @@ window.addEventListener("hashchange", () => {
 //Load trang
 window.addEventListener("load", () => {
   showPage();
+});
+
+//==============Cập nhật lại trang page=======================//
+window.addEventListener("storage", (e) => {
+  //Cập nhật lại sản phẩm
+  if (e.key === "dataProducts") renderData(); //chưa hoàn thiện
+
+  if (e.key === "users") {
+      renderUser();
+  }
 });

@@ -60,8 +60,8 @@
     background-color: #4e73df; 
 }
 
-/* Nút thao tác (Xóa và Chi tiết) */
-.kh-edit{
+/* Nút thao tác (Chi tiết) */
+.kh-details{
     padding: 6px 10px;
     border: none;
     border-radius: 5px;
@@ -72,37 +72,186 @@
 
 
 /* Màu nền của nút Chi tiết */
-.kh-edit {
+.kh-details {
     background-color: #007bff;
 }
 
 
 
 /* Hiệu ứng khi di chuột vào nút Chi tiết */
-.kh-edit:hover {
+.kh-details:hover {
     background-color: #0056b3;
 }
+
+.kh-reset{
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    background-color:#ffc107;
+}
+
+.kh-reset:hover{
+    background-color: #e0a800;
+}
+
+
 
 
 /* Style cho nút khóa */
 .kh-lock {
-    background-color: #28a745;
-    color: white;
+    color:white;
     border: none;
     padding: 5px 10px;
     border-radius: 4px;
     cursor: pointer;
 }
-
-/* Style cho nút mở khóa */
-.kh-lock[title*="Mở khóa"] {
+.kh-lock[title*="Khóa"]{
+    background-color: #28a745;
+}
+.kh-lock[title*="Mở khóa"]{
     background-color: #ff4444;
 }
 
-/* Hover effect */
-.kh-lock:hover {
-    opacity: 0.8;
+.kh-lock[title*="Khóa"] i.fa-lock{
+    display: none;
 }
+.kh-lock[title*="Mở khóa"] i.fa-lock-open{
+    display: none;
+}
+
+
+
+/* Hover effect */
+.kh-lock:hover[title*="Khóa"] {
+    
+    background-color: #ff4444;
+}
+.kh-lock:hover[title*="Khóa"] i.fa-lock {
+    display: inline-block;
+    
+}
+.kh-lock:hover[title*="Khóa"] i.fa-lock-open {
+    display: none;
+    
+}
+
+.kh-lock:hover[title*="Mở khóa"] {
+    
+    background-color: #28a745;
+}
+.kh-lock:hover[title*="Mở khóa"] i.fa-lock {
+    display: none;
+    
+}
+.kh-lock:hover[title*="Mở khóa"] i.fa-lock-open {
+    display: inline-block;
+    
+}
+
+
+.kh-methods{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-items: stretch;
+    gap: 6px;
+}
+
+
+.kh-details-popup{
+    display: block; /* Ẩn popup mặc định */
+    position: fixed; /* fixed để popup đứng yên trên viewport */
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%); /* canh giữa */
+    width: 320px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    overflow: hidden;
+    cursor: grab; /* hiển thị như có thể kéo */
+}
+
+.kh-details-popup .popup-header {
+    font-weight: bold;
+    background-color: #4e73df;
+    color: white;
+    padding: 8px;
+    border-radius: 5px 5px 0 0;
+    cursor: grab;
+}
+
+.kh-details-popup .popup-body {
+    padding: 10px;
+}
+
+.kh-details-popup .close-popup {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.kh-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+    z-index: 1000;
+}
+
+.kh-reset-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    z-index: 1001;
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* căn giữa theo chiều ngang */
+    justify-content: center; /* căn giữa theo chiều dọc nếu cần */
+    gap: 15px;
+}
+
+/* Header / message */
+.kh-reset-popup p {
+    text-align: center;
+    font-weight: italic;
+}
+
+/* Nút */
+.kh-reset-popup button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.kh-reset-popup .yes {
+    background-color: #28a745;
+    color: white;
+}
+
+.kh-reset-popup .no {
+    background-color: #ff4444;
+    color: white;
+}
+
 
 /* --- Phần phải: Tìm kiếm khách hàng --- */
 #kh-right {
@@ -110,13 +259,16 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; 
     gap: 20px; 
-    flex-shrink: 0; 
+    align-items: center;
+    margin-right: 20px;
 }
 
 /* Ô tìm kiếm */
 .kh-search-box {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
     border-radius: 10px;
     padding: 15px;
     width: 100%; 
@@ -130,7 +282,7 @@
     text-align: center;
     margin-bottom: 15px;
     font-size: 18px;
-    padding-right: 50px;
+    
 }
 
 /* Form tìm kiếm */
@@ -147,7 +299,7 @@
     border: 1px solid #ccc;
     outline: none;
     font-size: 16px;
-    width: 355px;
+    
 }
 
 /* Nút tìm kiếm */
@@ -159,13 +311,19 @@
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
-    width: 90%;  
+     
+}
+.kh-search-form #resettimkh{
+    background-color: #ef3535;
 }
 
 /* Hiệu ứng khi di chuột vào nút */
 .kh-search-form button:hover {
     background-color: #375aeb;
     
+}
+.kh-search-form #resettimkh:hover{
+    background-color: #e40606;
 }
 
 

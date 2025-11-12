@@ -168,14 +168,17 @@ export async function loadProducts() {
 
 // ======= HIỂN THỊ SẢN PHẨM VỚI PHÂN TRANG =======
 export function displayProducts(list) {
-  // 1. Lưu lại danh sách đã lọc
-  currentFilteredList = list;
-  
+   // 1. Lọc bỏ các sản phẩm bị ẩn (chỉ hiển thị cho khách hàng)
+  const visibleList = list.filter(product => !product.hidden);
+
+  // Lưu lại danh sách đã lọc
+  currentFilteredList = visibleList;
+
   // 2. Tính toán phân trang
-  const totalPages = Math.ceil(list.length / PRODUCTS_PER_PAGE);
+  const totalPages = Math.ceil(visibleList.length / PRODUCTS_PER_PAGE);
   const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
   const endIndex = startIndex + PRODUCTS_PER_PAGE;
-  const productsToShow = list.slice(startIndex, endIndex);
+  const productsToShow = visibleList.slice(startIndex, endIndex);
   
   // 3. Xóa nội dung cũ
   productsGrid.innerHTML = "";

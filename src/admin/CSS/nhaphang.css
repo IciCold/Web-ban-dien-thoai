@@ -2,7 +2,7 @@
    CSS CHO TRANG QUẢN LÝ NHẬP HÀNG
    ================================= */
 
-/* Khung tổng thể (tương tự #sp-wrapper) */
+/* Khung tổng thể */
 #nh-wrapper {
   display: flex;
   padding: 20px;
@@ -16,54 +16,64 @@
   overflow: hidden;
   gap: 20px;
   box-sizing: border-box;
+  flex-direction: column;
 }
 
-/* --- Phần trái: Danh sách Phiếu Nhập --- */
+/* Header và nút tạo phiếu mới */
+.nh-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.nh-title {
+  color: #4e4e4e;
+  font-size: 24px;
+  margin: 0;
+}
+
+#btnTaoPhieuMoi {
+  background-color: #28a745;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+}
+#btnTaoPhieuMoi:hover {
+  background-color: #218838;
+}
+
+/* Container chứa 2 phần phiếu */
+.nh-sections-container {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* --- Phần trái: Phiếu đang tạo --- */
 #nh-left {
-  width: 500px;
+  width: 50%;
   height: 100%;
   border-radius: 10px;
   padding: 20px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  background-color: #f8f9fc;
-  border: 1px solid #e0e0e0;
+  background-color: #fff3cd;
+  border: 2px solid #ffc107;
 }
 
-.nh-title {
+.nh-section-title {
   text-align: center;
-  color: #4e4e4e;
-  margin-bottom: 20px;
-  font-size: 24px;
-}
-
-.nh-actions {
-  display: flex;
-  gap: 10px;
+  color: #856404;
   margin-bottom: 15px;
-}
-
-#btnTaoPhieuMoi {
-  background-color: #28a745;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  font-size: 18px;
   font-weight: bold;
-  flex-grow: 1;
-}
-#btnTaoPhieuMoi:hover {
-  background-color: #218838;
-}
-
-#nh-search {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  width: 200px;
-  box-sizing: border-box;
 }
 
 .nh-table-container {
@@ -71,21 +81,58 @@
   overflow-y: auto;
 }
 
+/* --- Phần phải: Phiếu đã hoàn thành --- */
+#nh-right {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #d4edda;
+  border: 2px solid #28a745;
+  border-radius: 10px;
+}
+
+.nh-section-title-completed {
+  text-align: center;
+  color: #155724;
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.nh-search-container {
+  margin-bottom: 15px;
+}
+
+#nh-search {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #28a745;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
 /* Bảng danh sách phiếu nhập */
 .nh-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
+  background-color: white;
 }
 .nh-table th,
 .nh-table td {
   border: 1px solid #ddd;
-  padding: 10px;
-  font-size: 14px;
+  padding: 8px;
+  font-size: 13px;
 }
 .nh-table th {
   background-color: #4e73df;
   color: white;
+  position: sticky;
+  top: 0;
 }
 .nh-table .nh-edit {
   background-color: #007bff;
@@ -94,30 +141,92 @@
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 12px;
 }
-.nh-table tr.selected {
-  background-color: #e0f7fa;
+.nh-table .nh-edit:hover {
+  background-color: #0056b3;
+}
+.nh-table tr:hover {
+  background-color: #f5f5f5;
 }
 
-/* --- Phần phải: Chi Tiết Phiếu Nhập --- */
-#nh-right {
-  width: 700px;
+.nh-empty-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-style: italic;
+}
+
+/* POPUP CHI TIẾT PHIẾU */
+.nh-popup-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+}
+
+.nh-popup-overlay.active {
+  display: block;
+}
+
+.nh-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  max-height: 90vh;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.nh-popup.active {
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  box-sizing: border-box;
-  overflow-y: auto;
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
 }
 
-.nh-subtitle {
-  color: #4e4e4e;
-  text-align: center;
-  margin-bottom: 15px;
-  font-size: 18px;
+.nh-popup-header {
+  background-color: #4e73df;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nh-popup-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.nh-popup-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+}
+
+.nh-popup-close:hover {
+  color: #ddd;
+}
+
+.nh-popup-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 #nh-form-chitiet .input-group {
@@ -139,7 +248,7 @@
   font-size: 16px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  box-sizing: border-box; /* Quan trọng */
+  box-sizing: border-box;
 }
 
 #nh-form-chitiet input:disabled {
@@ -197,6 +306,9 @@
   padding: 3px 8px;
   border-radius: 5px;
   cursor: pointer;
+}
+.nh-del-item:hover {
+  background-color: #c82333;
 }
 
 /* Nút Hoàn thành / Xóa phiếu */
