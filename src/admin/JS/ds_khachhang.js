@@ -111,8 +111,14 @@ function detailsCustomer(index) {
             <p><strong>Họ tên:</strong> ${user.fullName || 'Chưa cài đặt'}</p>
             <p><strong>Username:</strong> ${user.userName || 'N/A'}</p>
             <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
-            <p><strong>Địa chỉ nhà:</strong><br> ${(user.addressList).join('<br>')}</p>
-            <p><strong>Tài khoản ngân hàng:</strong> <br> ${(user.bankingList).join('<br>')} </p> 
+            <p><strong>Địa chỉ nhà:</strong><br> 
+            ${user.addressList.map(a => a.specific).join('<br>')}
+            </p>
+            <p><strong>Tài khoản ngân hàng:</strong><br>
+            ${user.bankingList.map(b => 
+            `${b.account} ${b.holderName}<br>${b.name}`
+            ).join('<br><br>')}
+            </p> 
             <p><strong>Ngày đăng ký:</strong> ${user.registrationDate || 'N/A'}</p>
             <button class="close-popup">Đóng</button>
         </div>
@@ -213,19 +219,19 @@ export function setupCustomerSearch() {
 }
 
 function searchCustomers(name, username) {
-    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const users = docdulieuLocalStorage("users");
     const tableBody = document.querySelector('.kh-table tbody');
     
     if (!tableBody) return;
 
     // Filter users
     const filteredUsers = users.filter(user => {
-        const matchName = !name || (user.userName && user.userName.toLowerCase().includes(name.toLowerCase()));
+        const matchName = !name || (user.fullName && user.fullName.toLowerCase().includes(name.toLowerCase()));
         const matchUsername = !username || (user.userName && user.userName.toLowerCase().includes(username.toLowerCase()));
         return matchName && matchUsername;
     });
 
-    // Hiển thị kết quả
+    /*// Hiển thị kết quả
     tableBody.innerHTML = '';
     filteredUsers.forEach((user) => {
         const originalIndex = users.findIndex(u => u.userName === user.userName);
@@ -244,9 +250,43 @@ function searchCustomers(name, username) {
             </td>
         `;
         tableBody.appendChild(row);
+    });*/
+
+    // Xóa dữ liệu cũ
+    tableBody.innerHTML = '';
+    // Thêm dữ liệu mớis
+    filteredUsers.forEach((user, index) => {
+        const locked = user.locked;
+        //const lockIcon = locked ? '<i class="fa-solid fa-lock"></i>' : '<i class="fa-solid fa-lock-open"></i>';
+        const lockTitle = locked ? 'Mở khóa tài khoản' : 'Khóa tài khoản';
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${user.fullName || 'Chưa cài đặt'}</td>
+            <td>${user.userName || 'N/A'}</td>
+            <td>******</td> <!-- Không hiển thị mật khẩu thật -->
+            <td>${user.registrationDate || new Date().toLocaleDateString('vi-VN')}</td>
+            <td class = "kh-methods">
+                <button class="kh-details" data-index="${index}">Chi tiết</button>
+                <button class="kh-reset" data-index="${index}">Reset mật khẩu</button>
+                <button class="kh-lock" data-index="${index}" title="${lockTitle}">
+                <i class="fa-solid fa-lock"></i>
+                <i class="fa-solid fa-lock-open"></i>
+                ${lockTitle}</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
     });
 
     // Re-attach events
     attachLockEvents();
     attachDetailsEvents();
+    attachResetEvents();
 }
+const resettimkiem = document.querySelector('.kh-search-form #resettimkh');
+resettimkiem.addEventListener('click',e=>{
+    const tableBody = document.querySelector('.kh-table tbody');
+    tableBody.innerHTML='';
+    loadCustomerList();
+});
+
+//innerHTML = '' vs .reset()

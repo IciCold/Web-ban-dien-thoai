@@ -259,13 +259,16 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; 
     gap: 20px; 
-    flex-shrink: 0; 
+    align-items: center;
+    margin-right: 20px;
 }
 
 /* Ô tìm kiếm */
 .kh-search-box {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
     border-radius: 10px;
     padding: 15px;
     width: 100%; 
@@ -279,7 +282,7 @@
     text-align: center;
     margin-bottom: 15px;
     font-size: 18px;
-    padding-right: 50px;
+    
 }
 
 /* Form tìm kiếm */
@@ -296,7 +299,7 @@
     border: 1px solid #ccc;
     outline: none;
     font-size: 16px;
-    width: 355px;
+    
 }
 
 /* Nút tìm kiếm */
@@ -308,7 +311,10 @@
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
-    width: 90%;  
+     
+}
+.kh-search-form #resettimkh{
+    background-color: #ef3535;
 }
 
 /* Hiệu ứng khi di chuột vào nút */
@@ -316,4 +322,8 @@
     background-color: #375aeb;
     
 }
+.kh-search-form #resettimkh:hover{
+    background-color: #e40606;
+}
+
 

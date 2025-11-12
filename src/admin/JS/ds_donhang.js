@@ -45,18 +45,21 @@ function updateTable(data) {
         </div>
       </td>
     `;
-        const change = row.querySelector(".statuscell"); // row works but document doesnt, maybe scope error?
-        if (donhang.status === "đã giao") {
-          change.style.color = "green";
-        } else if (donhang.status === "đã hủy") {
-          change.style.color = "red";
-        } else if (donhang.status === "mới đặt") {
-          change.style.color = "yellow";
-        } else {
-          change.style.color = "orange";
-        }
+    const change = row.querySelector('.statuscell'); // row works but document doesnt, maybe scope error?
+    if(donhang.status==="đã giao"){
+      change.style.color = "green";
+    }
+    else if(donhang.status === "đã hủy"){
+      change.style.color = "red";
+    }
+    else if(donhang.status==="mới đặt"){
+      change.style.color = "#c9a401";
+    }
+    else{
+      change.style.color = "orange";
+    }
 
- 
+  
     tbody.appendChild(row);
   });
 
@@ -310,6 +313,15 @@ function addRowEvents() {
       const statusSelect = popup.querySelector('#status');
       const cancelBtn = popup.querySelector('#cancel-status');
 
+      // Ẩn form, hiện lại nút "Chỉnh sửa"
+      statusForm.style.display = 'none';
+      if(dh.status==='đã giao'||dh.status==='đã hủy'){
+        editBtn.style.display = "none";
+      }
+      else{
+        editBtn.style.display='inline-block';
+      }
+
       
 
       // Khi nhấn "Chỉnh sửa"
@@ -349,14 +361,8 @@ function addRowEvents() {
       // Cập nhật giao diện
       currentStatusSpan.textContent = newStatus;
 
-      // Ẩn form, hiện lại nút "Chỉnh sửa"
-      statusForm.style.display = 'none';
-      if(dh.status==='đã giao'||dh.status==='đã hủy'){
-        editBtn.style.display = "none";
-      }
-      else{
-        editBtn.style.display='inline-block';
-      }
+      
+      updateTable(dsdonhang);
 
 
     });
@@ -471,12 +477,19 @@ search.addEventListener("submit", e => {
   });
   updateTable(filtered);
 });
+
+
+
+
+
+
+
+
 // RESET BỘ LỌC
 const btnReset = document.getElementById("resetFilter");
 btnReset.addEventListener("click", () => {
   search.reset(); // Xóa hết dữ liệu trong form
   updateTable(dsdonhang); // Hiển thị lại toàn bộ đơn hàng
 });
-
 
 
