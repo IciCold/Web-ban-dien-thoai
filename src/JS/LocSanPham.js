@@ -273,6 +273,9 @@ function updateDisplay() {
   // **BƯỚC QUAN TRỌNG:** Reset về trang 1 khi lọc
   resetToFirstPage();
 
+  // Đổi title sang "Danh sách sản phẩm"
+  const heading = document.querySelector(".products-section h2");
+  if (heading) heading.innerHTML = "Danh sách sản phẩm";
   
   const price_min = document.getElementById("price-min-input");
   const price_max = document.getElementById("price-max-input");

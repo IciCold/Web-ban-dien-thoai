@@ -3,7 +3,9 @@ import { docdulieuLocalStorage, ghidulieuLocalStorage } from "./readandwrite.js"
 let dsdonhang = [];
 
 const formSearch = document.querySelector(".dh-search-form");
-
+window.addEventListener("storage",(e) => {
+  if(e.key === "orders") dsdonhang = docdulieuLocalStorage("orders");
+})
 // Tải dữ liệu đơn hàng khi trang load
 window.addEventListener("DOMContentLoaded", () => {
   dsdonhang = docdulieuLocalStorage("orders") || [];
