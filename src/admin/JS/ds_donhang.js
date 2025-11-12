@@ -38,6 +38,7 @@ function updateTable(data) {
       <td>${donhang.customer}</td>
       <td>${donhang.total.toLocaleString("vi-VN")}₫</td>
       <td>${donhang.deliveryAddress}</td>
+       <td>${donhang.status}</td>
       <td>
         <div class="dh-actions">
           <button class="dh-details" data-id="${donhang.id}">Chi tiết</button>
