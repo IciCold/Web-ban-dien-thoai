@@ -1,7 +1,7 @@
 import "./ds_sanpham.js";
 import "./nhaphang.js";
 import { loadCustomerList, setupCustomerSearch } from "./ds_khachhang.js";
-import { loadStatistics, seedOrderData } from "./thongke.js";
+import { loadStatistics } from "./thongke.js";
 import "./login.js";
 import "./logout.js";
 import "./ds_donhang.js";
@@ -9,7 +9,7 @@ import "./quan_ly_gia.js";
 import "./forgot.js";
 import "./quanLyTonKho.js";
 import "../../JS/alert.js";
-import { renderUser } from "./autoRender.js";
+import { renderUser,renderData,renderOrder } from "./autoRender.js";
 
 //==============Chuyển Page bằng Hash=======================//
 const pages = {
@@ -80,7 +80,6 @@ function showPage() {
         }
         if (subPage.id === "thongKe") {
           console.log("Loading statistics data...");
-          seedOrderData();
           loadStatistics();
         }
       }, 100);
@@ -125,7 +124,7 @@ window.addEventListener("load", () => {
 window.addEventListener("storage", (e) => {
   //Cập nhật lại sản phẩm
   if (e.key === "dataProducts") renderData(); //chưa hoàn thiện
-
+  if(e.key === "orders") renderOrder();
   if (e.key === "users") {
       renderUser();
   }

@@ -27,7 +27,6 @@ const timbrand = document.getElementById("timbrand");
 let id = 0;
 let currentEditingId = null;
 let datalist = [];
-
 // ==============================
 //  KHI TẢI TRANG
 // ==============================
@@ -179,7 +178,8 @@ function saveProduct({ten, brand, mau_sac = "", camera = "", cpu = "", bo_nho = 
 // ==============================
 //  HIỂN THỊ BẢNG SẢN PHẨM
 // ==============================
-function updateBang() {
+export function updateBang() {
+  datalist = docdulieuLocalStorage("dataProducts") || [];
   divContainer.innerHTML = "";
   if (datalist.length === 0) {
     divContainer.innerHTML = "<p>Chưa có sản phẩm nào!</p>";
