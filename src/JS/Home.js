@@ -120,41 +120,11 @@ export async function loadProducts() {
   try {
     
 
-    // 2️⃣ Đọc dữ liệu người dùng từ localStorage
+    // 2️ Đọc dữ liệu người dùng từ localStorage
     dataProducts = await docJSONvaLuuLocalStorage("dataProducts", "../asset/data/dienthoai.json");
 
-    // 3️⃣ Gộp dữ liệu (tránh trùng id)
-    
-    
+    // 5️ Hiển thị ban đầu
 
-    /* 4️⃣ Chuẩn hóa dữ liệu
-    allProducts = allData.map(item => {
-      let brand = item.brand || item.thuonghieu;
-      if (item.loai === "Tablet") brand = "ipad";
-      return {
-        ...item,
-        id: item.id,
-        //name: item.ten || item.tensp,
-        //price: item.gia,
-        //img: item.src || item.anh,
-        src: item.src || item.anh,
-        brand: brand ? brand.toLowerCase() : "khác",
-        ten: item.ten || item.tensp,
-        //src: item.src || item.anh,
-        bo_nho: item.bo_nho || item.memory,
-        mau_sac: item.mau_sac || item.color,
-        dung_luong_pin: item.dung_luong_pin || item.battery,
-        cpu: item.cpu,
-        ram: item.ram,
-        gia: item.gia,
-        camera: item.camera,
-        group_id: item.group_id
-      };
-    });*/
-
-    // 5️⃣ Hiển thị ban đầu
-    
-    
     displayProducts(dataProducts);
 
   } catch (error) {
@@ -176,6 +146,7 @@ export function displayProducts(list) {
 
   // 2. Tính toán phân trang
   const totalPages = Math.ceil(visibleList.length / PRODUCTS_PER_PAGE);
+  
   const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
   const endIndex = startIndex + PRODUCTS_PER_PAGE;
   const productsToShow = visibleList.slice(startIndex, endIndex);

@@ -65,7 +65,6 @@ function showPage() {
       requestAnimationFrame(() => {
         subPage.classList.add("page-active-enter");
       });
-
       displayUsername(); //Hiển thị tên user khi đã an toàn
 
       // Load dữ liệu khi trang con admin được hiển thị

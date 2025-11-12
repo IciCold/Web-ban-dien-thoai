@@ -168,6 +168,7 @@ function addEventListeners() {
   // Xử lý khi nhấn nút Lưu
   document.querySelectorAll("#ds_giaBan .save-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
+      window.location.reload();
       const index = e.target.dataset.index;
       const giaVon = Number(
         document.querySelector(
