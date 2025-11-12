@@ -263,6 +263,7 @@ function saveOrderAndCheckout() {
     customerEmail: currentUser.email,
     customerPhone: selectedAddrObj.phone,
     products: currentPaymentData.items.map((item) => ({
+      id: item.id,
       name: item.name,
       price: item.price,
       quantity: item.quantity,
@@ -345,22 +346,33 @@ function completeOrderProcessing(newOrder) {
   hideConfirmModal();
    //KIỂM TRA LẦN CUỐI SẢN PHẨM ẨN (trước khi lưu đơn hàng)
   const products = docdulieuLocalStorage("dataProducts");
-  const hiddenProductsInOrder = [];
+  const validationErrors = [];
+  
   for (let item of newOrder.products) {
-    const productInDB = products.find(p => 
-      p.ten === item.name || (p.id === item.id && p.hidden)
-    );
-    if (productInDB && productInDB.hidden) {
-      hiddenProductsInOrder.push(item.name);
-    }
+      // Dùng item.id (đã thêm ở bước 1) để tìm chính xác
+      const productInDB = products.find(p => p.id === item.id); 
+      
+      if (!productInDB) {
+          validationErrors.push(`${item.name} (Không tìm thấy)`);
+      } else if (productInDB.hidden) {
+          validationErrors.push(`${item.name} (Hiện không khả dụng)`);
+      } else {
+          // Kiểm tra số lượng
+          const availableStock = Number(productInDB.so_luong) || 0;
+          if (availableStock < item.quantity) {
+              validationErrors.push(
+                  `${item.name} (Chỉ còn ${availableStock} sản phẩm, bạn yêu cầu ${item.quantity})`
+              );
+          }
+      }
   }
   
-  if (hiddenProductsInOrder.length > 0) {
+  if (validationErrors.length > 0) {
     showalert(
-      `Không thể hoàn tất đơn hàng. Các sản phẩm sau hiện không khả dụng: ${hiddenProductsInOrder.join(", ")}.`,
+      `Không thể hoàn tất đơn hàng:\n${validationErrors.join("\n")}\nVui lòng quay lại giỏ hàng.`,
       "error"
     );
-    return;
+    return; // Dừng xử lý
   }
 
   // 2. Lưu đơn hàng vào localStorage
@@ -779,18 +791,54 @@ function handleAddNewAddressSubmit() {
 function validateCartItems(items) {
   const products = docdulieuLocalStorage("dataProducts");
   const hiddenProducts = [];
+  const outOfStockProducts = []; // Mảng mới cho sản phẩm không đủ hàng
   
   for (let item of items) {
+    // Tìm sản phẩm trong CSDL
     const productInDB = products.find(p => p.id === item.id);
-    if (productInDB && productInDB.hidden) {
-      hiddenProducts.push(item.name);
+
+    if (productInDB) {
+        // 1. Kiểm tra sản phẩm bị ẩn?
+        if (productInDB.hidden) {
+          hiddenProducts.push(item.name);
+        }
+        
+        // 2. Kiểm tra số lượng tồn kho
+        // (Mặc định là 0 nếu không có)
+        const availableStock = Number(productInDB.so_luong) || 0;
+        if (availableStock < item.quantity) {
+          outOfStockProducts.push({ 
+              name: item.name, 
+              requested: item.quantity, 
+              available: availableStock 
+          });
+        }
+    } else {
+        // Nếu không tìm thấy sản phẩm, coi như bị ẩn/lỗi
+        hiddenProducts.push(`${item.name} (Không tìm thấy)`);
     }
   }
   
+  // --- Xây dựng thông báo lỗi ---
+  let errorMessages = [];
+  
   if (hiddenProducts.length > 0) {
+    errorMessages.push(`Các sản phẩm sau hiện không khả dụng: ${hiddenProducts.join(", ")}.`);
+  }
+  
+  if (outOfStockProducts.length > 0) {
+    const stockErrors = outOfStockProducts.map(p => 
+      `${p.name} (Chỉ còn ${p.available}, bạn yêu cầu ${p.requested})`
+    ).join("; ");
+    errorMessages.push(`Số lượng sản phẩm không đủ: ${stockErrors}.`);
+  }
+
+  // --- Trả về kết quả ---
+  if (errorMessages.length > 0) {
     return {
       valid: false,
-      message: `Các sản phẩm sau hiện không khả dụng: ${hiddenProducts.join(", ")}. Vui lòng xóa khỏi giỏ hàng trước khi thanh toán.`
+      // Ghép các lỗi lại và thêm hướng dẫn
+      message: errorMessages.join("\n") + "\nVui lòng điều chỉnh lại giỏ hàng."
     };
   }
   
