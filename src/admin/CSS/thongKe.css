@@ -17,7 +17,7 @@
 .stats-wrapper {
     display: grid;
     grid-template-columns: 2fr 1fr; /* left 2 parts, right 1 part */
-    grid-template-rows: auto auto; /* top row for panels, bottom for result */
+    grid-template-rows: 1.75fr 2fr; /* top row for panels, bottom for result */
     grid-template-areas:
         "left right"
         "result result";
@@ -31,6 +31,7 @@
     width: 1240px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     box-sizing: border-box;
+    height: 1240px;
 }
 
 /* Assign grid areas */
