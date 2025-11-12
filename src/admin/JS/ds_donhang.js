@@ -346,13 +346,18 @@ function addRowEvents() {
         const check = "Bạn có chắc chắn là đã giao hàng chưa?";
         if(!confirm(check)) return;
         capNhatTonKhoKhiGiaoHang(dh,true);
+        statusForm.style.display = 'none';
+        editBtn.style.display = "none";
       }
       else if(newStatus==="đã hủy"){
         const check = "Bạn có chắc chắn là hủy đơn hàng không?";
         if(!confirm(check)) return;
         capNhatTonKhoKhiGiaoHang(dh,false);
+        statusForm.style.display = 'none';
+        editBtn.style.display = "none";
       }
       // Cập nhật object đơn hàng
+      updateTable(dsdonhang);
       dh.status = newStatus;
 
       // Cập nhật localStorage nếu bạn lưu ở đó
@@ -362,7 +367,7 @@ function addRowEvents() {
       currentStatusSpan.textContent = newStatus;
 
       
-      updateTable(dsdonhang);
+      
 
 
     });
