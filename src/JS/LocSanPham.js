@@ -278,7 +278,7 @@ function updateDisplay() {
 
   // Đổi title sang "Danh sách sản phẩm"
   const heading = document.querySelector(".products-section h2");
-  if (heading) heading.innerHTML = "Danh sách sản phẩm";
+  if (heading) heading.innerHTML = "Kết quả tìm kiếm";
   
   const price_min = document.getElementById("price-min-input");
   const price_max = document.getElementById("price-max-input");
