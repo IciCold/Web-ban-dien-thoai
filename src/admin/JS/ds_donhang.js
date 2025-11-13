@@ -342,38 +342,78 @@ function addRowEvents() {
         editBtn.style.display = 'inline-block';   // hiện lại nút "Chỉnh sửa"
       });
 
-      statusForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const newStatus = statusSelect.value;
-      if(newStatus==="đã giao"){
-        const check = "Bạn có chắc chắn là đã giao hàng chưa?";
-        if(!confirm(check)) return;
-        capNhatTonKhoKhiGiaoHang(dh,true);
+      // Dán đè lên hàm addEventListener của statusForm (dòng 351)
+statusForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const newStatus = statusSelect.value;
+    const oldStatus = dh.status; // Lấy trạng thái CŨ để so sánh
+
+    // Nếu trạng thái không đổi thì không làm gì
+    if (newStatus === oldStatus) {
+        statusForm.style.display = 'none';
+        editBtn.style.display = 'inline-block';
+        return;
+    }
+
+    // 1. TRƯỜNG HỢP: CHUYỂN SANG "ĐÃ GIAO" (TRỪ KHO)
+    if (newStatus === "đã giao") {
+        const check = "Bạn có chắc chắn là đã giao hàng chưa? (Sẽ trừ tồn kho)";
+        if (!confirm(check)) return;
+
+        // GỌI HÀM VÀ LƯU KẾT QUẢ
+        const result = capNhatTonKhoKhiGiaoHang(dh, true);
+
+        if (!result.success) {
+            // NẾU THẤT BẠI: Báo lỗi và dừng lại
+            showalert(`❌ LỖI TRỪ KHO!\nSản phẩm "${result.productName}" bị lỗi: ${result.reason}\n\nTrạng thái CHƯA được cập nhật.`, "error");
+            statusSelect.value = oldStatus; // Trả lại select về giá trị cũ
+            return; // Dừng hàm, không cập nhật
+        }
+        
+        // NẾU THÀNH CÔNG: Báo thành công
+        showalert("✅ Đã giao hàng! Tồn kho đã được trừ.", "success");
         statusForm.style.display = 'none';
         editBtn.style.display = "none";
-      }
-      else if(newStatus==="đã hủy"){
+    }
+
+    // 2. TRƯỜNG HỢP: CHUYỂN SANG "ĐÃ HỦY"
+    else if (newStatus === "đã hủy") {
         const check = "Bạn có chắc chắn là hủy đơn hàng không?";
-        if(!confirm(check)) return;
-        capNhatTonKhoKhiGiaoHang(dh,false);
+        if (!confirm(check)) return;
+
+        // SỬA LỖI LOGIC: Chỉ cộng lại kho NẾU trạng thái cũ là "đã giao"
+        if (oldStatus === "đã giao") {
+            capNhatTonKhoKhiGiaoHang(dh, false); // Cộng lại kho
+            showalert("✅ Đã hủy đơn. Tồn kho đã được cộng lại.", "success");
+        } else {
+            // Nếu hủy từ "mới đặt" hoặc "đã xử lý" thì không cần làm gì
+            showalert("✅ Đã hủy đơn hàng.", "success");
+        }
+        
         statusForm.style.display = 'none';
         editBtn.style.display = "none";
-      }
-      // Cập nhật object đơn hàng
-      
-      dh.status = newStatus;
+    }
+    
+    // 3. TRƯỜNG HỢP: CÁC THAY ĐỔI KHÁC (mới đặt <-> đã xử lý)
+    else {
+        showalert("Cập nhật trạng thái thành công!", "success");
+        statusForm.style.display = 'none';
+        editBtn.style.display = 'inline-block';
+    }
 
-      // Cập nhật localStorage nếu bạn lưu ở đó
-      ghidulieuLocalStorage('orders',dsdonhang);
-
-      // Cập nhật giao diện
-      currentStatusSpan.textContent = newStatus;
-
-      updateTable(dsdonhang);
-      
-      showalert("Cập nhật thành công!","success");
-
-    });
+    // ===== CẬP NHẬT TRẠNG THÁI CUỐI CÙNG (NẾU MỌI THỨ OK) =====
+    // Mã này chỉ chạy nếu:
+    // 1. Chuyển sang "đã giao" THÀNH CÔNG
+    // 2. Chuyển sang "đã hủy"
+    // 3. Chuyển sang các trạng thái khác
+    
+    dh.status = newStatus;
+    ghidulieuLocalStorage('orders', dsdonhang);
+    currentStatusSpan.textContent = newStatus;
+    updateTable(dsdonhang);
+    
+    // (Xóa alert "Cập nhật thành công!" chung ở cuối, vì đã báo riêng ở trên)
+});
       //tiếp tục làm tìm kiếm
 
 
