@@ -186,7 +186,7 @@ function displayStatistics(stats) {
         <p><strong>👤 Tổng user đăng ký:</strong> ${stats.registeredUsers}</p>
         <p><strong>📱 Tổng sản phẩm:</strong> ${stats.totalProducts}</p>
         <br>
-        <p><strong>Trạng thái đơn hàng:</strong></p>
+        <h3 class="stats-subtitle">Trạng thái đơn hàng:</h3>
         <p><strong>✅ Đã giao:</strong> ${stats.ordersByStatus["đã giao"] || 0}</p>
         <p><strong>⏳ Mới đặt:</strong> ${stats.ordersByStatus["mới đặt"] || 0}</p>
         <p><strong>🚚 Đã xử lý (đang giao):</strong> ${stats.ordersByStatus["đã xử lý"] || 0}</p>
