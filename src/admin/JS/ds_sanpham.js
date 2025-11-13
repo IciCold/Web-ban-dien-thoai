@@ -263,15 +263,39 @@ export function updateBang() {
       }
     });
 
-    // --- Nút xóa ---
+   // --- Nút xóa ---
     row.querySelector(".sp-del").addEventListener("click", () => {
-      if (confirm(`Bạn có chắc muốn xóa "${item.ten}"?`)) {
+      const productIdToDel = item.id;
+
+      // **BƯỚC KIỂM TRA RÀNG BUỘC ĐƠN HÀNG**
+      const allOrders = docdulieuLocalStorage("orders");
+      let isProductInOrder = false;
+
+      if (allOrders && allOrders.length > 0) {
+        // Dùng .some() để kiểm tra xem "có tồn tại" đơn hàng nào...
+        isProductInOrder = allOrders.some(order => 
+          // ...mà mảng products của nó tồn tại VÀ...
+          order.products && 
+          // ...có chứa sản phẩm với ID trùng khớp
+          order.products.some(p => p.id === productIdToDel)
+        );
+      }
+
+      if (isProductInOrder) {
+        // Nếu sản phẩm đã có trong đơn hàng -> KHÔNG CHO XÓA
+        showalert(`❌ Không thể xóa sản phẩm "${item.ten}".\n\nSản phẩm này đã tồn tại trong ít nhất một đơn hàng.\nBạn nên sử dụng chức năng "Ẩn" thay vì xóa.`, "error");
+        return; // Dừng hàm ngay lập tức
+      }
+      // **HẾT BƯỚC KIỂM TRA**
+
+      // Nếu không vướng ràng buộc, hỏi xác nhận xóa
+      if (confirm(`Bạn có chắc muốn xóa "${item.ten}"?\n(Sản phẩm này chưa có trong đơn hàng nào. Hành động này không thể hoàn tác.)`)) {
         datalist = datalist.filter(sp => sp.id !== item.id);
         ghidulieuLocalStorage("dataProducts", datalist);
         updateBang();
+        showalert(`Đã xóa vĩnh viễn sản phẩm "${item.ten}"`, "success");
       }
     });
-
     // --- Nút xem chi tiết ---
     row.querySelector(".sp-view").addEventListener("click", () => {
       showalert(`
@@ -408,13 +432,37 @@ function displayFilteredTable(filteredList) {
       }
     });
 
-     // --- Nút xóa ---
+    // --- Nút xóa ---
     row.querySelector(".sp-del").addEventListener("click", () => {
-      if (confirm(`Bạn có chắc muốn xóa "${item.ten}"?`)) {
+      const productIdToDel = item.id;
+
+      // **BƯỚC KIỂM TRA RÀNG BUỘC ĐƠN HÀNG**
+      const allOrders = docdulieuLocalStorage("orders");
+      let isProductInOrder = false;
+
+      if (allOrders && allOrders.length > 0) {
+        // Dùng .some() để kiểm tra xem "có tồn tại" đơn hàng nào...
+        isProductInOrder = allOrders.some(order => 
+          // ...mà mảng products của nó tồn tại VÀ...
+          order.products && 
+          // ...có chứa sản phẩm với ID trùng khớp
+          order.products.some(p => p.id === productIdToDel)
+        );
+      }
+
+      if (isProductInOrder) {
+        // Nếu sản phẩm đã có trong đơn hàng -> KHÔNG CHO XÓA
+        showalert(`❌ Không thể xóa sản phẩm "${item.ten}".\n\nSản phẩm này đã tồn tại trong ít nhất một đơn hàng.\nBạn nên sử dụng chức năng "Ẩn" thay vì xóa.`, "error");
+        return; // Dừng hàm ngay lập tức
+      }
+      // **HẾT BƯỚC KIỂM TRA**
+
+      // Nếu không vướng ràng buộc, hỏi xác nhận xóa
+      if (confirm(`Bạn có chắc muốn xóa "${item.ten}"?\n(Sản phẩm này chưa có trong đơn hàng nào. Hành động này không thể hoàn tác.)`)) {
         datalist = datalist.filter(sp => sp.id !== item.id);
         ghidulieuLocalStorage("dataProducts", datalist);
-        timkiem();
-        showalert(`Đã xóa sản phẩm "${item.ten}"`, "success");
+        timkiem(); // Gọi lại hàm tìm kiếm để cập nhật bảng lọc
+        showalert(`Đã xóa vĩnh viễn sản phẩm "${item.ten}"`, "success");
       }
     });
 
