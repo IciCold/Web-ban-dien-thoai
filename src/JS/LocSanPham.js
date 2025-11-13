@@ -51,6 +51,7 @@ const filterPopup = document.getElementById("filterPopup");
 const applyFilter = document.getElementById("applyFilter");
 const resetFilter = document.getElementById("resetFilter");
 const searchInput = document.querySelector(".name-options #search-input-loc");
+const carousel = document.querySelector(".carousel-container");
 
 //Lọc theo tên
 if (searchInput) {
@@ -207,6 +208,7 @@ if (applyFilter) {
   applyFilter.addEventListener("click", () => {
     filterPopup.style.display = "none";
     updateDisplay(); // Áp dụng lọc và hiển thị
+    carousel.style.display = 'none';
   });
 }
 
@@ -263,6 +265,7 @@ if (resetFilter) {
     }
     
     updateDisplay(); // Hiển thị lại tất cả sản phẩm
+    carousel.style.display = 'block';
   });
 }
 

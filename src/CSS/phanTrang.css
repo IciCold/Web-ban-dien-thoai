@@ -292,7 +292,7 @@
 }
 
 #applyFilter {
-  background-color: var(--main-color);
+  background-color: #0062d9; 
   color: white;
   border: none;
   padding: 8px 18px;
@@ -303,7 +303,7 @@
 }
 
 #applyFilter:hover {
-  background-color: #0062d9;
+  background-color: var(--main-color);
 }
 
 /* ======= Mũi tên nhỏ (popup hướng lên nút lọc) ======= */
